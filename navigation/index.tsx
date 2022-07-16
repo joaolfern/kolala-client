@@ -11,20 +11,17 @@ import * as React from 'react';
 import { ColorSchemeName, Pressable } from 'react-native';
 
 import Colors from '../constants/Colors';
-import useColorScheme from '../hooks/useColorScheme';
-import ModalScreen from '../screens/ModalScreen';
 import NotFoundScreen from '../screens/NotFoundScreen';
 import TabOneScreen from '../screens/Home';
-import TabTwoScreen from '../screens/TabTwoScreen';
 import { RootStackParamList, RootTabParamList, RootTabScreenProps } from '../types';
 import LinkingConfiguration from './LinkingConfiguration';
 import Text from '../text/text'
 
-export default function Navigation({ colorScheme }: { colorScheme: ColorSchemeName }) {
+export default function Navigation() {
   return (
     <NavigationContainer
       linking={LinkingConfiguration}
-      theme={colorScheme === 'light' ? DefaultTheme : DarkTheme}>
+      theme={DarkTheme}>
       <RootNavigator />
     </NavigationContainer>
   );
@@ -41,9 +38,6 @@ function RootNavigator() {
     <Stack.Navigator>
       <Stack.Screen name="Root" component={BottomTabNavigator} options={{ headerShown: false }} />
       <Stack.Screen name="NotFound" component={NotFoundScreen} options={{ title: 'Oops!' }} />
-      <Stack.Group screenOptions={{ presentation: 'modal' }}>
-        <Stack.Screen name="Modal" component={ModalScreen} />
-      </Stack.Group>
     </Stack.Navigator>
   );
 }
@@ -55,26 +49,25 @@ function RootNavigator() {
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 function BottomTabNavigator() {
-  const colorScheme = useColorScheme();
 
   return (
     <BottomTab.Navigator
       initialRouteName="Maps"
       screenOptions={{
-        headerTintColor: Colors[colorScheme].primaryColor,
-        tabBarActiveTintColor: Colors[colorScheme].primaryColor,
-        tabBarInactiveTintColor: Colors[colorScheme].bottomTab.unselectedTab,
-        tabBarStyle: { backgroundColor: Colors[colorScheme].background2 },
-        headerStyle: { backgroundColor: Colors[colorScheme].background, shadowColor: "transparent" },
+        headerTintColor: Colors.primaryColor,
+        tabBarActiveTintColor: Colors.primaryColor,
+        tabBarInactiveTintColor: Colors.bottomTab.unselectedTab,
+        tabBarStyle: { backgroundColor: Colors.background2 },
+        headerStyle: { backgroundColor: Colors.background, shadowColor: "transparent" },
       }}>
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Feed"
         component={TabTwoScreen}
         options={{
           title: 'Feed',
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
-      />
+      /> */}
       <BottomTab.Screen
         name="Maps"
         component={TabOneScreen}
@@ -83,14 +76,14 @@ function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <TabBarIcon name="map" color={color} />
         })}
       />
-      <BottomTab.Screen
+      {/* <BottomTab.Screen
         name="Hangs"
         component={TabTwoScreen}
         options={{
           title: 'Meus Rolês',
           tabBarIcon: ({ color }) => <TabBarIcon name="walking" color={color} />,
         }}
-      />
+      /> */}
     </BottomTab.Navigator>
   );
 }

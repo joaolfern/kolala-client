@@ -1,15 +1,14 @@
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
+import { Text } from './Text/Text'
+import { View } from './View/View'
 
-import Colors from '../constants/Colors';
-import { MonoText } from './StyledText';
-import { Text, View } from './Themed';
 
 export default function EditScreenInfo({ path }: { path: string }) {
   return (
     <View>
-      <Text>Onde é o rolê?asds</Text>
+      <Text>Onde é o rolê?</Text>
     </View>
   );
 }
