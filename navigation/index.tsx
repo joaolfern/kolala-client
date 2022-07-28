@@ -56,8 +56,6 @@ function BottomTabNavigator() {
       screenOptions={{
         headerTintColor: Colors.primaryColor,
         tabBarActiveTintColor: Colors.primaryColor,
-        tabBarInactiveTintColor: Colors.bottomTab.unselectedTab,
-        tabBarStyle: { backgroundColor: Colors.background2 },
         headerStyle: { backgroundColor: Colors.background, shadowColor: "transparent" },
       }}>
       {/* <BottomTab.Screen

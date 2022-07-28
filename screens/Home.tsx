@@ -10,7 +10,7 @@ import mapStyle from '../constants/mapStyle'
 
 // @ts-ignore
 import { ENVIRONMENT } from "@env"
-import { View } from '../components/View/View'
+import View  from '../components/View/View'
 
 interface IMarkers {
   latitude: number

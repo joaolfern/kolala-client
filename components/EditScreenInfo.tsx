@@ -1,8 +1,8 @@
 import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Text } from './Text/Text'
-import { View } from './View/View'
+import Text from './Text/Text'
+import View from './View/View'
 
 
 export default function EditScreenInfo({ path }: { path: string }) {

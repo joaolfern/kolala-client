@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Text } from '../components/Text/Text'
-import { View } from '../components/View/View'
+import Text from '../components/Text/Text'
+import View from '../components/View/View'
 
 import { RootStackScreenProps } from '../types';
 
