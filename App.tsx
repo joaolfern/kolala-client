@@ -4,7 +4,9 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import useCachedResources from './hooks/useCachedResources'
 import Navigation from './navigation'
 import * as Location from 'expo-location'
+import * as Svg from 'react-native-svg';
 import Login from './screens/Login'
+import EventForm from './screens/EventForm'
 
 export default function App() {
   const isLoadingComplete = useCachedResources()
@@ -14,7 +16,7 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        {0 ? <Navigation  /> : <Login />}
+        {0 ? <Navigation  /> : <EventForm />}
         <StatusBar style={'light'} />
       </SafeAreaProvider>
     )

@@ -19,5 +19,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     backgroundColor: Colors.primaryColor,
     borderRadius: 16,
-  }
+    height: 48,
+    justifyContent: 'center',
+  },
 })
