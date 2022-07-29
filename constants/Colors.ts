@@ -5,4 +5,5 @@ export default {
   altText: '#000000',
   background: '#272022',
   lightBackground: '#322A2D',
+  gray: '#B6B6B6'
 }
