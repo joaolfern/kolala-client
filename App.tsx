@@ -6,7 +6,7 @@ import Navigation from './navigation'
 import * as Location from 'expo-location'
 import * as Svg from 'react-native-svg';
 import Login from './screens/Login'
-import EventForm from './screens/EventForm'
+import EventForm from './screens/EventForm/EventForm'
 
 export default function App() {
   const isLoadingComplete = useCachedResources()

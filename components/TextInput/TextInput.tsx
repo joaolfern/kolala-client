@@ -7,7 +7,7 @@ import {
 import Colors from '../../constants/Colors'
 import { useController } from 'react-hook-form'
 
-type IProps = TextInputProps & {
+export type IProps = TextInputProps & {
   name: string
   control: any
   defaultValue?: string
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.text,
     borderRadius: 10,
-    height: 58,
+    minHeight: 58,
     color: Colors.text,
     marginBottom: 25,
     fontSize: 18,
