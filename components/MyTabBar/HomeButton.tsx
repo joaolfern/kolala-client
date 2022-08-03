@@ -3,6 +3,7 @@ import { NavigationState } from '@react-navigation/native'
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import Compass from '../../assets/images/compass.svg'
+import Span from '../Span/Span'
 
 type IProps = BottomTabBarProps & {
   route: NavigationState['routes'][0]
@@ -34,30 +35,31 @@ function HomeButton({ route, descriptors, index, state, navigation }: IProps) {
   }
 
   return (
-    <TouchableOpacity
-      accessibilityRole='button'
-      accessibilityState={isFocused ? { selected: true } : {}}
-      accessibilityLabel={options.tabBarAccessibilityLabel}
-      testID={options.tabBarTestID}
-      onPress={onPress}
-      onLongPress={onLongPress}
-      style={styles.Button}
-    >
-      <Compass />
-    </TouchableOpacity>
+    <Span style={styles.Wrapper}>
+      <TouchableOpacity
+        accessibilityRole='button'
+        accessibilityState={isFocused ? { selected: true } : {}}
+        accessibilityLabel={options.tabBarAccessibilityLabel}
+        testID={options.tabBarTestID}
+        onPress={onPress}
+        onLongPress={onLongPress}
+        style={styles.Button}
+      >
+        <Compass />
+      </TouchableOpacity>
+    </Span>
   )
 }
 
 const styles = StyleSheet.create({
-  Button: {
+  Wrapper: {
     position: 'absolute',
-    top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  Button: {},
   Icon: {
     aspectRatio: 1,
     width: 51,
