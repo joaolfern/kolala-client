@@ -4,8 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import useCachedResources from './hooks/useCachedResources'
 import Navigation from './navigation'
 import * as Location from 'expo-location'
-import * as Svg from 'react-native-svg';
-import Login from './screens/Login'
+import * as Svg from 'react-native-svg'
 import EventForm from './screens/EventForm/EventForm'
 
 export default function App() {
