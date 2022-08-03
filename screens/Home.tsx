@@ -9,8 +9,8 @@ import coffee from '../assets/mapIcons/coffee.png'
 import mapStyle from '../constants/mapStyle'
 
 // @ts-ignore
-import { ENVIRONMENT } from "@env"
-import View  from '../components/View/View'
+import { ENVIRONMENT, GOOGLE_API_TOKEN } from '@env'
+import View from '../components/View/View'
 
 interface IMarkers {
   latitude: number
@@ -28,13 +28,13 @@ export default function Home({ navigation }: RootTabScreenProps<'Maps'>) {
   }, [])
 
   async function getLocation() {
-    let { status } = await Location.requestForegroundPermissionsAsync();
+    let { status } = await Location.requestForegroundPermissionsAsync()
     if (status !== 'granted') {
       console.log(`Location access denied`)
     }
 
     let devicePosition
-    console.log('🦞', ENVIRONMENT)
+    console.log('🐨 env', ENVIRONMENT)
     if (ENVIRONMENT === `local`) {
       devicePosition = {
         latitude: -23.4874549,
@@ -43,17 +43,15 @@ export default function Home({ navigation }: RootTabScreenProps<'Maps'>) {
         longitudeDelta: 0.0421,
       }
     } else {
-      const apiKey = 'AIzaSyCSnjOzWsb5WuBpLz4gUt7hLpgl0LqueKk'
-      Location.setGoogleApiKey(apiKey);
+      Location.setGoogleApiKey(GOOGLE_API_TOKEN)
 
-      let { coords } = await Location.getCurrentPositionAsync();
+      let { coords } = await Location.getCurrentPositionAsync()
       devicePosition = {
         latitude: coords.latitude,
         longitude: coords.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       }
-
     }
 
     setPosition(devicePosition)
@@ -64,8 +62,8 @@ export default function Home({ navigation }: RootTabScreenProps<'Maps'>) {
       {
         latitude: -23.4874549,
         longitude: -47.4991724,
-        icon: 'music'
-      }
+        icon: 'music',
+      },
     ])
   }
 
@@ -101,6 +99,6 @@ const styles = StyleSheet.create({
   },
   map: {
     width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    height: Dimensions.get('window').height + 70,
   },
-});
+})

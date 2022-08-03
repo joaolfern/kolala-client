@@ -25,10 +25,10 @@ export type RootStackScreenProps<Screen extends keyof RootStackParamList> = Nati
 >;
 
 export type RootTabParamList = {
-  Maps: undefined;
-  Hangs: undefined;
-  Feed: undefined;
-};
+  Maps: undefined
+  Profile: undefined
+  Events: undefined
+}
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> = CompositeScreenProps<
   BottomTabScreenProps<RootTabParamList, Screen>,

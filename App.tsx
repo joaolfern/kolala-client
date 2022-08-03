@@ -16,8 +16,8 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        {0 ? <Navigation  /> : <EventForm />}
-        <StatusBar style={'light'} />
+        {1 ? <Navigation /> : <EventForm />}
+        <StatusBar backgroundColor='transparent' style={'dark'} />
       </SafeAreaProvider>
     )
   }
