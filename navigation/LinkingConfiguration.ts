@@ -15,10 +15,6 @@ const linking: LinkingOptions<RootStackParamList> = {
     screens: {
       Root: {
         screens: {
-          Profile: {
-            screens: {
-            },
-          },
           Maps: {
             screens: {
             },
@@ -27,6 +23,7 @@ const linking: LinkingOptions<RootStackParamList> = {
             screens: {
             },
           },
+
         },
       },
       Modal: 'modal',

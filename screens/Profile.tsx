@@ -1,11 +1,12 @@
 import React from 'react'
+import Header from '../components/Header/Header'
 import Text from '../components/Text/Text'
 import View from '../components/View/View'
 
 function Profile() {
   return (
     <View>
-      <Text>Profile</Text>
+      <Header>Perfil</Header>
     </View>
   )
 }

@@ -3,6 +3,7 @@ import {
   NavigationState,
   ParamListBase,
   TabNavigationState,
+  useNavigation,
 } from '@react-navigation/native'
 import React from 'react'
 import { Image, StyleSheet, TouchableOpacity } from 'react-native'
@@ -12,39 +13,11 @@ import Span from '../Span/Span'
 import Text from '../Text/Text'
 import HangsButton from './HangsButton'
 
-type IProps = BottomTabBarProps & {
-  route: NavigationState['routes'][0]
-  index: number
-}
-
-function EventsButton({
-  route,
-  descriptors,
-  index,
-  state,
-  navigation,
-}: IProps) {
-  const { options } = descriptors[route.key]
-
-  const isFocused = state.index === index
+function EventsButton() {
+  const navigation = useNavigation()
 
   const onPress = () => {
-    const event = navigation.emit({
-      type: 'tabPress',
-      target: route.key,
-      canPreventDefault: true,
-    })
-
-    if (!isFocused && !event.defaultPrevented) {
-      navigation.navigate(route.name)
-    }
-  }
-
-  const onLongPress = () => {
-    navigation.emit({
-      type: 'tabLongPress',
-      target: route.key,
-    })
+    navigation.navigate('Events')
   }
 
   // 🎈🎈 TODO COUNTER
@@ -54,11 +27,7 @@ function EventsButton({
       <HangsButton />
       <Button
         accessibilityRole='button'
-        accessibilityState={isFocused ? { selected: true } : {}}
-        accessibilityLabel={options.tabBarAccessibilityLabel}
-        testID={options.tabBarTestID}
         onPress={onPress}
-        onLongPress={onLongPress}
         style={styles.Button}
       >
         <Text style={styles.Text}>3 eventos</Text>

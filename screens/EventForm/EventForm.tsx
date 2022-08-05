@@ -13,8 +13,11 @@ import { useForm } from 'react-hook-form'
 import Textarea from '../../components/Textarea/Textarea'
 import Select from '../../components/Select/Select'
 import { CATEGORY_RESOURCE } from './constants'
+import Header from '../../components/Header/Header'
+import { RootStackScreenProps, RootTabScreenProps } from '../../types'
+import MapIcon from '../../components/MapIcon/MapIcon'
 
-function EventForm() {
+function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
   const {
     handleSubmit,
     control,
@@ -22,10 +25,11 @@ function EventForm() {
   } = useForm()
 
   const onSubmit = (data: any) => console.log(data)
+
   return (
     <SafeAreaView style={styles.View}>
       <ScrollView>
-        <Text style={styles.Title}>Criar evento</Text>
+        <Header>Criar evento</Header>
         <UploadImage amount={6} style={styles.UploadImage} />
 
         <Label>Título</Label>
@@ -45,6 +49,8 @@ function EventForm() {
         <Label>Categorias</Label>
         <Select control={control} name='cateogries' items={CATEGORY_RESOURCE} />
 
+        <Label>Ícone no mapa</Label>
+        <MapIcon control={control} name='icon' />
         <Button style={styles.Button} onPress={handleSubmit(onSubmit)}>
           <Text style={styles.ButtonText}>Criar evento</Text>
         </Button>
@@ -59,11 +65,7 @@ const styles = StyleSheet.create({
   View: {
     padding: 16,
   },
-  Title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 19,
-  },
+
   UploadImage: {
     marginBottom: 20,
   },

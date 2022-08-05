@@ -15,13 +15,7 @@ type IProps = Omit<PickerSelectProps, 'onValueChange'> & {
   defaultValue?: string
 }
 
-export default function Select({
-  name,
-  control,
-  defaultValue,
-  ...rest
-}: IProps) {
-  const [isOpen, setIsOpen] = useState(false)
+export default function Select({ name, control, defaultValue, ...rest }: IProps) {
   const { field } = useController({
     name,
     control,
@@ -38,18 +32,13 @@ export default function Select({
         style={style}
         onValueChange={onChange}
         useNativeAndroidPickerStyle={false}
-        onOpen={() => setIsOpen(true)}
-        onClose={() => setIsOpen(false)}
         {...rest}
       />
       <ArrowRight
         style={[
           styles.Arrow,
           {
-            transform: [
-              { rotate: isOpen ? '180deg' : '0deg' },
-              { translateY: -21 },
-            ],
+            transform: [{ translateY: -21 }],
           },
         ]}
       />
