@@ -6,13 +6,13 @@ import HomeButton from './HomeButton'
 import ProfileTabButton from './ProfileTabButton'
 
 function MyTabBar({ state, ...rest }: BottomTabBarProps) {
-  const [profile, map, events] = state.routes
+  const [map] = state.routes
 
   return (
     <View style={styles.TabBar}>
-      <ProfileTabButton state={state} index={0} route={profile} {...rest} />
+      <ProfileTabButton />
       <HomeButton state={state} index={1} route={map} {...rest} />
-      <EventsButton state={state} index={2} route={events} {...rest} />
+      <EventsButton />
     </View>
   )
 }

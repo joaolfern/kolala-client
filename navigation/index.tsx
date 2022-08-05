@@ -1,7 +1,10 @@
 import { FontAwesome5 } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer, DarkTheme } from '@react-navigation/native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack'
 import * as React from 'react'
 
 import Colors from '../constants/Colors'
@@ -15,6 +18,8 @@ import {
 import LinkingConfiguration from './LinkingConfiguration'
 import MyTabBar from '../components/MyTabBar/MyTabBar'
 import Profile from '../screens/Profile'
+import Events from '../screens/Events'
+import EventForm from '../screens/EventForm/EventForm'
 
 export default function Navigation() {
   return (
@@ -39,13 +44,30 @@ function RootNavigator() {
         component={NotFoundScreen}
         options={{ title: 'Oops!' }}
       />
+      <Stack.Screen
+        name='EventForm'
+        component={EventForm}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='Profile'
+        component={Profile}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name='Events'
+        component={Events}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   )
 }
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>()
 
-function BottomTabNavigator() {
+type Props = NativeStackScreenProps<RootStackParamList, 'Root'>
+
+function BottomTabNavigator({ navigation: stackNavigation }: Props) {
   return (
     <BottomTab.Navigator
       initialRouteName='Maps'
@@ -64,15 +86,6 @@ function BottomTabNavigator() {
       }}
     >
       <BottomTab.Screen
-        name='Profile'
-        component={Profile}
-        options={({ navigation }: RootTabScreenProps<'Profile'>) => ({
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name='profile' color={color} />
-          ),
-        })}
-      />
-      <BottomTab.Screen
         name='Maps'
         component={Home}
         options={({ navigation }: RootTabScreenProps<'Maps'>) => ({
@@ -81,13 +94,10 @@ function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name='Events'
-        component={Home}
-        options={{
-          title: 'Meus Rolês',
-          tabBarIcon: ({ color }) => (
-            <TabBarIcon name='walking' color={color} />
-          ),
-        }}
+        component={Events}
+        options={({ navigation }: RootTabScreenProps<'Events'>) => ({
+          tabBarIcon: ({ color }) => <TabBarIcon name='Events' color={color} />,
+        })}
       />
     </BottomTab.Navigator>
   )
