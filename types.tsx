@@ -7,6 +7,12 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
+export namespace ImagePicker {
+  export interface ImagePickerMultipleResult {
+    uri: string
+  }
+}
+
 declare global {
   namespace ReactNavigation {
     interface RootParamList extends RootStackParamList { }
