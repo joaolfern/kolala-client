@@ -23,6 +23,7 @@ function MapIcon({ name, control }: IProps) {
     <ScrollView horizontal={true} style={styles.Container}>
       {MAP_ICONS_RESOURCE.map(({ label, value }) => (
         <TouchableOpacity
+          key={label}
           style={[styles.Item, selectedIcon === value && styles.ItemSelect]}
           onPress={() => onChange(value)}
         >
