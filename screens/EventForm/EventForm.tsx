@@ -30,8 +30,11 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
     <SafeAreaView style={styles.View}>
       <ScrollView>
         <Header>Criar evento</Header>
-        <UploadImage amount={6} style={styles.UploadImage} />
-
+        <UploadImage
+          control={control}
+          name='image'
+          style={styles.UploadImage}
+        />
         <Label>Título</Label>
         <TextInput
           name='title'
@@ -47,7 +50,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
         />
 
         <Label>Categorias</Label>
-        <Select control={control} name='cateogries' items={CATEGORY_RESOURCE} />
+        <Select control={control} name='categories' items={CATEGORY_RESOURCE} />
 
         <Label>Ícone no mapa</Label>
         <MapIcon control={control} name='icon' />
