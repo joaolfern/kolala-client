@@ -36,13 +36,14 @@ function LocationInput({ control, name, ...rest }: IProps) {
       onPress={(_, details = null) => {
         onChange(details?.geometry.location)
       }}
+      debounce={700}
+      keyboardShouldPersistTaps='always'
+      disableScroll={true}
       query={{
         key: GOOGLE_API_TOKEN,
         language: 'pt-BR',
-        location: {
-          latitude: -23.4874549,
-          longitude: -47.4991724,
-        },
+        rankby: 'distance',
+        location: '-23.4874549,-47.4991724',
       }}
     />
   )
