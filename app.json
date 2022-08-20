@@ -1,5 +1,6 @@
 {
   "expo": {
+    "owner": "lucariooo",
     "name": "kolala",
     "slug": "kolala",
     "version": "1.0.0",
@@ -15,9 +16,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },

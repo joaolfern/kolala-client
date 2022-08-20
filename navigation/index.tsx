@@ -18,7 +18,7 @@ import {
 import LinkingConfiguration from './LinkingConfiguration'
 import MyTabBar from '../components/MyTabBar/MyTabBar'
 import Profile from '../screens/Profile'
-import Events from '../screens/Events'
+import Events from '../screens/Events/Events'
 import EventForm from '../screens/EventForm/EventForm'
 
 export default function Navigation() {
