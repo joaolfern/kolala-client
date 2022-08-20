@@ -1,10 +1,8 @@
 import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
-import Switch from '../../components/Toggle/Toggle'
 import Text from '../../components/Text/Text'
 import UploadImage from '../../components/UploadImage/UploadImage'
-import View from '../../components/View/View'
 import TextInput from '../../components/TextInput/TextInput'
 import Label from '../../components/Label/Label'
 import Button from '../../components/Button/Button'
@@ -16,6 +14,7 @@ import { CATEGORY_RESOURCE } from './constants'
 import Header from '../../components/Header/Header'
 import { RootStackScreenProps, RootTabScreenProps } from '../../types'
 import MapIcon from '../../components/MapIcon/MapIcon'
+import LocationInput from '../../components/LocationInput/LocationInput'
 
 function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
   const {
@@ -28,7 +27,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
 
   return (
     <SafeAreaView style={styles.View}>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='handled'>
         <Header>Criar evento</Header>
         <UploadImage
           control={control}
@@ -49,11 +48,19 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
           placeholder='ex: Grupo que se reúne semanalmente para apreciar os clássicos da sétima arte nacional, debater e compartilhar experiências.'
         />
 
+        <Label>Local</Label>
+        <LocationInput
+          name='location'
+          control={control}
+          styles={styles.UploadImage}
+        />
+
         <Label>Categorias</Label>
         <Select control={control} name='categories' items={CATEGORY_RESOURCE} />
 
         <Label>Ícone no mapa</Label>
         <MapIcon control={control} name='icon' />
+
         <Button style={styles.Button} onPress={handleSubmit(onSubmit)}>
           <Text style={styles.ButtonText}>Criar evento</Text>
         </Button>
@@ -68,7 +75,6 @@ const styles = StyleSheet.create({
   View: {
     padding: 16,
   },
-
   UploadImage: {
     marginBottom: 20,
   },
