@@ -6,6 +6,7 @@ import Navigation from './navigation'
 import * as Location from 'expo-location'
 import * as Svg from 'react-native-svg'
 import EventForm from './screens/EventForm/EventForm'
+import Login from './screens/Login'
 
 export default function App() {
   const isLoadingComplete = useCachedResources()
@@ -15,7 +16,7 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        {1 ? <Navigation /> : <EventForm />}
+        {0 ? <Navigation /> : <Login />}
         <StatusBar backgroundColor='transparent' style={'dark'} />
       </SafeAreaProvider>
     )
