@@ -7,6 +7,8 @@ import * as Location from 'expo-location'
 import * as Svg from 'react-native-svg'
 import EventForm from './screens/EventForm/EventForm'
 import Login from './screens/Login'
+import { Provider } from 'react-redux'
+import { store } from './store/tokenStore'
 
 export default function App() {
   const isLoadingComplete = useCachedResources()
@@ -16,8 +18,10 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        {0 ? <Navigation /> : <Login />}
-        <StatusBar backgroundColor='transparent' style={'dark'} />
+        <Provider store={store}>
+          {0 ? <Navigation /> : <Login />}
+          <StatusBar backgroundColor='transparent' style={'dark'} />
+        </Provider>
       </SafeAreaProvider>
     )
   }

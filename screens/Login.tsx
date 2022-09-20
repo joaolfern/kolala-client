@@ -4,20 +4,17 @@ import Text from '../components/Text/Text'
 import View from '../components/View/View'
 import logo from '../assets/images/logo.png'
 import Colors from '../constants/Colors'
-import GoogleAuthButton from '../components/GoogleAuthButton/GoogleAuthButton'
+import GoogleAuthButton from '../components/AuthButton/GoogleAuthButton'
+import FacebookAuthButton from '../components/AuthButton/FacebookAuthButton'
 
 function Login() {
   return (
-    <View
-      style={style.View}
-    >
-      <Image
-        style={style.Logo}
-        source={logo}
-      />
+    <View style={style.View}>
+      <Image style={style.Logo} source={logo} />
       <Text style={style.Title}>kolala</Text>
       <Text style={style.Description}>seu minimapa da vida real</Text>
       <GoogleAuthButton />
+      <FacebookAuthButton />
     </View>
   )
 }
@@ -32,7 +29,7 @@ const style = StyleSheet.create({
   Title: {
     color: Colors.secondaryColor,
     fontWeight: '600',
-    fontSize: 30
+    fontSize: 30,
   },
   Description: {
     marginBottom: 20,
@@ -40,8 +37,8 @@ const style = StyleSheet.create({
     fontWeight: '600',
   },
   Logo: {
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 })
 
 export default Login
