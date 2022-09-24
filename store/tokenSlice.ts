@@ -9,11 +9,13 @@ export const tokenSlice = createSlice({
     setToken: (state, action: PayloadAction<string>) => (
       state = action.payload
     ),
-  },
+    clearToken: (state, action) => (
+      state = initialState
+    ),
+  }
 })
 
-export const { setToken } = tokenSlice.actions
-
+export const { clearToken, setToken } = tokenSlice.actions
 export const selectToken = (state: { token: string } ) => state
 
 const tokenReducer = tokenSlice.reducer
