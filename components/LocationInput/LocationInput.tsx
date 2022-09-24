@@ -7,6 +7,8 @@ import {
 import { GOOGLE_API_TOKEN } from '@env'
 import Colors from '../../constants/Colors'
 import { useController } from 'react-hook-form'
+import Span from '../Span/Span'
+import Text from '../Text/Text'
 
 interface IProps extends Partial<GooglePlacesAutocompleteProps> {
   name: string
@@ -45,6 +47,16 @@ function LocationInput({ control, name, ...rest }: IProps) {
         rankby: 'distance',
         location: '-23.4874549,-47.4991724',
       }}
+      renderRow={(rowData, idx) => {
+        const title = rowData.structured_formatting.main_text
+        const address = rowData.structured_formatting.secondary_text
+        return (
+          <Span style={resultStyle.containerResultRow(idx)}>
+            <Text style={resultStyle.resultTitle}>{title}</Text>
+            <Text>{address}</Text>
+          </Span>
+        )
+      }}
     />
   )
 }
@@ -52,23 +64,49 @@ function LocationInput({ control, name, ...rest }: IProps) {
 const style: GooglePlacesAutocompleteProps['styles'] = {
   container: {
     marginBottom: 20,
-    // borderWidth: 1,
-    // borderColor: Colors.text,
-    // borderRadius: 10,
-    // minHeight: 58,
-    // marginBottom: 25,
-    // paddingHorizontal: 20,
-    // justifyContent: 'center',
+    justifyContent: 'center',
   },
-  // textInput: {
-  //   fontSize: 18,
-  //   color: Colors.text,
-  // },
-  // description: {},
-  // textInputContainer: {
-  //   justifyContent: 'center',
-  //   minHeight: 58,
-  // },
+  textInput: {
+    minHeight: 58,
+    marginTop: 4,
+    color: Colors.text,
+    borderWidth: 1,
+    borderRadius: 10,
+    borderColor: 'white',
+    backgroundColor: 'transparent',
+    fontSize: 18,
+    margin: 0,
+    paddingHorizontal: 20,
+  },
+  textInputContainer: {
+    justifyContent: 'center',
+  },
+  separator: {
+    display: 'none',
+  },
+  row: {
+    backgroundColor: 'transparent',
+    paddingVertical: 0,
+    paddingHorizontal: 0,
+    margin: 0,
+    color: Colors.text,
+  },
+}
+
+const resultStyle = {
+  containerResultRow: (idx: number) => ({
+    flex: 1,
+    'justify-content': 'center',
+    color: Colors.text,
+    borderWidth: 0,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+
+    backgroundColor: idx % 2 ? Colors.xLightBackground : Colors.lightBackground,
+  }),
+  resultTitle: {
+    fontWeight: '600' as '600',
+  },
 }
 
 export default LocationInput
