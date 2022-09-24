@@ -62,7 +62,7 @@ function Events({ navigation }: RootTabScreenProps<'Events'>) {
   }
 
   return (
-    <SafeAreaView style={styles.View}>
+    <SafeAreaView>
       <Span style={styles.MyEvents}>
         <Header>Seus eventos</Header>
         <Button style={styles.CreateButton}>
@@ -81,9 +81,6 @@ function Events({ navigation }: RootTabScreenProps<'Events'>) {
 }
 
 const styles = StyleSheet.create({
-  View: {
-    padding: 16,
-  },
   MyEvents: {
     marginBottom: 18,
   },

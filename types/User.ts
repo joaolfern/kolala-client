@@ -1,10 +1,10 @@
 export type _userLevel = 'user' | 'admin'
 
-export type UserLoginResponse = {
-  authKey: string,
-  authMethod: string
-  email: string
+export interface Account {
   id: number
-  level: _userLevel,
-  status: 1,
+  email: string
+  status: number
+  authMethod: string
+  authKey: string
+  level: _userLevel
 }

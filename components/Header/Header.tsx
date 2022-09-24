@@ -16,7 +16,9 @@ function Header({ ...rest }: IProps) {
   return (
     <Span style={styles.Container}>
       <TouchableOpacity onPress={onBack}>
-        <ArrowRight style={styles.BackIcon} />
+        <Span style={styles.BackIconContainer}>
+          <ArrowRight style={styles.BackIcon} />
+        </Span>
       </TouchableOpacity>
       <Text style={styles.Text} {...rest} />
     </Span>
@@ -32,6 +34,10 @@ const styles = StyleSheet.create({
   Text: {
     fontSize: 22,
     fontWeight: 'bold',
+  },
+  BackIconContainer: {
+    paddingHorizontal: 10,
+    alignItems: 'center',
   },
   BackIcon: {
     transform: [{ rotate: '180deg' }],
