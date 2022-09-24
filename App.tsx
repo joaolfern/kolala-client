@@ -7,6 +7,9 @@ import * as Svg from 'react-native-svg'
 import { Provider } from 'react-redux'
 import { store } from './store/store'
 import InitialWidget from './navigation/InitialWidget'
+import { LogBox } from 'react-native'
+
+LogBox.ignoreLogs(['EventEmitter.removeListener'])
 
 export default function App() {
   const isLoadingComplete = useCachedResources()
