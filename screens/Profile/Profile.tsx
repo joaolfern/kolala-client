@@ -11,6 +11,7 @@ import { IProfile } from '../../types/Profile'
 import { getProfile } from './api'
 import { RootStackScreenProps, RootTabParamList } from '../../types'
 import LogoutButton from '../../components/LogoutButton/LogoutButton'
+import useLogout from '../../hooks/useLogout'
 
 interface IProps {
   profileUserId: number
@@ -19,8 +20,10 @@ interface IProps {
 function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
   const { profileUserId } = route?.params
   const user = useAppSelector(selectUser)
-  const [profileUser, setProfileUser] = useState<IProfile | null>(null)
+  const logout = useLogout()
+
   const isOwnProfile = useRef(profileUserId === user.profile?.id).current
+  const [profileUser, setProfileUser] = useState<IProfile | null>(null)
 
   useEffect(() => {
     if (isOwnProfile) {
@@ -45,8 +48,8 @@ function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
   return (
     <SafeAreaView>
       <Header>Perfil</Header>
-      <Span style={styles.row}>
-        <Span style={styles.topContainer}>
+      <Span style={styles.topContainer}>
+        <Span style={styles.row}>
           <Span style={styles.pictureWrapper}>
             <Image
               style={styles.picture}
@@ -57,14 +60,16 @@ function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
               }
             />
           </Span>
-          <Text style={styles.title}>{profileUser?.name}</Text>
-          {!!(isOwnProfile && user.account?.email) && (
-            <Text>{user.account?.email}</Text>
-          )}
+          <Span style={styles.logoutWrapper}>
+            <Span style={styles.logout}>
+              <LogoutButton onPress={logout} />
+            </Span>
+          </Span>
         </Span>
-        <Span style={styles.logout}>
-          <LogoutButton />
-        </Span>
+        <Text style={styles.title}>{profileUser?.name}</Text>
+        {!!(isOwnProfile && user.account?.email) && (
+          <Text>{user.account?.email}</Text>
+        )}
       </Span>
     </SafeAreaView>
   )
@@ -73,6 +78,11 @@ function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
 const styles = StyleSheet.create({
   row: {
     position: 'relative',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '100%',
+    marginBottom: 16,
   },
   topContainer: {
     alignItems: 'center',
@@ -86,17 +96,20 @@ const styles = StyleSheet.create({
   pictureWrapper: {
     borderRadius: 99999,
     overflow: 'hidden',
-    marginBottom: 16,
+    marginLeft: 'auto',
   },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
   },
+  logoutWrapper: {
+    marginLeft: 'auto',
+    height: 53,
+  },
   logout: {
     position: 'absolute',
-    right: 8,
-    alignItems: 'stretch',
-    marginVertical: 'auto',
+    right: 0,
+    bottom: 0,
   },
 })
 

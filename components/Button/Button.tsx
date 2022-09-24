@@ -1,14 +1,14 @@
 import React, { ReactNode } from 'react'
-import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native'
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from 'react-native'
 import Colors from '../../constants/Colors'
 
-function Button ({ style, ...rest  }: TouchableOpacityProps) {
-  return (
-    <TouchableOpacity
-      {...rest}
-      style={[styles.Button, style]}
-    />
-  )
+function Button({ style, ...rest }: TouchableOpacityProps) {
+  return <TouchableOpacity {...rest} style={[styles.Button, style]} />
 }
 
 export default Button
