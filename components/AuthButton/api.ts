@@ -1,10 +1,10 @@
 import api from '../../services/api'
 import { Fetch } from '../../services/Fetch'
-import { Profile } from '../../types/Profile'
-import { UserLoginResponse } from '../../types/User'
+import { IProfile } from '../../types/Profile'
+import { Account } from '../../types/User'
 
 export const sendAccessTokenRequest = async (data: { accessToken: string }) => (
-  await Fetch<{ user: UserLoginResponse, token: string, profile: Profile }>(
+  await Fetch<{ user: Account, token: string, profile: IProfile }>(
     () => api.post('unauth/access-token', data)
   )
 )

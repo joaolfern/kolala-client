@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, StyleSheet, View } from 'react-native'
+import { Alert, Image, StyleSheet, View } from 'react-native'
 import Button from '../Button/Button'
 import Text from '../Text/Text'
 import google from '../../assets/images/google.png'
@@ -9,7 +9,8 @@ import * as Google from 'expo-auth-session/providers/google'
 import { EXPO_CLIENT_ID } from '@env'
 import { sendAccessTokenRequest } from './api'
 import authButtonStyle from './authButtonStyle'
-import { selectToken, storeToken } from '../../store/tokenSlice'
+import { setToken } from '../../store/tokenSlice'
+import { setUser } from '../../store/userSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 WebBrowser.maybeCompleteAuthSession()
 
@@ -22,7 +23,6 @@ function GoogleAuthButton() {
   })
 
   const dispatch = useAppDispatch()
-  const { token } = useAppSelector(selectToken)
 
   React.useEffect(() => {
     async function sendAccessToken(accessToken: string) {
@@ -30,11 +30,11 @@ function GoogleAuthButton() {
         const response = await sendAccessTokenRequest({ accessToken })
         const { profile, token, user } = response.data?.data || {}
 
-        console.log('alou', token)
+        if (profile && user) dispatch(setUser({ account: user, profile }))
 
-        if (token) dispatch(storeToken(token))
-      } catch (err) {
-        console.log('error', err)
+        if (token) dispatch(setToken(token))
+      } catch (err: any) {
+        console.log(err.message)
       }
     }
 
@@ -43,7 +43,7 @@ function GoogleAuthButton() {
       if (authentication?.accessToken)
         sendAccessToken(authentication?.accessToken)
     }
-  }, [])
+  }, [response])
 
   return (
     <View style={[authButtonStyle.View, styles.View]}>

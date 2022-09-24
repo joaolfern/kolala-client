@@ -1,4 +1,4 @@
-export type Profile = {
+export type IProfile = {
   facebookAccount: string | null
   id: number
   instagramAccount: string | null

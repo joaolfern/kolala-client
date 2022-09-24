@@ -26,7 +26,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
   const onSubmit = (data: any) => console.log(data)
 
   return (
-    <SafeAreaView style={styles.View}>
+    <SafeAreaView>
       <ScrollView keyboardShouldPersistTaps='handled'>
         <Header>Criar evento</Header>
         <UploadImage
@@ -72,9 +72,6 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
 export default EventForm
 
 const styles = StyleSheet.create({
-  View: {
-    padding: 16,
-  },
   UploadImage: {
     marginBottom: 20,
   },

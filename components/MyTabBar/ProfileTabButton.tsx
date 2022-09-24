@@ -4,13 +4,18 @@ import React from 'react'
 import { Image, StyleSheet, TouchableOpacity } from 'react-native'
 import blankProfile from '../../assets/images/blank-profile.png'
 import Colors from '../../constants/Colors'
+import { useAppSelector } from '../../store/hooks'
+import { selectUser } from '../../store/userSlice'
 import Span from '../Span/Span'
 
 function ProfileTabButton() {
   const navigation = useNavigation()
+  const { profile } = useAppSelector(selectUser)
 
   const onPress = () => {
-    navigation.navigate('Profile')
+    navigation.navigate('Profile', {
+      profileUserId: profile?.id as number,
+    })
   }
 
   return (
