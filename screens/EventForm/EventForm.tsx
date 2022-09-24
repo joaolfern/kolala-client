@@ -32,7 +32,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
         <UploadImage
           control={control}
           name='image'
-          style={styles.UploadImage}
+          style={styles.marginBottom}
         />
         <Label>Título</Label>
         <TextInput
@@ -52,7 +52,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
         <LocationInput
           name='location'
           control={control}
-          styles={styles.UploadImage}
+          styles={styles.marginBottom}
         />
 
         <Label>Categorias</Label>
@@ -72,7 +72,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
 export default EventForm
 
 const styles = StyleSheet.create({
-  UploadImage: {
+  marginBottom: {
     marginBottom: 20,
   },
   Button: {
