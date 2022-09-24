@@ -4,7 +4,6 @@ import Header from '../../components/Header/Header'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import { useAppSelector } from '../../store/hooks'
 import { selectUser } from '../../store/userSlice'
-import blankProfile from '../../assets/images/blank-profile.png'
 import Span from '../../components/Span/Span'
 import Text from '../../components/Text/Text'
 import { IProfile } from '../../types/Profile'
@@ -12,10 +11,7 @@ import { getProfile } from './api'
 import { RootStackScreenProps, RootTabParamList } from '../../types'
 import LogoutButton from '../../components/LogoutButton/LogoutButton'
 import useLogout from '../../hooks/useLogout'
-
-interface IProps {
-  profileUserId: number
-}
+import Avatar from '../../components/Avatar/Avatar'
 
 function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
   const { profileUserId } = route?.params
@@ -51,12 +47,10 @@ function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
       <Span style={styles.topContainer}>
         <Span style={styles.row}>
           <Span style={styles.pictureWrapper}>
-            <Image
+            <Avatar
               style={styles.picture}
               source={
-                profileUser?.picture
-                  ? { uri: profileUser.picture }
-                  : blankProfile
+                profileUser?.picture ? { uri: profileUser.picture } : undefined
               }
             />
           </Span>
@@ -76,6 +70,9 @@ function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
 }
 
 const styles = StyleSheet.create({
+  topContainer: {
+    alignItems: 'center',
+  },
   row: {
     position: 'relative',
     justifyContent: 'center',
@@ -84,18 +81,11 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 16,
   },
-  topContainer: {
-    alignItems: 'center',
-  },
   picture: {
-    aspectRatio: 1,
-    resizeMode: 'contain',
     width: 150,
     height: 150,
   },
   pictureWrapper: {
-    borderRadius: 99999,
-    overflow: 'hidden',
     marginLeft: 'auto',
   },
   title: {
