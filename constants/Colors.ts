@@ -8,5 +8,6 @@ export default {
   lightBackground: '#322A2D',
   xLightBackground: '#413036',
   gray: '#B6B6B6',
-  green: '#00AB64'
+  green: '#00AB64',
+  red: 'red'
 }
