@@ -63,19 +63,22 @@ function Events({ navigation }: RootTabScreenProps<'Events'>) {
 
   return (
     <SafeAreaView>
-      <Span style={styles.MyEvents}>
-        <Header>Seus eventos</Header>
-        <Button style={styles.CreateButton}>
-          <Text onPress={onPress} style={styles.CreateButtonText}>
-            Criar evento
-          </Text>
-        </Button>
-      </Span>
-      <Text style={styles.Title}>Eventos que você participa</Text>
-      <FlatList
-        data={myEvents}
-        renderItem={({ item }) => <MyEvent event={item} />}
-      />
+      <ScrollView>
+        <Span style={styles.MyEvents}>
+          <Header>Seus eventos</Header>
+          <Button style={styles.CreateButton}>
+            <Text onPress={onPress} style={styles.CreateButtonText}>
+              Criar evento
+            </Text>
+          </Button>
+        </Span>
+        <Text style={styles.Title}>Eventos que você participa</Text>
+        <FlatList
+          data={myEvents}
+          scrollEnabled={false}
+          renderItem={({ item }) => <MyEvent event={item} />}
+        />
+      </ScrollView>
     </SafeAreaView>
   )
 }
