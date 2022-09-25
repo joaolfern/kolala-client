@@ -12,6 +12,8 @@ import CameraSVG from '../../assets/images/camera.svg'
 import Colors from '../../constants/Colors'
 import * as ImagePicker from 'expo-image-picker'
 import { useController } from 'react-hook-form'
+import Constants from 'expo-constants'
+
 type UploadImageProps = ViewProps & {
   listMax?: number
   name: string
@@ -25,7 +27,7 @@ function UploadImage({
   control,
   ...rest
 }: UploadImageProps) {
-  const [list, setList] = useState<ImagePicker.ImageInfo[]>([])
+  const [list, setList] = useState<string[]>([])
 
   const { field } = useController({
     name,
@@ -33,7 +35,28 @@ function UploadImage({
     defaultValue: [],
   })
 
+  async function handleCameraPermission() {
+    if (Constants?.platform?.ios) {
+      const cameraRollStatus =
+        await ImagePicker.requestMediaLibraryPermissionsAsync()
+      const cameraStatus = await ImagePicker.requestCameraPermissionsAsync()
+      if (
+        cameraRollStatus.status !== 'granted' ||
+        cameraStatus.status !== 'granted'
+      ) {
+        alert('Sorry, we need these permissions to make this work!')
+        return false
+      }
+    }
+
+    return true
+  }
+
   const handleChoosePhoto = async () => {
+    const grantedPermission = await handleCameraPermission()
+
+    if (!grantedPermission) return
+
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
@@ -41,12 +64,12 @@ function UploadImage({
       allowsMultipleSelection: true,
     })
 
-    const item = result || {}
+    const item = (result || {}) as ImagePicker.ImageInfo
 
     if (!result.cancelled) {
       // @ts-ignore
       setList(prev => {
-        const newList = Array.isArray(item) ? item : [item, ...prev]
+        const newList = Array.isArray(item) ? item : [item.uri, ...prev]
 
         onChange(newList)
         return newList
@@ -67,7 +90,7 @@ function UploadImage({
           </View>
         </TouchableOpacity>
       )}
-      {list.map(({ uri }, idx) => (
+      {list.map((uri, idx) => (
         <Image key={uri + idx} style={[styles.ImageItem]} source={{ uri }} />
       ))}
     </ScrollView>

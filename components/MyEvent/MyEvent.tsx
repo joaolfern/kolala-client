@@ -6,10 +6,10 @@ import CategoryTag from '../CategoryTag/CategoryTag'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 import MyEventChatButton from './components/MyEventChatButton/MyEventChatButton'
-import { IEvent } from './types'
+import { IEventRegistry } from './types'
 
 interface IProps {
-  event: IEvent
+  event: IEventRegistry
 }
 
 function MyEvent({ event }: IProps) {

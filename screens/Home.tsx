@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react'
+import { StyleSheet, Dimensions } from 'react-native'
 
-import { RootTabScreenProps } from '../types';
-import MapView, { Marker, Region } from 'react-native-maps';
-import * as Location from 'expo-location';
+import { RootTabScreenProps } from '../types'
+import MapView, { Marker, Region } from 'react-native-maps'
+import * as Location from 'expo-location'
 // @ts-ignore
 import coffee from '../assets/mapIcons/coffee.png'
 import mapStyle from '../constants/mapStyle'

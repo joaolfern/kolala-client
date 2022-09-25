@@ -6,14 +6,17 @@ import logo from '../assets/images/logo.png'
 import Colors from '../constants/Colors'
 import GoogleAuthButton from '../components/AuthButton/GoogleAuthButton'
 import FacebookAuthButton from '../components/AuthButton/FacebookAuthButton'
+import Span from '../components/Span/Span'
 
 function Login() {
   return (
     <View style={style.View}>
-      <Image style={style.Logo} source={logo} />
+      <Image style={style.marginBottom} source={logo} />
       <Text style={style.Title}>kolala</Text>
       <Text style={style.Description}>seu minimapa da vida real</Text>
-      <GoogleAuthButton />
+      <Span style={style.Button}>
+        <GoogleAuthButton />
+      </Span>
       <FacebookAuthButton />
     </View>
   )
@@ -36,8 +39,12 @@ const style = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
   },
-  Logo: {
+  marginBottom: {
     marginBottom: 10,
+  },
+  Button: {
+    width: '100%',
+    marginBottom: 22,
   },
 })
 

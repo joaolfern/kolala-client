@@ -6,7 +6,7 @@ import Button from '../../components/Button/Button'
 import Header from '../../components/Header/Header'
 import Label from '../../components/Label/Label'
 import MyEvent from '../../components/MyEvent/MyEvent'
-import { IEvent } from '../../components/MyEvent/types'
+import { IEventRegistry } from '../../components/MyEvent/types'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Span from '../../components/Span/Span'
 import Text from '../../components/Text/Text'
@@ -14,7 +14,7 @@ import View from '../../components/View/View'
 import Colors from '../../constants/Colors'
 import { RootTabScreenProps } from '../../types'
 
-const myEvents: IEvent[] = [
+const myEvents: IEventRegistry[] = [
   {
     categories: [
       {
