@@ -3,7 +3,7 @@ export interface ICategory {
     value: string
 }
 
-export interface IEvent {
+export interface IEventRegistry {
   title: string
   img: string
   date: string

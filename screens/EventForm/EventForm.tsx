@@ -15,15 +15,62 @@ import Header from '../../components/Header/Header'
 import { RootStackScreenProps, RootTabScreenProps } from '../../types'
 import MapIcon from '../../components/MapIcon/MapIcon'
 import LocationInput from '../../components/LocationInput/LocationInput'
+import { IEventFormSubmitEvent } from '../../types/Event'
+import { createEvent } from './api'
 
 function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm()
+  } = useForm<IEventFormSubmitEvent>()
 
-  const onSubmit = (data: any) => console.log(data)
+  function makeFormData(data: IEventFormSubmitEvent, formData: FormData) {
+    Object.entries(data).forEach(([key, value]) => {
+      switch (key) {
+        case 'image':
+          value?.map?.((uri: string, idx: number) => {
+            let uriArray = uri.split('.')
+            let fileType = uriArray[uriArray.length - 1]
+
+            const file = {
+              uri,
+              name: `${data.title} (${idx}).${fileType}`,
+              type: `image/${fileType}`,
+            }
+
+            // @ts-ignore
+            formData.append(`key`, file)
+            return
+          })
+
+          return
+        case 'location':
+          formData.append('lat', value.lat)
+          formData.append('lng', value.lng)
+
+          return
+        default:
+          formData.append(key, value)
+          return
+      }
+    })
+  }
+
+  async function onSubmit(data: IEventFormSubmitEvent) {
+    const formData = new FormData()
+    makeFormData(data, formData)
+
+    console.log(formData)
+
+    try {
+      const response = await createEvent(formData)
+      // TODO 🎈🎈
+    } catch (err) {
+      console.error(err)
+      console.log(err)
+    }
+  }
 
   return (
     <SafeAreaView>
@@ -55,8 +102,8 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
           styles={styles.marginBottom}
         />
 
-        <Label>Categorias</Label>
-        <Select control={control} name='categories' items={CATEGORY_RESOURCE} />
+        <Label>Categoria</Label>
+        <Select control={control} name='category' items={CATEGORY_RESOURCE} />
 
         <Label>Ícone no mapa</Label>
         <MapIcon control={control} name='icon' />
@@ -78,6 +125,7 @@ const styles = StyleSheet.create({
   Button: {
     alignSelf: 'flex-end',
     width: 'auto',
+    marginTop: 20,
   },
   ButtonText: {
     color: Colors.altText,

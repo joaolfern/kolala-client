@@ -12,6 +12,7 @@ import authButtonStyle from './authButtonStyle'
 import { setToken } from '../../store/tokenSlice'
 import { setUser } from '../../store/userSlice'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import Span from '../Span/Span'
 WebBrowser.maybeCompleteAuthSession()
 
 function GoogleAuthButton() {
@@ -46,7 +47,7 @@ function GoogleAuthButton() {
   }, [response])
 
   return (
-    <View style={[authButtonStyle.View, styles.View]}>
+    <Span style={[authButtonStyle.View, styles.View]}>
       <Button
         disabled={!request}
         style={[authButtonStyle.Button, styles.Button]}
@@ -59,7 +60,7 @@ function GoogleAuthButton() {
           Continuar com Google
         </Text>
       </Button>
-    </View>
+    </Span>
   )
 }
 
@@ -67,7 +68,11 @@ export default GoogleAuthButton
 
 const styles = StyleSheet.create({
   Image: {},
-  View: {},
+  View: {
+    margin: 0,
+    height: 'auto',
+    paddingVertical: 0,
+  },
   Button: {
     backgroundColor: '#fff',
   },

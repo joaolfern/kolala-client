@@ -9,6 +9,7 @@ import * as Google from 'expo-auth-session/providers/google'
 import { EXPO_CLIENT_ID } from '@env'
 import { sendAccessTokenRequest } from './api'
 import authButtonStyle from './authButtonStyle'
+import Span from '../Span/Span'
 WebBrowser.maybeCompleteAuthSession()
 
 function FacebookAuthButton() {
@@ -34,7 +35,7 @@ function FacebookAuthButton() {
   }, [response])
 
   return (
-    <View style={[authButtonStyle.View, styles.View]}>
+    <Span style={[authButtonStyle.View, styles.View]}>
       <Button
         disabled={!request}
         style={[authButtonStyle.Button, styles.Button]}
@@ -50,7 +51,7 @@ function FacebookAuthButton() {
           Continuar com Facebook
         </Text>
       </Button>
-    </View>
+    </Span>
   )
 }
 
@@ -58,7 +59,9 @@ export default FacebookAuthButton
 
 const styles = StyleSheet.create({
   Image: {},
-  View: {},
+  View: {
+    paddingVertical: 0,
+  },
   Button: {
     backgroundColor: '#1877F2',
   },
