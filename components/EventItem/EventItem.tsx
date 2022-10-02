@@ -2,50 +2,53 @@ import dayjs from 'dayjs'
 import React from 'react'
 import { Image, StyleSheet } from 'react-native'
 import Colors from '../../constants/Colors'
+import { IEvent } from '../../types/Event'
+import Avatar from '../Avatar/Avatar'
 import CategoryTag from '../CategoryTag/CategoryTag'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
-import MyEventChatButton from './components/MyEventChatButton/MyEventChatButton'
+import EventItemChatButton from './components/EventItemChatButton/EventItemChatButton'
 import { IEventRegistry } from './types'
 
 interface IProps {
-  event: IEventRegistry
+  event: IEvent.ListItem
 }
 
-function MyEvent({ event }: IProps) {
+function EventItem({ event }: IProps) {
   return (
     <Span style={[styles.Container, styles.GapBottom]}>
       <Span style={[styles.Header, styles.innerGapBottom]}>
-        <Image style={styles.Image} source={{ uri: event.img }} />
+        <Avatar
+          style={styles.Image}
+          source={event.image ? { uri: event.image } : undefined}
+        />
         <Span style={styles.HeaderTitle}>
           <Text style={styles.HeaderTitleText}>{event.title}</Text>
-          {event.categories.map(category => (
-            <CategoryTag key={category.value} category={category} />
-          ))}
+          <CategoryTag key={event.category} category={event.category} />
         </Span>
       </Span>
       <Span style={[styles.DataRow, styles.innerGapBottom]}>
         <Span style={styles.DataRowLeft}>
           <Text>Data</Text>
-          <Text>{dayjs(event.date).format('D/M')}</Text>
+          <Text>{dayjs(event.datetime).format('D/M')}</Text>
         </Span>
         <Span style={styles.DataRowRight}>
           <Text>Horário</Text>
-          <Text>{dayjs(event.time).format('DD [de] MMM[.]')}</Text>
+          <Text>{dayjs(event.datetime).format('DD [de] MMM[.]')}</Text>
         </Span>
       </Span>
       <Span style={styles.DataRow}>
         <Span style={styles.DataRowRight}>
           <Text>Participantes</Text>
-          <Text>{event.members.length || 0}</Text>
+          <Text>{event.memberCount}</Text>
         </Span>
-        <MyEventChatButton />
+        <EventItemChatButton />
       </Span>
     </Span>
   )
 }
 
-export default MyEvent
+export default EventItem
 
 const styles = StyleSheet.create({
   Container: {

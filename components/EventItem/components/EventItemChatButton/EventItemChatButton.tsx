@@ -4,7 +4,7 @@ import Chat from '../../../../assets/mapIcons/chat.svg'
 import { StyleSheet } from 'react-native'
 import Colors from '../../../../constants/Colors'
 
-function MyEventChatButton() {
+function EventItemChatButton() {
   return (
     <Button style={styles.Button}>
       <Chat />
@@ -12,7 +12,7 @@ function MyEventChatButton() {
   )
 }
 
-export default MyEventChatButton
+export default EventItemChatButton
 
 const styles = StyleSheet.create({
   Button: {

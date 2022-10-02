@@ -11,7 +11,6 @@ export default function SafeAreaView({
 
 const styles = StyleSheet.create({
   View: {
-    padding: 16,
     backgroundColor: Colors.background,
     height: '100%',
     width: '100%',

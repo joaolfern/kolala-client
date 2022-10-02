@@ -1,18 +1,22 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { StyleSheet } from 'react-native'
 import Colors from '../../constants/Colors'
-import { ICategory } from '../MyEvent/types'
+import { CATEGORY_RESOURCE } from '../../screens/EventForm/constants'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 
 interface IProps {
-  category: ICategory
+  category: number
 }
 
 function CategoryTag({ category }: IProps) {
+  const categoryItem = useMemo(
+    () => CATEGORY_RESOURCE.find(item => item.value === category),
+    []
+  )
   return (
     <Span style={styles.Tag}>
-      <Text style={styles.Text}>{category.label}</Text>
+      <Text style={styles.Text}>{categoryItem?.label}</Text>
     </Span>
   )
 }

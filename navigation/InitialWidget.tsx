@@ -9,8 +9,6 @@ function InitialWidget() {
   const { token } = useAppSelector(selectToken)
   const user = useAppSelector(selectUser)
 
-  console.log('👾', user)
-
   return token ? <Navigation /> : <Login />
 }
 
