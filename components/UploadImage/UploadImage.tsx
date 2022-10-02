@@ -59,7 +59,6 @@ function UploadImage({
 
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
       quality: 1,
       allowsMultipleSelection: true,
     })
@@ -67,7 +66,6 @@ function UploadImage({
     const item = (result || {}) as ImagePicker.ImageInfo
 
     if (!result.cancelled) {
-      // @ts-ignore
       setList(prev => {
         const newList = Array.isArray(item) ? item : [item.uri, ...prev]
 

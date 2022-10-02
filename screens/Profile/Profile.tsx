@@ -12,6 +12,7 @@ import { RootStackScreenProps, RootTabParamList } from '../../types'
 import LogoutButton from '../../components/LogoutButton/LogoutButton'
 import useLogout from '../../hooks/useLogout'
 import Avatar from '../../components/Avatar/Avatar'
+import Scroll from '../../components/Scroll/Scroll'
 
 function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
   const { profileUserId } = route?.params
@@ -43,28 +44,32 @@ function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
 
   return (
     <SafeAreaView>
-      <Header>Perfil</Header>
-      <Span style={styles.topContainer}>
-        <Span style={styles.row}>
-          <Span style={styles.pictureWrapper}>
-            <Avatar
-              style={styles.picture}
-              source={
-                profileUser?.picture ? { uri: profileUser.picture } : undefined
-              }
-            />
-          </Span>
-          <Span style={styles.logoutWrapper}>
-            <Span style={styles.logout}>
-              <LogoutButton onPress={logout} />
+      <Scroll>
+        <Header>Perfil</Header>
+        <Span style={styles.topContainer}>
+          <Span style={styles.row}>
+            <Span style={styles.pictureWrapper}>
+              <Avatar
+                style={styles.picture}
+                source={
+                  profileUser?.picture
+                    ? { uri: profileUser.picture }
+                    : undefined
+                }
+              />
+            </Span>
+            <Span style={styles.logoutWrapper}>
+              <Span style={styles.logout}>
+                <LogoutButton onPress={logout} />
+              </Span>
             </Span>
           </Span>
+          <Text style={styles.title}>{profileUser?.name}</Text>
+          {!!(isOwnProfile && user.account?.email) && (
+            <Text>{user.account?.email}</Text>
+          )}
         </Span>
-        <Text style={styles.title}>{profileUser?.name}</Text>
-        {!!(isOwnProfile && user.account?.email) && (
-          <Text>{user.account?.email}</Text>
-        )}
-      </Span>
+      </Scroll>
     </SafeAreaView>
   )
 }
