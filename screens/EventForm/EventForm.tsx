@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Text from '../../components/Text/Text'
@@ -17,6 +17,7 @@ import MapIcon from '../../components/MapIcon/MapIcon'
 import LocationInput from '../../components/LocationInput/LocationInput'
 import { IEventFormSubmitEvent } from '../../types/Event'
 import { createEvent } from './api'
+import DateInput from '../../components/DateInput/DateInput'
 
 function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
   const {
@@ -24,6 +25,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
     control,
     formState: { errors },
   } = useForm<IEventFormSubmitEvent>()
+  const [loadingSubmit, setLoadingSubmit] = useState(false)
 
   function makeFormData(data: IEventFormSubmitEvent, formData: FormData) {
     Object.entries(data).forEach(([key, value]) => {
@@ -61,14 +63,14 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
     const formData = new FormData()
     makeFormData(data, formData)
 
-    console.log(formData)
-
+    setLoadingSubmit(true)
     try {
       const response = await createEvent(formData)
       // TODO 🎈🎈
     } catch (err) {
-      console.error(err)
       console.log(err)
+    } finally {
+      setLoadingSubmit(false)
     }
   }
 
@@ -105,10 +107,17 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
         <Label>Categoria</Label>
         <Select control={control} name='category' items={CATEGORY_RESOURCE} />
 
+        <Label>Data e hora</Label>
+        <DateInput control={control} name='datetime' />
+
         <Label>Ícone no mapa</Label>
         <MapIcon control={control} name='icon' />
 
-        <Button style={styles.Button} onPress={handleSubmit(onSubmit)}>
+        <Button
+          loading={loadingSubmit}
+          style={styles.Button}
+          onPress={handleSubmit(onSubmit)}
+        >
           <Text style={styles.ButtonText}>Criar evento</Text>
         </Button>
       </ScrollView>

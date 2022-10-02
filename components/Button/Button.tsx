@@ -1,14 +1,29 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 import {
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableOpacityProps,
 } from 'react-native'
 import Colors from '../../constants/Colors'
+import Span from '../Span/Span'
+import Spinner from '../Spinner/Spinner'
 
-function Button({ style, ...rest }: TouchableOpacityProps) {
-  return <TouchableOpacity {...rest} style={[styles.Button, style]} />
+interface IButton extends TouchableOpacityProps {
+  loading?: boolean
+}
+
+function Button({ style, children, loading, ...rest }: IButton) {
+  return (
+    <TouchableOpacity {...rest} style={[styles.Button, style]}>
+      {loading ? (
+        <Span style={styles.spinnerWrapper}>
+          <Spinner style={styles.spinner} />
+        </Span>
+      ) : (
+        children
+      )}
+    </TouchableOpacity>
+  )
 }
 
 export default Button
@@ -21,5 +36,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     height: 48,
     justifyContent: 'center',
+  },
+  spinner: {
+    marginRight: 10,
+  },
+  spinnerWrapper: {
+    alignItems: 'center',
+    flexGrow: 1,
   },
 })
