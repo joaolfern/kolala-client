@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Text from '../../components/Text/Text'
 import UploadImage from '../../components/UploadImage/UploadImage'
@@ -12,21 +12,22 @@ import Textarea from '../../components/Textarea/Textarea'
 import Select from '../../components/Select/Select'
 import { CATEGORY_RESOURCE } from './constants'
 import Header from '../../components/Header/Header'
-import { RootStackScreenProps, RootTabScreenProps } from '../../types'
 import MapIcon from '../../components/MapIcon/MapIcon'
 import LocationInput from '../../components/LocationInput/LocationInput'
 import { createEvent } from './api'
 import DateInput from '../../components/DateInput/DateInput'
 import { IEvent } from '../../types/Event'
 import Scroll from '../../components/Scroll/Scroll'
+import { useNavigation } from '@react-navigation/native'
 
-function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
+function EventForm() {
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<IEvent.FormSubmitEvent>()
   const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const navigation = useNavigation()
 
   function makeFormData(data: IEvent.FormSubmitEvent, formData: FormData) {
     Object.entries(data).forEach(([key, value]) => {
@@ -66,8 +67,8 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
 
     setLoadingSubmit(true)
     try {
-      const response = await createEvent(formData)
-      // TODO 🎈🎈
+      await createEvent(formData)
+      navigation.navigate('Events')
     } catch (err) {
       console.log(err)
     } finally {
@@ -136,6 +137,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     width: 'auto',
     marginTop: 20,
+    marginBottom: 30,
   },
   ButtonText: {
     color: Colors.altText,

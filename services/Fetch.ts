@@ -35,7 +35,7 @@ export async function Fetch <T> (request: () => Promise<AxiosResponse>): Promise
   } catch (err: any) {
     if (axios.isCancel(err)) throw err
     if (err.name === 'ERR_INTERNET_DISCONNECTED') throw new ErrInternetDisconnected()
-    if (err.response['_response']?.includes?.('Failed to connect to')) throw new ConnectionFailed()
+    if (err.response?.['_response']?.includes?.('Failed to connect to')) throw new ConnectionFailed()
     throw err
   }
 }

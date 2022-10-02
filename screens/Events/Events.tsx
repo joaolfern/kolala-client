@@ -44,8 +44,6 @@ function Events({ navigation }: RootTabScreenProps<'Events'>) {
     navigation.navigate('EventForm')
   }
 
-  console.log('🙌🙌🙌🙌', organizingEvents)
-
   return (
     <SafeAreaView>
       <ScrollView style={styles.Container}>
