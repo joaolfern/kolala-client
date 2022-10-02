@@ -15,19 +15,20 @@ import Header from '../../components/Header/Header'
 import { RootStackScreenProps, RootTabScreenProps } from '../../types'
 import MapIcon from '../../components/MapIcon/MapIcon'
 import LocationInput from '../../components/LocationInput/LocationInput'
-import { IEventFormSubmitEvent } from '../../types/Event'
 import { createEvent } from './api'
 import DateInput from '../../components/DateInput/DateInput'
+import { IEvent } from '../../types/Event'
+import Scroll from '../../components/Scroll/Scroll'
 
 function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<IEventFormSubmitEvent>()
+  } = useForm<IEvent.FormSubmitEvent>()
   const [loadingSubmit, setLoadingSubmit] = useState(false)
 
-  function makeFormData(data: IEventFormSubmitEvent, formData: FormData) {
+  function makeFormData(data: IEvent.FormSubmitEvent, formData: FormData) {
     Object.entries(data).forEach(([key, value]) => {
       switch (key) {
         case 'image':
@@ -59,7 +60,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
     })
   }
 
-  async function onSubmit(data: IEventFormSubmitEvent) {
+  async function onSubmit(data: IEvent.FormSubmitEvent) {
     const formData = new FormData()
     makeFormData(data, formData)
 
@@ -76,7 +77,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
 
   return (
     <SafeAreaView>
-      <ScrollView keyboardShouldPersistTaps='handled'>
+      <Scroll keyboardShouldPersistTaps='handled'>
         <Header>Criar evento</Header>
         <UploadImage
           control={control}
@@ -120,7 +121,7 @@ function EventForm({ navigation }: RootStackScreenProps<'EventForm'>) {
         >
           <Text style={styles.ButtonText}>Criar evento</Text>
         </Button>
-      </ScrollView>
+      </Scroll>
     </SafeAreaView>
   )
 }

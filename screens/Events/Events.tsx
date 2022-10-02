@@ -1,90 +1,94 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { useNavigation } from '@react-navigation/native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlatList, ScrollView, StyleSheet } from 'react-native'
 import Button from '../../components/Button/Button'
 import Header from '../../components/Header/Header'
-import Label from '../../components/Label/Label'
-import MyEvent from '../../components/MyEvent/MyEvent'
-import { IEventRegistry } from '../../components/MyEvent/types'
+import EventItem from '../../components/EventItem/EventItem'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Span from '../../components/Span/Span'
 import Text from '../../components/Text/Text'
-import View from '../../components/View/View'
 import Colors from '../../constants/Colors'
 import { RootTabScreenProps } from '../../types'
-
-const myEvents: IEventRegistry[] = [
-  {
-    categories: [
-      {
-        label: 'Geek',
-        value: 'Geek',
-      },
-    ],
-    date: '01-01-2023',
-    time: '10:00',
-    img: 'https://picsum.photos/200',
-    title: 'RPG e Café',
-    members: ['1', '2'],
-  },
-  {
-    categories: [
-      {
-        label: 'Geek',
-        value: 'Geek',
-      },
-    ],
-    date: '01-01-2023',
-    time: '10:00',
-    img: 'https://picsum.photos/200',
-    title: 'RPG e Café',
-    members: ['1', '2'],
-  },
-  {
-    categories: [
-      {
-        label: 'Geek',
-        value: 'Geek',
-      },
-    ],
-    date: '01-01-2023',
-    time: '10:00',
-    img: 'https://picsum.photos/200',
-    title: 'RPG e Café',
-    members: ['1', '2'],
-  },
-]
+import { IEvent } from '../../types/Event'
+import { listEvents } from './api'
 
 function Events({ navigation }: RootTabScreenProps<'Events'>) {
+  const [organizingEvents, setOrganizingEvents] = useState<IEvent.ListItem[]>(
+    []
+  )
+  const [participatingEvents, setPariticipatingEvents] = useState<
+    IEvent.ListItem[]
+  >([])
+
+  async function getEvents() {
+    try {
+      const response = await listEvents()
+      const { organizingEvents, participatingEvents } = response.data.data || {}
+      if (participatingEvents) {
+        setPariticipatingEvents(participatingEvents)
+      }
+      if (organizingEvents) {
+        setOrganizingEvents(organizingEvents)
+      }
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    getEvents()
+  }, [])
+
   const onPress = () => {
     navigation.navigate('EventForm')
   }
 
+  console.log('🙌🙌🙌🙌', organizingEvents)
+
   return (
     <SafeAreaView>
-      <ScrollView>
-        <Span style={styles.MyEvents}>
+      <ScrollView style={styles.Container}>
+        <Span style={styles.EventItems}>
           <Header>Seus eventos</Header>
           <Button style={styles.CreateButton}>
             <Text onPress={onPress} style={styles.CreateButtonText}>
               Criar evento
             </Text>
           </Button>
+          <Text style={styles.Title}>Organizando</Text>
+          <FlatList
+            data={organizingEvents}
+            scrollEnabled={false}
+            ListEmptyComponent={<Text style={styles.NoData}>Nenhum dado</Text>}
+            renderItem={({ item }) => <EventItem event={item} />}
+          />
         </Span>
-        <Text style={styles.Title}>Eventos que você participa</Text>
-        <FlatList
-          data={myEvents}
-          scrollEnabled={false}
-          renderItem={({ item }) => <MyEvent event={item} />}
-        />
+        {!!participatingEvents.length && (
+          <>
+            <Text style={styles.Title}>Participando</Text>
+            <FlatList
+              data={participatingEvents}
+              scrollEnabled={false}
+              renderItem={({ item }) => <EventItem event={item} />}
+            />
+          </>
+        )}
       </ScrollView>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  MyEvents: {
+  Container: {
+    padding: 16,
+  },
+  NoData: {
+    color: Colors.gray,
+    margin: 'auto',
+    alignSelf: 'center',
+  },
+  EventItems: {
     marginBottom: 18,
   },
   Title: {
