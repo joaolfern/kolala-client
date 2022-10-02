@@ -5,8 +5,6 @@ import Span from '../Span/Span'
 import spinner from '../../assets/images/spinner-white.gif'
 import { ImageProps } from 'react-native-svg'
 
-console.log('🥵🥵', spinner)
-
 interface IProps extends ImageProps {
   style?: any
 }
