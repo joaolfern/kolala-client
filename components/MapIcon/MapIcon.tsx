@@ -19,20 +19,20 @@ function MapIcon({ name, control }: IProps) {
   const { field } = useController({
     name,
     control,
-    defaultValue: MAP_ICONS_RESOURCE[0].value,
+    defaultValue: MAP_ICONS_RESOURCE[0].label,
   })
 
   const { onChange, value: selectedIcon } = field
 
   return (
     <ScrollView horizontal={true} style={styles.Container}>
-      {MAP_ICONS_RESOURCE.map(({ label, value }) => (
+      {MAP_ICONS_RESOURCE.map(({ label: key, value: icon }, idx) => (
         <TouchableOpacity
-          key={label}
-          style={[styles.Item, selectedIcon === value && styles.ItemSelect]}
-          onPress={() => onChange(value)}
+          key={key + idx}
+          style={[styles.Item, selectedIcon === key && styles.ItemSelect]}
+          onPress={() => onChange(key)}
         >
-          <Image style={styles.ItemImage} source={value as ImageURISource} />
+          <Image style={styles.ItemImage} source={icon as ImageURISource} />
         </TouchableOpacity>
       ))}
     </ScrollView>

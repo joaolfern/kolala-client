@@ -25,7 +25,7 @@ export default function Home() {
 
   useEffect(() => {
     if (userLocation) requestMarkers(userLocation)
-  }, [])
+  }, [userLocation])
 
   return (
     <View style={styles.container}>
