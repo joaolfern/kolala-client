@@ -1,30 +1,22 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useId } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
 
-import { RootTabScreenProps } from '../types'
+import { RootTabScreenProps } from '../../types'
 import MapView, { Marker, Region } from 'react-native-maps'
 import * as Location from 'expo-location'
-// @ts-ignore
-import coffee from '../assets/mapIcons/coffee.png'
-import mapStyle from '../constants/mapStyle'
+import mapStyle from '../../constants/mapStyle'
 
 // @ts-ignore
 import { ENVIRONMENT, GOOGLE_API_TOKEN } from '@env'
-import View from '../components/View/View'
-
-interface IMarkers {
-  latitude: number
-  longitude: number
-  icon: 'music' | 'drink'
-}
+import View from '../../components/View/View'
+import { getMarkers, IMarkers } from './api'
+import { ICONS_RESOURCE } from './constants'
 
 export default function Home({ navigation }: RootTabScreenProps<'Maps'>) {
   const [position, setPosition] = useState<Region>()
   const [markers, setMarkers] = useState<IMarkers[]>([])
-
   useEffect(() => {
     getLocation()
-    getMarkers()
   }, [])
 
   async function getLocation() {
@@ -57,15 +49,23 @@ export default function Home({ navigation }: RootTabScreenProps<'Maps'>) {
     setPosition(devicePosition)
   }
 
-  async function getMarkers() {
-    setMarkers([
-      {
-        latitude: -23.4874549,
-        longitude: -47.4991724,
-        icon: 'music',
+  async function requestMarkers() {
+    const response = await getMarkers({
+      params: {
+        lat: -23.4874549,
+        lng: -47.4991724,
       },
-    ])
+    })
+    const data = response.data.data
+
+    console.log(data)
+
+    if (Array.isArray(data)) setMarkers(data)
   }
+
+  useEffect(() => {
+    requestMarkers()
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -75,16 +75,18 @@ export default function Home({ navigation }: RootTabScreenProps<'Maps'>) {
         customMapStyle={mapStyle}
         region={position}
       >
-        {markers.map(marker => (
-          <Marker
-            key={123123}
-            coordinate={{
-              latitude: marker.latitude,
-              longitude: marker.longitude,
-            }}
-            image={coffee}
-          />
-        ))}
+        {markers.map((marker, idx) => {
+          return (
+            <Marker
+              key={marker.lat + marker.lng + idx}
+              coordinate={{
+                latitude: marker.lat,
+                longitude: marker.lng,
+              }}
+              image={ICONS_RESOURCE[marker.icon]}
+            />
+          )
+        })}
       </MapView>
     </View>
   )

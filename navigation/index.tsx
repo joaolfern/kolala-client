@@ -9,7 +9,7 @@ import * as React from 'react'
 
 import Colors from '../constants/Colors'
 import NotFoundScreen from '../screens/NotFoundScreen'
-import Home from '../screens/Home'
+import Home from '../screens/Home/Home'
 import {
   RootStackParamList,
   RootTabParamList,
