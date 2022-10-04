@@ -1,70 +1,30 @@
 import React, { useEffect, useState, useId } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-
-import { RootTabScreenProps } from '../../types'
 import MapView, { Marker, Region } from 'react-native-maps'
-import * as Location from 'expo-location'
 import mapStyle from '../../constants/mapStyle'
-
-// @ts-ignore
-import { ENVIRONMENT, GOOGLE_API_TOKEN } from '@env'
 import View from '../../components/View/View'
 import { getMarkers, IMarkers } from './api'
-import { ICONS_RESOURCE } from './constants'
+import { MAP_ICONS } from '../EventForm/constants'
+import useUserLocation from './UserMarker/useUserLocation'
 
-export default function Home({ navigation }: RootTabScreenProps<'Maps'>) {
-  const [position, setPosition] = useState<Region>()
+export default function Home() {
   const [markers, setMarkers] = useState<IMarkers[]>([])
-  useEffect(() => {
-    getLocation()
-  }, [])
+  const { userLocation } = useUserLocation()
 
-  async function getLocation() {
-    let { status } = await Location.requestForegroundPermissionsAsync()
-    if (status !== 'granted') {
-      console.log(`Location access denied`)
-    }
-
-    let devicePosition
-    console.log('🐨 env', ENVIRONMENT)
-    if (ENVIRONMENT === `local`) {
-      devicePosition = {
-        latitude: -23.4874549,
-        longitude: -47.4991724,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }
-    } else {
-      Location.setGoogleApiKey(GOOGLE_API_TOKEN)
-
-      let { coords } = await Location.getCurrentPositionAsync()
-      devicePosition = {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }
-    }
-
-    setPosition(devicePosition)
-  }
-
-  async function requestMarkers() {
+  async function requestMarkers(location: Region) {
     const response = await getMarkers({
       params: {
-        lat: -23.4874549,
-        lng: -47.4991724,
+        lat: location.latitude,
+        lng: location.longitude,
       },
     })
     const data = response.data.data
-
-    console.log(data)
 
     if (Array.isArray(data)) setMarkers(data)
   }
 
   useEffect(() => {
-    requestMarkers()
+    if (userLocation) requestMarkers(userLocation)
   }, [])
 
   return (
@@ -73,7 +33,8 @@ export default function Home({ navigation }: RootTabScreenProps<'Maps'>) {
         minZoomLevel={11}
         style={styles.map}
         customMapStyle={mapStyle}
-        region={position}
+        region={userLocation}
+        showsUserLocation={true}
       >
         {markers.map((marker, idx) => {
           return (
@@ -83,7 +44,7 @@ export default function Home({ navigation }: RootTabScreenProps<'Maps'>) {
                 latitude: marker.lat,
                 longitude: marker.lng,
               }}
-              image={ICONS_RESOURCE[marker.icon]}
+              image={MAP_ICONS[marker.icon || 0]}
             />
           )
         })}

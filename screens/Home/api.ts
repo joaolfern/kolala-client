@@ -3,12 +3,12 @@
 import { AxiosRequestConfig } from 'axios'
 import api from '../../services/api'
 import { Fetch } from '../../services/Fetch'
-import { ICONS_RESOURCE } from './constants'
+import { MAP_ICONS } from '../EventForm/constants'
 
 export interface IMarkers {
   lat: number
   lng: number
-  icon: keyof typeof ICONS_RESOURCE
+  icon: keyof typeof MAP_ICONS
 }
 
 interface IConfig extends AxiosRequestConfig {
