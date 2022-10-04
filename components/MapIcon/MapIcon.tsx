@@ -1,9 +1,14 @@
 import React from 'react'
 import { useController } from 'react-hook-form'
-import { Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  Image,
+  ImageURISource,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 import Colors from '../../constants/Colors'
 import { MAP_ICONS_RESOURCE } from '../../screens/EventForm/constants'
-import Span from '../Span/Span'
 
 type IProps = {
   name: string
@@ -27,7 +32,7 @@ function MapIcon({ name, control }: IProps) {
           style={[styles.Item, selectedIcon === value && styles.ItemSelect]}
           onPress={() => onChange(value)}
         >
-          <Image style={styles.ItemImage} source={label as any} />
+          <Image style={styles.ItemImage} source={value as ImageURISource} />
         </TouchableOpacity>
       ))}
     </ScrollView>

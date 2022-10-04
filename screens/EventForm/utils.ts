@@ -1,5 +1,5 @@
-export const asResource = <T = unknown>(value: object) =>
-  Object.entries(value).map(([key, value]) => ({
-    name: key as T,
-    text: value,
+export const asResource = <T = object>(value: T) =>
+  Object.entries(value as keyof object).map(([key, value]) => ({
+    label: key,
+    value: value,
   }))
