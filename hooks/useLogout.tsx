@@ -2,14 +2,16 @@ import React from 'react'
 import { useAppDispatch } from '../store/hooks'
 import { clearToken } from '../store/tokenSlice'
 import { clearUser } from '../store/userSlice'
-import * as Google from 'expo-auth-session/providers/google'
+import { useSecureStore } from '../store/useSecureStore'
 
 function useLogout() {
   const dispatch = useAppDispatch()
 
-  function logout() {
+  async function logout() {
+    const TokenSecureStore = useSecureStore()
     dispatch(clearUser({}))
     dispatch(clearToken({}))
+    await TokenSecureStore.clear()
   }
 
   return logout

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { IProfile } from '../types/Profile'
-import { Account } from '../types/User'
+import { IAccount } from '../types/User'
 
 interface IUserInitialState {
-  account: Account | null
+  account: IAccount | null
   profile: IProfile | null
 }
 

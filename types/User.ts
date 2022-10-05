@@ -1,6 +1,6 @@
 export type _userLevel = 'user' | 'admin'
 
-export interface Account {
+export interface IAccount {
   id: number
   email: string
   status: number

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import Text from '../components/Text/Text'
 import View from '../components/View/View'
@@ -7,8 +7,43 @@ import Colors from '../constants/Colors'
 import GoogleAuthButton from '../components/AuthButton/GoogleAuthButton'
 import FacebookAuthButton from '../components/AuthButton/FacebookAuthButton'
 import Span from '../components/Span/Span'
+import { useAppDispatch, useAppSelector } from '../store/hooks'
+import { selectToken } from '../store/tokenSlice'
+import { loginWithToken } from '../components/AuthButton/api'
+import { setUser } from '../store/userSlice'
+import { useSecureStore } from '../store/useSecureStore'
+import { useCookies } from 'react-cookie'
 
 function Login() {
+  const TokenSecureStore = useSecureStore()
+  const { token } = useAppSelector(selectToken)
+  const dispatch = useAppDispatch()
+  const [_, setCookie] = useCookies(['bearear-token'])
+
+  useEffect(() => {
+    async function tryStoredToken() {
+      const token = await TokenSecureStore.get()
+
+      if (token) {
+        setCookie('bearear-token', token)
+
+        const response = await loginWithToken()
+        const { user } = response.data?.data || {}
+        if (user) {
+          const { profile, ...account } = user
+          dispatch(
+            setUser({
+              account,
+              profile,
+            })
+          )
+        }
+      }
+    }
+
+    // if (!token || 1) tryStoredToken()
+  }, [token])
+
   return (
     <View style={style.View}>
       <Image style={style.marginBottom} source={logo} />
