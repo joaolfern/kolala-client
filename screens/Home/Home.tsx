@@ -39,6 +39,7 @@ export default function Home() {
         {markers.map((marker, idx) => {
           return (
             <Marker
+              title={marker.title}
               key={marker.lat + marker.lng + idx}
               coordinate={{
                 latitude: marker.lat,
@@ -64,4 +65,5 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height + 100,
   },
+  marker: {},
 })
