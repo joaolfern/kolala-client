@@ -12,6 +12,7 @@ import Colors from '../../constants/Colors'
 import { RootTabScreenProps } from '../../types'
 import { IEvent } from '../../types/Event'
 import { listEvents } from './api'
+import Spinner from '../../components/Spinner/Spinner'
 
 function Events({ navigation }: RootTabScreenProps<'Events'>) {
   const [organizingEvents, setOrganizingEvents] = useState<IEvent.ListItem[]>(
@@ -20,8 +21,10 @@ function Events({ navigation }: RootTabScreenProps<'Events'>) {
   const [participatingEvents, setPariticipatingEvents] = useState<
     IEvent.ListItem[]
   >([])
+  const [loading, setLoading] = useState(false)
 
   async function getEvents() {
+    setLoading(true)
     try {
       const response = await listEvents()
       const { organizingEvents, participatingEvents } = response.data.data || {}
@@ -33,6 +36,8 @@ function Events({ navigation }: RootTabScreenProps<'Events'>) {
       }
     } catch (err) {
       console.log(err)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -55,12 +60,20 @@ function Events({ navigation }: RootTabScreenProps<'Events'>) {
             </Text>
           </Button>
           <Text style={styles.Title}>Organizando</Text>
-          <FlatList
-            data={organizingEvents}
-            scrollEnabled={false}
-            ListEmptyComponent={<Text style={styles.NoData}>Nenhum dado</Text>}
-            renderItem={({ item }) => <EventItem event={item} />}
-          />
+          {loading ? (
+            <Span style={styles.loadingContainer}>
+              <Spinner />
+            </Span>
+          ) : (
+            <FlatList
+              data={organizingEvents}
+              scrollEnabled={false}
+              ListEmptyComponent={
+                <Text style={styles.NoData}>Nenhum dado</Text>
+              }
+              renderItem={({ item }) => <EventItem event={item} />}
+            />
+          )}
         </Span>
         {!!participatingEvents.length && (
           <>
@@ -100,6 +113,11 @@ const styles = StyleSheet.create({
   },
   CreateButtonText: {
     color: Colors.altText,
+  },
+  loadingContainer: {
+    padding: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 })
 
