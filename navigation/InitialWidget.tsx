@@ -18,7 +18,7 @@ function InitialWidget() {
       if (!result) TokenSecureStore.save(token)
     }
 
-    // if (token) handleSecureStore(token)
+    if (token) handleSecureStore(token)
   }, [token])
 
   return token ? <Navigation /> : <Login />

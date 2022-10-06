@@ -8,40 +8,43 @@ import GoogleAuthButton from '../components/AuthButton/GoogleAuthButton'
 import FacebookAuthButton from '../components/AuthButton/FacebookAuthButton'
 import Span from '../components/Span/Span'
 import { useAppDispatch, useAppSelector } from '../store/hooks'
-import { selectToken } from '../store/tokenSlice'
+import { selectToken, setToken } from '../store/tokenSlice'
 import { loginWithToken } from '../components/AuthButton/api'
 import { setUser } from '../store/userSlice'
 import { useSecureStore } from '../store/useSecureStore'
-import { useCookies } from 'react-cookie'
 
 function Login() {
   const TokenSecureStore = useSecureStore()
   const { token } = useAppSelector(selectToken)
   const dispatch = useAppDispatch()
-  const [_, setCookie] = useCookies(['bearear-token'])
 
   useEffect(() => {
     async function tryStoredToken() {
-      const token = await TokenSecureStore.get()
+      try {
+        const storeToken = await TokenSecureStore.get()
 
-      if (token) {
-        setCookie('bearear-token', token)
+        if (storeToken) {
+          const response = await loginWithToken(storeToken)
+          const { user } = response.data?.data || {}
 
-        const response = await loginWithToken()
-        const { user } = response.data?.data || {}
-        if (user) {
-          const { profile, ...account } = user
-          dispatch(
-            setUser({
-              account,
-              profile,
-            })
-          )
+          if (user) {
+            const { profile, ...account } = user
+            dispatch(
+              setUser({
+                account,
+                profile,
+              })
+            )
+          }
+
+          dispatch(setToken(storeToken))
         }
+      } catch (err) {
+        console.log(err)
       }
     }
 
-    // if (!token || 1) tryStoredToken()
+    if (!token || 1) tryStoredToken()
   }, [token])
 
   return (
