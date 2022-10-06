@@ -1,11 +1,7 @@
-import { StyleSheet,  View as DefaultView } from 'react-native'
+import { StyleSheet, View as DefaultView } from 'react-native'
 import Colors from '../../constants/Colors'
 
-export default function View({
-  style,
-  ...otherProps
-}: DefaultView['props']) {
-
+export default function View({ style, ...otherProps }: DefaultView['props']) {
   return <DefaultView style={[styles.View, style]} {...otherProps} />
 }
 
