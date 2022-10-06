@@ -9,6 +9,7 @@ export interface IMarkers {
   lat: number
   lng: number
   icon: keyof typeof MAP_ICONS
+  title: string
 }
 
 interface IConfig extends AxiosRequestConfig {
