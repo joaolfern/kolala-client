@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useId } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
 import MapView, { Marker, Region } from 'react-native-maps'
 import mapStyle from '../../constants/mapStyle'
@@ -6,12 +6,11 @@ import View from '../../components/View/View'
 import { getMarkers, IMarkers } from './api'
 import { MAP_ICONS } from '../EventForm/constants'
 import useUserLocation from './UserMarker/useUserLocation'
-import { useSecureStore } from '../../store/useSecureStore'
 
 export default function Home() {
   const [markers, setMarkers] = useState<IMarkers[]>([])
   const { userLocation } = useUserLocation()
-  const TokenSecureStore = useSecureStore()
+
   async function requestMarkers(location: Region) {
     const response = await getMarkers({
       params: {
@@ -24,15 +23,9 @@ export default function Home() {
     if (Array.isArray(data)) setMarkers(data)
   }
 
-  async function a() {
-    const result = await TokenSecureStore.get()
-  }
-
   useEffect(() => {
     if (userLocation) requestMarkers(userLocation)
   }, [userLocation])
-
-  a()
 
   return (
     <View style={styles.container}>
