@@ -8,7 +8,7 @@ export const sendAccessTokenRequest = async (data: { accessToken: string }) =>
     api.post('unauth/access-token', data)
   )
 
-export const loginWithToken = async () =>
+export const loginWithToken = async (token: string) =>
   await Fetch<{ user: IAccount & { profile: IProfile } }>(() =>
-    api.post('unauth/login/token')
+    api.post('unauth/login/token', { token })
   )

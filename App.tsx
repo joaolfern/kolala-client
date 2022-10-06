@@ -8,7 +8,6 @@ import { Provider } from 'react-redux'
 import { store } from './store/store'
 import InitialWidget from './navigation/InitialWidget'
 import { LogBox } from 'react-native'
-import { CookiesProvider } from 'react-cookie'
 
 LogBox.ignoreLogs(['EventEmitter.removeListener'])
 
@@ -20,12 +19,10 @@ export default function App() {
   } else {
     return (
       <SafeAreaProvider>
-        <CookiesProvider>
-          <Provider store={store}>
-            <InitialWidget />
-            <StatusBar backgroundColor='transparent' style={'dark'} />
-          </Provider>
-        </CookiesProvider>
+        <Provider store={store}>
+          <InitialWidget />
+          <StatusBar backgroundColor='transparent' style={'dark'} />
+        </Provider>
       </SafeAreaProvider>
     )
   }
