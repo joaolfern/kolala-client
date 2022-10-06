@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-import MapView, { Marker, Region } from 'react-native-maps'
+import MapView, { Region } from 'react-native-maps'
 import mapStyle from '../../constants/mapStyle'
 import View from '../../components/View/View'
 import { getMarkers, IMarkers } from './api'
-import { MAP_ICONS } from '../EventForm/constants'
 import useUserLocation from './UserMarker/useUserLocation'
+import CustomMarker from '../../components/CustomMarker/CustomMarker'
 
 export default function Home() {
   const [markers, setMarkers] = useState<IMarkers[]>([])
@@ -38,15 +38,7 @@ export default function Home() {
       >
         {markers.map((marker, idx) => {
           return (
-            <Marker
-              title={marker.title}
-              key={marker.lat + marker.lng + idx}
-              coordinate={{
-                latitude: marker.lat,
-                longitude: marker.lng,
-              }}
-              image={MAP_ICONS[marker.icon || 0]}
-            />
+            <CustomMarker key={marker.lat + marker.lng + idx} marker={marker} />
           )
         })}
       </MapView>
@@ -64,6 +56,10 @@ const styles = StyleSheet.create({
   map: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height + 100,
+    marginBottom: 'auto',
   },
-  marker: {},
+  marker: {
+    width: 50,
+    height: 50,
+  },
 })

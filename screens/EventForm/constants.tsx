@@ -1,6 +1,8 @@
 import { Item } from 'react-native-picker-select'
 import coffee from '../../assets/mapIcons/coffee.png'
 import music from '../../assets/mapIcons/music.png'
+// @ts-ignore
+import charizard from '../../assets/images/charizard.gif'
 import workout from '../../assets/mapIcons/workout.png'
 import announcement from '../../assets/mapIcons/announcement.png'
 import { ImageURISource } from 'react-native'
@@ -38,6 +40,7 @@ export const MAP_ICONS: { [key: number]: ImageURISource } = {
   1: music,
   2: workout,
   3: announcement,
+  4: charizard,
 }
 
 export const MAP_ICONS_RESOURCE = asResource(MAP_ICONS)
