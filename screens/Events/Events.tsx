@@ -1,7 +1,6 @@
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { FlatList, ScrollView, StyleSheet } from 'react-native'
+import { FlatList, StyleSheet } from 'react-native'
 import Button from '../../components/Button/Button'
 import Header from '../../components/Header/Header'
 import EventItem from '../../components/EventItem/EventItem'
@@ -9,12 +8,29 @@ import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Span from '../../components/Span/Span'
 import Text from '../../components/Text/Text'
 import Colors from '../../constants/Colors'
-import { RootTabScreenProps } from '../../types'
 import { IEvent } from '../../types/Event'
 import { listEvents } from './api'
 import Spinner from '../../components/Spinner/Spinner'
 
-function Events({ navigation }: RootTabScreenProps<'Events'>) {
+function C() {
+  const navigation = useNavigation()
+
+  const onPress = () => {
+    navigation.navigate('EventForm')
+  }
+
+  return (
+    <Span style={styles.EventItems}>
+      <Header>Seus eventos</Header>
+      <Button onPress={onPress} style={styles.CreateButton}>
+        <Text style={styles.CreateButtonText}>Criar evento</Text>
+      </Button>
+      <Text style={styles.Title}>Organizando</Text>
+    </Span>
+  )
+}
+
+function Events() {
   const [organizingEvents, setOrganizingEvents] = useState<IEvent.ListItem[]>(
     []
   )
@@ -45,67 +61,43 @@ function Events({ navigation }: RootTabScreenProps<'Events'>) {
     getEvents()
   }, [])
 
-  const onPress = () => {
-    navigation.navigate('EventForm')
-  }
-
   return (
     <SafeAreaView>
-      <ScrollView style={styles.Container}>
-        <Span style={styles.EventItems}>
-          <Header>Seus eventos</Header>
-          <Button style={styles.CreateButton}>
-            <Text onPress={onPress} style={styles.CreateButtonText}>
-              Criar evento
-            </Text>
-          </Button>
-          <Text style={styles.Title}>Organizando</Text>
-          {loading ? (
-            <Span style={styles.loadingContainer}>
-              <Spinner />
-            </Span>
-          ) : (
-            <FlatList
-              data={organizingEvents}
-              scrollEnabled={false}
-              ListEmptyComponent={
-                <Text style={styles.NoData}>Nenhum dado</Text>
-              }
-              renderItem={({ item }) => <EventItem event={item} />}
-            />
-          )}
+      {loading ? (
+        <Span style={styles.Container}>
+          <C />
+          <Span style={styles.loadingContainer}>
+            <Spinner />
+          </Span>
         </Span>
-        {!!participatingEvents.length && (
-          <>
-            <Text style={styles.Title}>Participando</Text>
-            <FlatList
-              data={participatingEvents}
-              scrollEnabled={false}
-              renderItem={({ item }) => <EventItem event={item} />}
-            />
-          </>
-        )}
-      </ScrollView>
+      ) : (
+        <FlatList
+          style={styles.Container}
+          stickyHeaderIndices={[0]}
+          StickyHeaderComponent={C}
+          data={organizingEvents}
+          ListEmptyComponent={<Text style={styles.NoData}>Nenhum dado</Text>}
+          renderItem={({ item }) => <EventItem event={item} />}
+        />
+      )}
+      <Text>eoo</Text>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  Container: {
-    padding: 16,
-  },
+  Container: {},
   NoData: {
     color: Colors.gray,
     margin: 'auto',
     alignSelf: 'center',
   },
   EventItems: {
-    marginBottom: 18,
+    padding: 16,
   },
   Title: {
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 19,
   },
   CreateButton: {
     alignSelf: 'flex-start',
@@ -115,7 +107,7 @@ const styles = StyleSheet.create({
     color: Colors.altText,
   },
   loadingContainer: {
-    padding: 20,
+    padding: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },

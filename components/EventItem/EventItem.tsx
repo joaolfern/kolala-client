@@ -30,17 +30,17 @@ function EventItem({ event }: IProps) {
       <Span style={[styles.DataRow, styles.innerGapBottom]}>
         <Span style={styles.DataRowLeft}>
           <Text>Data</Text>
-          <Text>{dayjs(event.datetime).format('D/M')}</Text>
+          <Text>{dayjs(event.datetime).format('DD [de] MMM[.]')}</Text>
         </Span>
         <Span style={styles.DataRowRight}>
           <Text>Horário</Text>
-          <Text>{dayjs(event.datetime).format('DD [de] MMM[.]')}</Text>
+          <Text>{dayjs(event.datetime).format('HH:mm')}</Text>
         </Span>
       </Span>
       <Span style={styles.DataRow}>
         <Span style={styles.DataRowRight}>
           <Text>Participantes</Text>
-          <Text>{event.memberCount}</Text>
+          <Text>{event.memberCount || 0}</Text>
         </Span>
         <EventItemChatButton />
       </Span>
@@ -52,6 +52,7 @@ export default EventItem
 
 const styles = StyleSheet.create({
   Container: {
+    marginHorizontal: 16,
     backgroundColor: Colors.xLightBackground,
     borderRadius: 13,
     padding: 20,
