@@ -106,11 +106,11 @@ function EventForm() {
           styles={styles.marginBottom}
         />
 
-        <Label>Categoria</Label>
-        <Select control={control} name='category' items={CATEGORY_RESOURCE} />
-
         <Label>Data e hora</Label>
         <DateInput control={control} name='datetime' />
+
+        <Label>Categoria</Label>
+        <Select control={control} name='category' items={CATEGORY_RESOURCE} />
 
         <Label>Ícone no mapa</Label>
         <MapIcon control={control} name='icon' />
