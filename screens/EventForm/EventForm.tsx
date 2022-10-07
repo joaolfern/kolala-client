@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import { StyleSheet } from 'react-native'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Text from '../../components/Text/Text'
@@ -12,13 +12,16 @@ import Textarea from '../../components/Textarea/Textarea'
 import Select from '../../components/Select/Select'
 import { CATEGORY_RESOURCE } from './constants'
 import Header from '../../components/Header/Header'
-import MapIcon from '../../components/MapIcon/MapIcon'
-import LocationInput from '../../components/LocationInput/LocationInput'
+
 import { createEvent } from './api'
 import DateInput from '../../components/DateInput/DateInput'
 import { IEvent } from '../../types/Event'
 import Scroll from '../../components/Scroll/Scroll'
 import { useNavigation } from '@react-navigation/native'
+const MapIcon = React.lazy(() => import('./../../components/MapIcon/MapIcon'))
+const LocationInput = React.lazy(
+  () => import('../../components/LocationInput/LocationInput')
+)
 
 function EventForm() {
   const {
@@ -100,11 +103,13 @@ function EventForm() {
         />
 
         <Label>Local</Label>
-        <LocationInput
-          name='location'
-          control={control}
-          styles={styles.marginBottom}
-        />
+        <Suspense fallback={<TextInput control={control} name='location' />}>
+          <LocationInput
+            name='location'
+            control={control}
+            styles={styles.marginBottom}
+          />
+        </Suspense>
 
         <Label>Data e hora</Label>
         <DateInput control={control} name='datetime' />
@@ -113,7 +118,9 @@ function EventForm() {
         <Select control={control} name='category' items={CATEGORY_RESOURCE} />
 
         <Label>Ícone no mapa</Label>
-        <MapIcon control={control} name='icon' />
+        <Suspense fallback={<TextInput control={control} name='icon' />}>
+          <MapIcon control={control} name='icon' />
+        </Suspense>
 
         <Button
           loading={loadingSubmit}

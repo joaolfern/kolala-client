@@ -1,6 +1,13 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "target": "esnext",
+    "sourceMap": true,
+    "declaration": false,
+    "module": "esnext",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
   }
 }
