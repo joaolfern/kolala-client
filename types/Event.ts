@@ -16,6 +16,11 @@ export namespace IEvent {
     lng: number
   }
 
+  export interface IEventSections {
+    title: string
+    data: ListItem[]
+  }
+
   export interface ListItem {
     id: number
     createdAt: Date

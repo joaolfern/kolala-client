@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { useEffect, useState } from 'react'
-import { FlatList, StyleSheet } from 'react-native'
+import { FlatList, SectionList, StyleSheet } from 'react-native'
 import Button from '../../components/Button/Button'
 import Header from '../../components/Header/Header'
 import EventItem from '../../components/EventItem/EventItem'
@@ -12,7 +12,7 @@ import { IEvent } from '../../types/Event'
 import { listEvents } from './api'
 import Spinner from '../../components/Spinner/Spinner'
 
-function C() {
+function EventListHeader() {
   const navigation = useNavigation()
 
   const onPress = () => {
@@ -20,36 +20,29 @@ function C() {
   }
 
   return (
-    <Span style={styles.EventItems}>
+    <Span style={styles.EventListHeader}>
       <Header>Seus eventos</Header>
       <Button onPress={onPress} style={styles.CreateButton}>
         <Text style={styles.CreateButtonText}>Criar evento</Text>
       </Button>
-      <Text style={styles.Title}>Organizando</Text>
     </Span>
   )
 }
 
-function Events() {
-  const [organizingEvents, setOrganizingEvents] = useState<IEvent.ListItem[]>(
-    []
-  )
-  const [participatingEvents, setPariticipatingEvents] = useState<
-    IEvent.ListItem[]
-  >([])
+function NoResultMessage() {
+  return <Text style={styles.NoResultMessage}>Nenhum dado</Text>
+}
+
+function EventList() {
+  const [eventList, setEventList] = useState<IEvent.IEventSections[]>([])
   const [loading, setLoading] = useState(false)
 
   async function getEvents() {
     setLoading(true)
     try {
       const response = await listEvents()
-      const { organizingEvents, participatingEvents } = response.data.data || {}
-      if (participatingEvents) {
-        setPariticipatingEvents(participatingEvents)
-      }
-      if (organizingEvents) {
-        setOrganizingEvents(organizingEvents)
-      }
+      const data = response.data?.data
+      if (data) setEventList(data)
     } catch (err) {
       console.log(err)
     } finally {
@@ -65,39 +58,46 @@ function Events() {
     <SafeAreaView>
       {loading ? (
         <Span style={styles.Container}>
-          <C />
+          <EventListHeader />
           <Span style={styles.loadingContainer}>
             <Spinner />
           </Span>
         </Span>
       ) : (
-        <FlatList
+        <SectionList
           style={styles.Container}
-          stickyHeaderIndices={[0]}
-          StickyHeaderComponent={C}
-          data={organizingEvents}
-          ListEmptyComponent={<Text style={styles.NoData}>Nenhum dado</Text>}
+          ListHeaderComponent={EventListHeader}
+          sections={eventList}
+          ListEmptyComponent={NoResultMessage}
           renderItem={({ item }) => <EventItem event={item} />}
+          renderSectionHeader={({ section: { title, data } }) => (
+            <Span>
+              <Text style={styles.Title}>{title}</Text>
+              {!data.length && <NoResultMessage />}
+            </Span>
+          )}
         />
       )}
-      <Text>eoo</Text>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   Container: {},
-  NoData: {
+  NoResultMessage: {
     color: Colors.gray,
     margin: 'auto',
     alignSelf: 'center',
+    marginBottom: 20,
   },
-  EventItems: {
+  EventListHeader: {
     padding: 16,
+    paddingBottom: 0,
   },
   Title: {
     fontSize: 22,
     fontWeight: 'bold',
+    padding: 16,
   },
   CreateButton: {
     alignSelf: 'flex-start',
@@ -113,4 +113,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Events
+export default EventList
