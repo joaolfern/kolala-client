@@ -5,8 +5,5 @@ import { IEvent } from '../../types/Event'
 const path = 'events'
 
 export const listEvents = async () => {
-  return await Fetch<{
-    organizingEvents: IEvent.ListItem[]
-    participatingEvents: IEvent.ListItem[]
-  }>(() => api.get('auth/events'))
+  return await Fetch<IEvent.IEventSections[]>(() => api.get('auth/events'))
 }
