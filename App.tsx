@@ -8,6 +8,8 @@ import { Provider } from 'react-redux'
 import { store } from './store/store'
 import InitialWidget from './navigation/InitialWidget'
 import { LogBox } from 'react-native'
+import Toast from './components/Toast/Toast'
+import { toastRef } from './utils/toast'
 
 LogBox.ignoreLogs(['EventEmitter.removeListener'])
 
@@ -21,6 +23,7 @@ export default function App() {
       <SafeAreaProvider>
         <Provider store={store}>
           <InitialWidget />
+          <Toast {...{ ref: toastRef }} />
           <StatusBar backgroundColor='transparent' style={'dark'} />
         </Provider>
       </SafeAreaProvider>
