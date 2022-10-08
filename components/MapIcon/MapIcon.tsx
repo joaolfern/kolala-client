@@ -30,7 +30,10 @@ function MapIcon({ name, control }: IProps) {
         <TouchableOpacity
           key={key + idx}
           style={[styles.Item, selectedIcon === key && styles.ItemSelect]}
-          onPress={() => onChange(key)}
+          onPress={() => {
+            console.log('❤️❤️', key)
+            onChange(key)
+          }}
         >
           <Image style={styles.ItemImage} source={icon as ImageURISource} />
         </TouchableOpacity>

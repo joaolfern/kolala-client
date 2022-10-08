@@ -105,7 +105,7 @@ function EventForm() {
         />
 
         <Label>Local</Label>
-        <Suspense fallback={<TextInput control={control} name='location' />}>
+        <Suspense fallback={<TextInput control={control} name='' />}>
           <LocationInput
             name='location'
             control={control}
@@ -120,7 +120,7 @@ function EventForm() {
         <Select control={control} name='category' items={CATEGORY_RESOURCE} />
 
         <Label>Ícone no mapa</Label>
-        <Suspense fallback={<TextInput control={control} name='icon' />}>
+        <Suspense fallback={<TextInput control={control} name='' />}>
           <MapIcon control={control} name='icon' />
         </Suspense>
 
