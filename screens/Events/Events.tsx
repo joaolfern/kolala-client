@@ -1,6 +1,6 @@
-import { useNavigation } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
-import { FlatList, SectionList, StyleSheet } from 'react-native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import React, { useCallback, useEffect, useState } from 'react'
+import { SectionList, StyleSheet } from 'react-native'
 import Button from '../../components/Button/Button'
 import Header from '../../components/Header/Header'
 import EventItem from '../../components/EventItem/EventItem'
@@ -50,9 +50,13 @@ function EventList() {
     }
   }
 
-  useEffect(() => {
-    getEvents()
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      getEvents()
+
+      return () => {}
+    }, [])
+  )
 
   return (
     <SafeAreaView>

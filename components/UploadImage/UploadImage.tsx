@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import {
   Image,
   ScrollView,
@@ -13,12 +13,43 @@ import Colors from '../../constants/Colors'
 import * as ImagePicker from 'expo-image-picker'
 import { useController } from 'react-hook-form'
 import Constants from 'expo-constants'
+import Span from '../Span/Span'
+import { IEvent } from '../../types/Event'
+import FAIcon from '../FAIcon/FAIcon'
+import { FontAwesome5 } from '@expo/vector-icons'
+
+type ImageItemProps = {
+  item: IEvent.Image
+  remove(id: string): void
+}
+
+function ImageItem({ item, remove }: ImageItemProps) {
+  return (
+    <Span style={styles.ImageItemWrapper}>
+      <TouchableOpacity
+        style={styles.closeButton}
+        onPress={() => remove(item.id as string)}
+      >
+        <FontAwesome5
+          size={30}
+          name='times-circle'
+          solid
+          color={Colors.secondaryColor}
+          style={styles.closeButtonIcon}
+        />
+      </TouchableOpacity>
+      <Image style={[styles.ImageItem]} source={{ uri: item.url }} />
+    </Span>
+  )
+}
 
 type UploadImageProps = ViewProps & {
   listMax?: number
   name: string
   control: any
 }
+
+let counter = 0
 
 function UploadImage({
   style,
@@ -27,7 +58,8 @@ function UploadImage({
   control,
   ...rest
 }: UploadImageProps) {
-  const [list, setList] = useState<string[]>([])
+  const [list, setList] = useState<IEvent.Image[]>([])
+  const eventListRef = useRef<IEvent.Image[]>([])
 
   const { field } = useController({
     name,
@@ -67,12 +99,24 @@ function UploadImage({
 
     if (!result.cancelled) {
       setList(prev => {
-        const newList = Array.isArray(item) ? item : [item.uri, ...prev]
+        const stateList: IEvent.Image[] = [
+          { id: String(item.uri) + counter, url: item.uri },
+          ...prev,
+        ]
+        counter++
 
-        onChange(newList)
-        return newList
+        return stateList
       })
+      const eventList = [item.uri, ...eventListRef.current]
+      onChange(eventList)
     }
+  }
+
+  function remove(id: string) {
+    setList(prev => prev.filter(item => item.id !== id))
+
+    const eventList = eventListRef.current.filter(item => item.id !== id)
+    onChange(eventList)
   }
 
   const { onChange } = field
@@ -88,8 +132,8 @@ function UploadImage({
           </View>
         </TouchableOpacity>
       )}
-      {list.map((uri, idx) => (
-        <Image key={uri + idx} style={[styles.ImageItem]} source={{ uri }} />
+      {list.map((item, idx) => (
+        <ImageItem item={item} remove={remove} key={item.url + idx} />
       ))}
     </ScrollView>
   )
@@ -100,19 +144,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingBottom: 16,
   },
+  ImageItemWrapper: {
+    position: 'relative',
+    marginRight: 16,
+  },
   ImageItem: {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 13,
     width: 150,
     height: 150,
-    marginRight: 16,
+    position: 'relative',
   },
   Input: {
     borderStyle: 'dashed',
     borderWidth: 1,
     borderColor: Colors.text,
     backgroundColor: Colors.lightBackground,
+    marginRight: 16,
   },
   MinInput: {
     width: 100,
@@ -124,6 +173,15 @@ const styles = StyleSheet.create({
   },
   Title: {
     color: Colors.secondaryColor,
+  },
+  closeButton: {
+    position: 'absolute',
+    right: 5,
+    top: 5,
+    zIndex: 2,
+  },
+  closeButtonIcon: {
+    elevation: 3,
   },
 })
 

@@ -47,6 +47,11 @@ export namespace IEvent {
       lng: number
     }
   }
+
+  export interface Image {
+    id: number | string
+    url: string
+  }
 }
 
 

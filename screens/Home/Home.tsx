@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
 import MapView, { Region } from 'react-native-maps'
 import mapStyle from '../../constants/mapStyle'
@@ -6,6 +6,7 @@ import View from '../../components/View/View'
 import { getMarkers, IMarkers } from './api'
 import useUserLocation from './UserMarker/useUserLocation'
 import CustomMarker from '../../components/CustomMarker/CustomMarker'
+import { useFocusEffect } from '@react-navigation/native'
 
 export default function Home() {
   const [markers, setMarkers] = useState<IMarkers[]>([])
@@ -23,9 +24,13 @@ export default function Home() {
     if (Array.isArray(data)) setMarkers(data)
   }
 
-  useEffect(() => {
-    if (userLocation) requestMarkers(userLocation)
-  }, [userLocation])
+  useFocusEffect(
+    useCallback(() => {
+      if (userLocation) requestMarkers(userLocation)
+
+      return () => {}
+    }, [userLocation])
+  )
 
   return (
     <View style={styles.container}>
