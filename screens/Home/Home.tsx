@@ -1,16 +1,19 @@
 import React, { useCallback, useState } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-import MapView, { Region } from 'react-native-maps'
+import MapView, { Marker, Region } from 'react-native-maps'
 import mapStyle from '../../constants/mapStyle'
 import View from '../../components/View/View'
 import { getMarkers, IMarkers } from './api'
 import useUserLocation from './UserMarker/useUserLocation'
 import CustomMarker from '../../components/CustomMarker/CustomMarker'
 import { useFocusEffect } from '@react-navigation/native'
+import { MAP_ICONS } from '../EventForm/constants'
 
 export default function Home() {
   const [markers, setMarkers] = useState<IMarkers[]>([])
   const { userLocation } = useUserLocation()
+
+  console.log('🍆🍆', JSON.stringify(markers, null, 2))
 
   async function requestMarkers(location: Region) {
     const response = await getMarkers({
@@ -41,11 +44,17 @@ export default function Home() {
         region={userLocation}
         showsUserLocation={true}
       >
-        {markers.map((marker, idx) => {
-          return (
-            <CustomMarker key={marker.lat + marker.lng + idx} marker={marker} />
-          )
-        })}
+        {markers.map((marker, idx) => (
+          <Marker
+            key={marker.lat + marker.lng + idx}
+            title={marker.title}
+            coordinate={{
+              latitude: marker.lat,
+              longitude: marker.lng,
+            }}
+            image={MAP_ICONS[marker.icon || 0]}
+          />
+        ))}
       </MapView>
     </View>
   )

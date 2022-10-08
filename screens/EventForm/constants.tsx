@@ -40,7 +40,7 @@ export const MAP_ICONS: { [key: number]: ImageURISource } = {
   1: music,
   2: workout,
   3: announcement,
-  4: charizard,
+  // 4: charizard,
 }
 
 export const MAP_ICONS_RESOURCE = asResource(MAP_ICONS)
