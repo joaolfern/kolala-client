@@ -18,6 +18,7 @@ import DateInput from '../../components/DateInput/DateInput'
 import { IEvent } from '../../types/Event'
 import Scroll from '../../components/Scroll/Scroll'
 import { useNavigation } from '@react-navigation/native'
+import { showToast } from '../../utils/toast'
 const MapIcon = React.lazy(() => import('./../../components/MapIcon/MapIcon'))
 const LocationInput = React.lazy(
   () => import('../../components/LocationInput/LocationInput')
@@ -73,6 +74,7 @@ function EventForm() {
       await createEvent(formData)
       navigation.navigate('Events')
     } catch (err) {
+      showToast('Ocorreu um problema')
       console.log(err)
     } finally {
       setLoadingSubmit(false)
