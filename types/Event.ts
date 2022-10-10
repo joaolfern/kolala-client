@@ -1,4 +1,6 @@
 import { ImageInfo } from 'expo-image-picker'
+import { IAtendee } from './Atendee'
+import { IProfile } from './Profile'
 
 export namespace IEvent {
 
@@ -9,16 +11,22 @@ export namespace IEvent {
     description: string
     category: number
     status: number
-    image: string[]
+    EventImage: Image[]
     authorId: number
     datetime: Date
     lat: number
     lng: number
+    author: IProfile
+    Atendee: IAtendee[]
   }
 
   export interface IEventSections {
     title: string
     data: ListItem[]
+  }
+
+  export interface Details extends Model {
+
   }
 
   export interface ListItem {

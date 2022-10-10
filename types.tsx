@@ -9,6 +9,7 @@ import {
   NavigatorScreenParams,
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { IMarkers } from './screens/Home/api'
 
 export namespace ImagePicker {
   export interface ImagePickerMultipleResult {
@@ -24,7 +25,9 @@ declare global {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined
-  Modal: undefined
+  EventDetails: {
+    marker: IMarkers
+  }
   NotFound: undefined
   EventForm: undefined
   Profile: {

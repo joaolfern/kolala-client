@@ -31,7 +31,6 @@ function MapIcon({ name, control }: IProps) {
           key={key + idx}
           style={[styles.Item, selectedIcon === key && styles.ItemSelect]}
           onPress={() => {
-            console.log('❤️❤️', key)
             onChange(key)
           }}
         >

@@ -59,7 +59,6 @@ function UploadImage({
   ...rest
 }: UploadImageProps) {
   const [list, setList] = useState<IEvent.Image[]>([])
-  const eventListRef = useRef<IEvent.Image[]>([])
 
   const { field } = useController({
     name,
@@ -89,34 +88,44 @@ function UploadImage({
 
     if (!grantedPermission) return
 
-    let result = await ImagePicker.launchImageLibraryAsync({
+    let result = (await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
+      selectionLimit: listMax - list.length,
       allowsMultipleSelection: true,
-    })
-
-    const item = (result || {}) as ImagePicker.ImageInfo
+    })) as ImagePicker.ImageInfo | ImagePicker.ImagePickerMultipleResult
 
     if (!result.cancelled) {
+      const uriList = 'selected' in result ? result.selected : [result]
+      const formattedList = uriList
+        .map(item => {
+          const formattedItem = {
+            id: String(item.uri) + counter,
+            url: item.uri,
+          }
+          counter++
+          return formattedItem
+        })
+        .slice(0, listMax - list.length)
       setList(prev => {
-        const stateList: IEvent.Image[] = [
-          { id: String(item.uri) + counter, url: item.uri },
-          ...prev,
-        ]
+        const stateList: IEvent.Image[] = [...formattedList, ...prev]
         counter++
 
+        const eventList = stateList.map(item => item.url)
+        onChange(eventList)
         return stateList
       })
-      const eventList = [item.uri, ...eventListRef.current]
-      onChange(eventList)
     }
   }
 
   function remove(id: string) {
-    setList(prev => prev.filter(item => item.id !== id))
+    setList(prev => {
+      const newList = prev.filter(item => item.id !== id)
 
-    const eventList = eventListRef.current.filter(item => item.id !== id)
-    onChange(eventList)
+      const eventList = newList.map(item => item.url)
+      onChange(eventList)
+      return newList
+    })
   }
 
   const { onChange } = field

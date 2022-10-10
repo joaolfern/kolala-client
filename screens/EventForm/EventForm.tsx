@@ -48,7 +48,7 @@ function EventForm() {
             }
 
             // @ts-ignore
-            formData.append(`key`, file)
+            formData.append(`${key}[]`, file)
             return
           })
 
@@ -68,6 +68,8 @@ function EventForm() {
   async function onSubmit(data: IEvent.FormSubmitEvent) {
     const formData = new FormData()
     makeFormData(data, formData)
+
+    console.log(JSON.stringify(formData, null, 2))
 
     setLoadingSubmit(true)
     try {
