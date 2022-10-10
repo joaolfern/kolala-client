@@ -20,6 +20,7 @@ import MyTabBar from '../components/MyTabBar/MyTabBar'
 import Profile from '../screens/Profile/Profile'
 import Events from '../screens/Events/Events'
 import EventForm from '../screens/EventForm/EventForm'
+import EventDetails from '../components/EventDetails/EventDetails'
 
 export default function Navigation() {
   return (
@@ -34,31 +35,45 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 function RootNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name='Root'
-        component={BottomTabNavigator}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name='NotFound'
-        component={NotFoundScreen}
-        options={{ title: 'Oops!' }}
-      />
-      <Stack.Screen
-        name='EventForm'
-        component={EventForm}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name='Profile'
-        component={Profile}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name='Events'
-        component={Events}
-        options={{ headerShown: false }}
-      />
+      <Stack.Group>
+        <Stack.Screen
+          name='Root'
+          component={BottomTabNavigator}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='NotFound'
+          component={NotFoundScreen}
+          options={{ title: 'Oops!' }}
+        />
+        <Stack.Screen
+          name='EventForm'
+          component={EventForm}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='Profile'
+          component={Profile}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='Events'
+          component={Events}
+          options={{ headerShown: false }}
+        />
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          presentation: 'containedTransparentModal',
+          animation: 'fade_from_bottom',
+        }}
+      >
+        <Stack.Screen
+          name='EventDetails'
+          component={EventDetails}
+          options={{ headerShown: false }}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   )
 }

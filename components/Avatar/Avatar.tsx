@@ -17,9 +17,9 @@ function Avatar({ style, source, ...rest }: IAvatar) {
   return (
     <Span style={styles.pictureWrapper}>
       <Image
-        {...rest}
         style={[styles.picture, style]}
         source={source || blankProfile}
+        {...rest}
       />
     </Span>
   )
@@ -28,7 +28,7 @@ function Avatar({ style, source, ...rest }: IAvatar) {
 const styles = StyleSheet.create({
   picture: {
     aspectRatio: 1,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
     width: 51,
     height: 51,
   },

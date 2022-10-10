@@ -53,8 +53,6 @@ function EventList() {
   useFocusEffect(
     useCallback(() => {
       getEvents()
-
-      return () => {}
     }, [])
   )
 

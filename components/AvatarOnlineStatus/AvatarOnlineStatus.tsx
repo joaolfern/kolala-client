@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet } from 'react-native'
 import Colors from '../../constants/Colors'
 import Avatar, { IAvatar } from '../Avatar/Avatar'
+import AvatarWithIcon from '../AvatarWithIcon/AvatarWithIcon'
 import Span from '../Span/Span'
 
 type IProps = IAvatar & {
@@ -10,28 +11,21 @@ type IProps = IAvatar & {
 
 function AvatarOnlineStatus({ isOnline, ...rest }: IProps) {
   return (
-    <Span style={styles.Wrapper}>
-      <Avatar {...rest} />
+    <AvatarWithIcon {...rest}>
       <Span
         style={[
           styles.onlineMarker,
           styles[isOnline ? 'onlineMarkerOnline' : 'onlineMarkerOffline'],
         ]}
       />
-    </Span>
+    </AvatarWithIcon>
   )
 }
 
 const styles = StyleSheet.create({
-  Wrapper: {
-    position: 'relative',
-  },
   onlineMarker: {
     width: 15,
     height: 15,
-    position: 'absolute',
-    right: 0,
-    bottom: 0,
     borderRadius: 99999,
   },
   onlineMarkerOnline: {

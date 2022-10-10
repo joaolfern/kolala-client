@@ -6,6 +6,7 @@ import { Fetch } from '../../services/Fetch'
 import { MAP_ICONS } from '../EventForm/constants'
 
 export interface IMarkers {
+  id: number
   lat: number
   lng: number
   icon: keyof typeof MAP_ICONS

@@ -5,6 +5,7 @@ import Colors from '../../constants/Colors'
 import { IEvent } from '../../types/Event'
 import Avatar from '../Avatar/Avatar'
 import CategoryTag from '../CategoryTag/CategoryTag'
+import DatetimeLabel from '../DatetimeLabel/DatetimeLabel'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 import EventItemChatButton from './components/EventItemChatButton/EventItemChatButton'
@@ -17,7 +18,7 @@ interface IProps {
 function EventItem({ event }: IProps) {
   return (
     <Span style={[styles.Container, styles.GapBottom]}>
-      <Span style={[styles.Header, styles.innerGapBottom]}>
+      <Span style={[styles.Header, styles.InnerGapBottom]}>
         <Avatar
           style={styles.Image}
           source={event.image ? { uri: event.image } : undefined}
@@ -27,19 +28,10 @@ function EventItem({ event }: IProps) {
           <CategoryTag key={event.category} category={event.category} />
         </Span>
       </Span>
-      <Span style={[styles.DataRow, styles.innerGapBottom]}>
-        <Span style={styles.DataRowLeft}>
-          <Text>Data</Text>
-          <Text>{dayjs(event.datetime).format('DD [de] MMM[.]')}</Text>
-        </Span>
-        <Span style={styles.DataRowRight}>
-          <Text>Horário</Text>
-          <Text>{dayjs(event.datetime).format('HH:mm')}</Text>
-        </Span>
-      </Span>
+      <DatetimeLabel datetime={event.datetime} />
       <Span style={styles.DataRow}>
         <Span style={styles.DataRowRight}>
-          <Text>Participantes</Text>
+          <Text style={styles.Label}>Participantes</Text>
           <Text>{event.memberCount || 0}</Text>
         </Span>
         <EventItemChatButton />
@@ -89,7 +81,10 @@ const styles = StyleSheet.create({
   GapBottom: {
     marginBottom: 16,
   },
-  innerGapBottom: {
+  InnerGapBottom: {
     marginBottom: 8,
+  },
+  Label: {
+    fontWeight: '600',
   },
 })
