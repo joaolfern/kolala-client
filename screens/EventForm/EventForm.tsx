@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from 'react'
+import React, { useState, Suspense, useEffect } from 'react'
 import { StyleSheet } from 'react-native'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Text from '../../components/Text/Text'
@@ -17,37 +17,80 @@ import { createEvent } from './api'
 import DateInput from '../../components/DateInput/DateInput'
 import { IEvent } from '../../types/Event'
 import Scroll from '../../components/Scroll/Scroll'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useNavigationState } from '@react-navigation/native'
 import { showToast } from '../../utils/toast'
 const MapIcon = React.lazy(() => import('./../../components/MapIcon/MapIcon'))
 const LocationInput = React.lazy(
   () => import('../../components/LocationInput/LocationInput')
 )
 
+function formatDetailsToForm({
+  EventImage,
+  Atendee,
+  author,
+  lat,
+  lng,
+  authorId,
+  createdAt,
+  id,
+  status,
+  ...details
+}: IEvent.Details): IEvent.FormSubmitEvent {
+  return {
+    ...details,
+    location: {
+      lat,
+      lng,
+    },
+    // @ts-ignore
+    image: EventImage,
+  }
+}
+
 function EventForm() {
+  const details = useNavigationState(
+    state =>
+      (
+        state.routes.find(item => item.name === 'EventForm')?.params as {
+          event: IEvent.Details | undefined
+        }
+      )?.event
+  )
+
+  const [loadingSubmit, setLoadingSubmit] = useState(false)
+  const navigation = useNavigation()
+
   const {
     handleSubmit,
     control,
+    setValue,
     formState: { errors },
-  } = useForm<IEvent.FormSubmitEvent>()
-  const [loadingSubmit, setLoadingSubmit] = useState(false)
-  const navigation = useNavigation()
+  } = useForm<IEvent.FormSubmitEvent>({
+    defaultValues: details ? formatDetailsToForm(details) : undefined,
+  })
+
+  useEffect(() => {
+    if (details?.icon || details?.icon === 0) setValue('icon', details?.icon)
+  }, [details?.icon])
 
   function makeFormData(data: IEvent.FormSubmitEvent, formData: FormData) {
     Object.entries(data).forEach(([key, value]) => {
       switch (key) {
         case 'image':
-          value?.map?.((uri: string, idx: number) => {
-            let uriArray = uri.split('.')
-            let fileType = uriArray[uriArray.length - 1]
+          value?.map?.((uri: string | IEvent.Image[], idx: number) => {
+            let file: any = uri
 
-            const file = {
-              uri,
-              name: `${data.title} (${idx}).${fileType}`,
-              type: `image/${fileType}`,
+            if (typeof uri === 'string') {
+              let uriArray = uri.split('.')
+              let fileType = uriArray[uriArray.length - 1]
+
+              file = {
+                uri,
+                name: `${data.title} (${idx}).${fileType}`,
+                type: `image/${fileType}`,
+              }
             }
 
-            // @ts-ignore
             formData.append(`${key}[]`, file)
             return
           })
@@ -91,7 +134,9 @@ function EventForm() {
           control={control}
           name='image'
           style={styles.marginBottom}
+          defaultValue={details?.EventImage}
         />
+
         <Label>Título</Label>
         <TextInput
           name='title'

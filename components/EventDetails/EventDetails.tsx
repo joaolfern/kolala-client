@@ -4,14 +4,12 @@ import {
   useNavigation,
   useNavigationState,
 } from '@react-navigation/native'
-import React, { useCallback, useEffect, useState } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../../constants/Colors'
 import Event from '../../Models/Event'
 import { shadow } from '../../screens/EventForm/utils'
 import { IMarkers } from '../../screens/Home/api'
-import { useAppSelector } from '../../store/hooks'
-import { selectUser } from '../../store/userSlice'
 import { IEvent } from '../../types/Event'
 import { showToast } from '../../utils/toast'
 import AvatarWithIcon from '../AvatarWithIcon/AvatarWithIcon'
@@ -32,12 +30,10 @@ export default function EventDetails() {
           marker: IMarkers
         }
       ).marker
-  ) as unknown as IMarkers
+  )
   const navigation = useNavigation()
   const [details, setDetails] = useState<IEvent.Details | null>(null)
   const [loading, setLoading] = useState(false)
-  const user = useAppSelector(selectUser)
-  const isAuthor = details?.authorId === user.account?.id
 
   async function getDetails(id: number) {
     setLoading(true)
@@ -55,11 +51,9 @@ export default function EventDetails() {
     }
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      if (marker?.id) getDetails(marker?.id)
-    }, [marker])
-  )
+  useEffect(() => {
+    if (marker?.id) getDetails(marker?.id)
+  }, [marker.id])
 
   function closeDetails() {
     navigation.goBack()
@@ -114,7 +108,7 @@ export default function EventDetails() {
         </Span>
         <Span style={styles.TitleRow}>
           <Text style={styles.Title}>{marker?.title}</Text>
-          <EventDetailsButton eventId={marker.id} />
+          <EventDetailsButton loading={loading} event={details} />
         </Span>
         <Span style={styles.CategoryRow}>
           <CategoryTag
@@ -156,7 +150,7 @@ const styles = StyleSheet.create({
   wrapper: {
     alignItems: 'flex-start',
     position: 'relative',
-    marginTop: '35%',
+    marginTop: Dimensions.get('screen').height * 0.2,
     flex: 1,
     backgroundColor: Colors.background,
     borderRadius: 18,
@@ -168,6 +162,7 @@ const styles = StyleSheet.create({
   closeButton: {
     alignSelf: 'flex-end',
     marginRight: 14,
+    marginTop: 10,
   },
   closeButtonIcon: {
     elevation: 3,
@@ -203,7 +198,6 @@ const styles = StyleSheet.create({
   AltButton: {
     borderRadius: 99999999,
     backgroundColor: Colors.xLightBackground,
-    ...shadow,
     justifyContent: 'center',
     alignItems: 'center',
   },

@@ -26,17 +26,19 @@ function MapIcon({ name, control }: IProps) {
 
   return (
     <ScrollView horizontal={true} style={styles.Container}>
-      {MAP_ICONS_RESOURCE.map(({ label: key, value: icon }, idx) => (
-        <TouchableOpacity
-          key={key + idx}
-          style={[styles.Item, selectedIcon === key && styles.ItemSelect]}
-          onPress={() => {
-            onChange(key)
-          }}
-        >
-          <Image style={styles.ItemImage} source={icon as ImageURISource} />
-        </TouchableOpacity>
-      ))}
+      {MAP_ICONS_RESOURCE.map(({ label: key, value: icon }, idx) => {
+        return (
+          <TouchableOpacity
+            key={key + idx}
+            style={[styles.Item, selectedIcon == key && styles.ItemSelect]}
+            onPress={() => {
+              onChange(key)
+            }}
+          >
+            <Image style={styles.ItemImage} source={icon as ImageURISource} />
+          </TouchableOpacity>
+        )
+      })}
     </ScrollView>
   )
 }
