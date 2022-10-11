@@ -15,7 +15,6 @@ import { useController } from 'react-hook-form'
 import Constants from 'expo-constants'
 import Span from '../Span/Span'
 import { IEvent } from '../../types/Event'
-import FAIcon from '../FAIcon/FAIcon'
 import { FontAwesome5 } from '@expo/vector-icons'
 
 type ImageItemProps = {
@@ -47,6 +46,7 @@ type UploadImageProps = ViewProps & {
   listMax?: number
   name: string
   control: any
+  defaultValue?: IEvent.Image[]
 }
 
 let counter = 0
@@ -56,14 +56,15 @@ function UploadImage({
   listMax = 6,
   name,
   control,
+  defaultValue = [],
   ...rest
 }: UploadImageProps) {
-  const [list, setList] = useState<IEvent.Image[]>([])
+  const [list, setList] = useState<IEvent.Image[]>(defaultValue)
 
   const { field } = useController({
     name,
     control,
-    defaultValue: [],
+    defaultValue: defaultValue.map(image => image.url),
   })
 
   async function handleCameraPermission() {
@@ -128,11 +129,11 @@ function UploadImage({
     })
   }
 
-  const { onChange } = field
+  const { onChange, value } = field
 
   return (
     <ScrollView style={styles.Container} horizontal={true}>
-      {list.length <= listMax && (
+      {list.length < listMax && (
         <TouchableOpacity onPress={handleChoosePhoto}>
           <View style={[styles.Input, styles.ImageItem]} {...rest}>
             <CameraSVG style={styles.Icon} />

@@ -1,4 +1,5 @@
 import { ImageInfo } from 'expo-image-picker'
+import { MAP_ICONS } from '../screens/EventForm/constants'
 import { IAtendee } from './Atendee'
 import { IProfile } from './Profile'
 
@@ -18,6 +19,7 @@ export namespace IEvent {
     lng: number
     author: IProfile
     Atendee: IAtendee[]
+    icon: keyof typeof MAP_ICONS
   }
 
   export interface IEventSections {
@@ -50,6 +52,7 @@ export namespace IEvent {
     category: number
     datetime: Date
     description: string
+    icon: number
     location: {
       lat: number
       lng: number

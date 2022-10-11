@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { IMarkers } from './screens/Home/api'
+import { IEvent } from './types/Event'
 
 export namespace ImagePicker {
   export interface ImagePickerMultipleResult {
@@ -29,7 +30,9 @@ export type RootStackParamList = {
     marker: IMarkers
   }
   NotFound: undefined
-  EventForm: undefined
+  EventForm: {
+    event?: IEvent.Details
+  }
   Profile: {
     profileUserId: number
   }
