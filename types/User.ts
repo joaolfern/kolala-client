@@ -1,3 +1,5 @@
+import { IProfile } from './Profile'
+
 export type _userLevel = 'user' | 'admin'
 
 export interface IAccount {
@@ -8,3 +10,5 @@ export interface IAccount {
   authKey: string
   level: _userLevel
 }
+
+export type IUser = IAccount & { profile: IProfile }

@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useEffect } from 'react'
+import React, { useState, Suspense, useEffect, useRef } from 'react'
 import { StyleSheet } from 'react-native'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Text from '../../components/Text/Text'
@@ -42,8 +42,7 @@ function formatDetailsToForm({
       lat,
       lng,
     },
-    // @ts-ignore
-    image: EventImage,
+    image: EventImage.map(image => image.url),
   }
 }
 
@@ -59,6 +58,7 @@ function EventForm() {
 
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const navigation = useNavigation()
+  const originalImagesRef = useRef(details?.EventImage || [])
 
   const {
     handleSubmit,
@@ -78,21 +78,18 @@ function EventForm() {
       switch (key) {
         case 'image':
           value?.map?.((uri: string | IEvent.Image[], idx: number) => {
-            let file: any = uri
-
             if (typeof uri === 'string') {
               let uriArray = uri.split('.')
               let fileType = uriArray[uriArray.length - 1]
 
-              file = {
+              const file: any = {
                 uri,
                 name: `${data.title} (${idx}).${fileType}`,
                 type: `image/${fileType}`,
               }
+              formData.append(`${key}[]`, file)
+              return
             }
-
-            formData.append(`${key}[]`, file)
-            return
           })
 
           return
@@ -116,7 +113,8 @@ function EventForm() {
 
     setLoadingSubmit(true)
     try {
-      await createEvent(formData)
+      if (details) await updateForm(data, formData)
+      else await createEvent(formData)
       navigation.navigate('Events')
     } catch (err) {
       showToast('Ocorreu um problema')
@@ -124,6 +122,14 @@ function EventForm() {
     } finally {
       setLoadingSubmit(false)
     }
+  }
+
+  async function updateForm(data: IEvent.FormSubmitEvent, formData: FormData) {
+    originalImagesRef.current
+      .filter(originalItem => !data.image.includes(originalItem.url))
+      .map(item => {
+        formData.append('removedImages[]', String(item.id))
+      })
   }
 
   return (

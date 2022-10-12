@@ -1,32 +1,56 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IProfile } from '../types/Profile'
-import { IAccount } from '../types/User'
+import { Region } from 'react-native-maps'
+import { IUser } from '../types/User'
+import * as SecureStore from 'expo-secure-store'
+
 
 interface IUserInitialState {
-  account: IAccount | null
-  profile: IProfile | null
+  user: IUser | null
+  location: Region | null
 }
 
 const initialState: IUserInitialState = {
-  account: null,
-  profile: null,
+  user: null,
+  location: null
 }
 
 const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<IUserInitialState>) => (
-      state = action.payload
+    setUser: (state, action: PayloadAction<IUser>) => (
+      state = {
+        ...state,
+        user: action.payload
+      }
     ),
-    clearUser: (state, action) => (
-      state = initialState
-    )
-  }
+    clearUser: (state, action) => {
+      SecureStore.deleteItemAsync('location')
+      return state = initialState
+    },
+    setLocation: (state, action: PayloadAction<Region>) => {
+      SecureStore.setItemAsync('location', JSON.stringify(action.payload))
+      return (
+        state = {
+          ...state,
+          location: action.payload
+        }
+      )
+    },
+    clearLocation: (state) => {
+      SecureStore.deleteItemAsync('location')
+      return (
+        state = {
+          ...state,
+          location: null
+        }
+      )
+    }
+  },
 })
 
 
-export const { setUser, clearUser } = userSlice.actions
+export const { setUser, clearUser, setLocation, clearLocation } = userSlice.actions
 
 export const selectUser = (state: { user: IUserInitialState } ) => state.user
 

@@ -10,7 +10,7 @@ import { MAP_ICONS } from '../EventForm/constants'
 
 export default function Home() {
   const navigation = useNavigation()
-  const { userLocation } = useUserLocation()
+  const { location } = useUserLocation()
   const [markers, setMarkers] = useState<IMarkers[]>([])
   const [mapRegion, setMapRegion] = useState<Region | null>(null)
 
@@ -30,10 +30,10 @@ export default function Home() {
 
   useFocusEffect(
     useCallback(() => {
-      if (userLocation) requestMarkers(userLocation)
+      if (location) requestMarkers(location)
 
       return () => {}
-    }, [userLocation])
+    }, [location])
   )
 
   const displayDetails = (marker: IMarkers) => {
@@ -52,8 +52,8 @@ export default function Home() {
   )
 
   useEffect(() => {
-    if (userLocation) setMapRegion(userLocation)
-  }, [userLocation])
+    if (location) setMapRegion(location)
+  }, [location])
 
   return (
     <View style={styles.container}>
