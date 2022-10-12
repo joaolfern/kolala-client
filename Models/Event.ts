@@ -43,7 +43,7 @@ class Event {
     return await Fetch<IEvent.IEventSections[]>(() => api.get(this.path))
   }
 
-  async createEvent (data: FormData) {
+  async create (data: FormData) {
     return (
       await Fetch<{}>(
         () => api.post('auth/events', data, {
@@ -54,6 +54,19 @@ class Event {
       )
     )
   }
+
+  async update (id: string, data: FormData) {
+    return (
+      await Fetch<{}>(
+        () => api.patch(`auth/events/${id}`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        })
+      )
+    )
+  }
+
 }
 
 export default new Event()

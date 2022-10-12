@@ -17,6 +17,7 @@ import Scroll from '../../components/Scroll/Scroll'
 import { useNavigation, useNavigationState } from '@react-navigation/native'
 import { showToast } from '../../utils/toast'
 import Event, { IEvent } from '../../Models/Event'
+import { REACT_APP_SERVER } from '../../services/api'
 const MapIcon = React.lazy(() => import('./../../components/MapIcon/MapIcon'))
 const LocationInput = React.lazy(
   () => import('../../components/LocationInput/LocationInput')
@@ -53,10 +54,10 @@ function EventForm() {
         }
       )?.event
   )
-
+  const isEditing = !!details
   const [loadingSubmit, setLoadingSubmit] = useState(false)
-  const navigation = useNavigation()
   const originalImagesRef = useRef(details?.EventImage || [])
+  const navigation = useNavigation()
 
   const {
     handleSubmit,
@@ -77,6 +78,9 @@ function EventForm() {
         case 'image':
           value?.map?.((uri: string | IEvent.Image[], idx: number) => {
             if (typeof uri === 'string') {
+              const isHosted = uri.includes(REACT_APP_SERVER)
+              if (isHosted) return
+
               let uriArray = uri.split('.')
               let fileType = uriArray[uriArray.length - 1]
 
@@ -107,12 +111,11 @@ function EventForm() {
     const formData = new FormData()
     makeFormData(data, formData)
 
-    console.log(JSON.stringify(formData, null, 2))
-
     setLoadingSubmit(true)
     try {
       if (details) await updateForm(data, formData)
-      else await Event.createEvent(formData)
+      else await Event.create(formData)
+      navigation.goBack()
       navigation.navigate('Events')
     } catch (err) {
       showToast('Ocorreu um problema')
@@ -128,6 +131,10 @@ function EventForm() {
       .map(item => {
         formData.append('removedImages[]', String(item.id))
       })
+
+    if (!details?.id) throw new Error('EventId not found')
+
+    return await Event.update(String(details.id), formData)
   }
 
   return (
@@ -180,7 +187,9 @@ function EventForm() {
           style={styles.Button}
           onPress={handleSubmit(onSubmit)}
         >
-          <Text style={styles.ButtonText}>Criar evento</Text>
+          <Text style={styles.ButtonText}>
+            {isEditing ? 'Editar' : 'Criar'} evento
+          </Text>
         </Button>
       </Scroll>
     </SafeAreaView>
@@ -197,7 +206,7 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     width: 'auto',
     marginTop: 20,
-    marginBottom: 30,
+    marginBottom: 50,
   },
   ButtonText: {
     color: Colors.altText,

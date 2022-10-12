@@ -1,6 +1,7 @@
+import { useNavigation } from '@react-navigation/native'
 import dayjs from 'dayjs'
 import React from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../../constants/Colors'
 import { IEvent } from '../../Models/Event'
 import Avatar from '../Avatar/Avatar'
@@ -15,8 +16,25 @@ interface IProps {
 }
 
 function EventItem({ event }: IProps) {
+  const navigation = useNavigation()
+
+  function navigateToDetails() {
+    navigation.navigate('Root')
+    setTimeout(() => {
+      navigation.navigate('EventDetails', {
+        preview: {
+          id: event.id,
+          title: event.title,
+        },
+      })
+    }, 300)
+  }
+
   return (
-    <Span style={[styles.Container, styles.GapBottom]}>
+    <TouchableOpacity
+      style={[styles.Container, styles.GapBottom]}
+      onPress={navigateToDetails}
+    >
       <Span style={[styles.Header, styles.InnerGapBottom]}>
         <Avatar
           style={styles.Image}
@@ -35,7 +53,7 @@ function EventItem({ event }: IProps) {
         </Span>
         <EventItemChatButton />
       </Span>
-    </Span>
+    </TouchableOpacity>
   )
 }
 
