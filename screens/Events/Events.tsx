@@ -8,9 +8,8 @@ import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Span from '../../components/Span/Span'
 import Text from '../../components/Text/Text'
 import Colors from '../../constants/Colors'
-import { IEvent } from '../../types/Event'
-import { listEvents } from './api'
 import Spinner from '../../components/Spinner/Spinner'
+import Event, { IEvent } from '../../Models/Event'
 
 function EventListHeader() {
   const navigation = useNavigation()
@@ -40,7 +39,7 @@ function EventList() {
   async function getEvents() {
     setLoading(true)
     try {
-      const response = await listEvents()
+      const response = await Event.listEvents()
       const data = response.data?.data
       if (data) setEventList(data)
     } catch (err) {

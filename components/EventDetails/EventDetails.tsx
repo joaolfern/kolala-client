@@ -7,10 +7,8 @@ import {
 import React, { useEffect, useState } from 'react'
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../../constants/Colors'
-import Event from '../../Models/Event'
+import Event, { IEvent } from '../../Models/Event'
 import { shadow } from '../../screens/EventForm/utils'
-import { IMarkers } from '../../screens/Home/api'
-import { IEvent } from '../../types/Event'
 import { showToast } from '../../utils/toast'
 import AvatarWithIcon from '../AvatarWithIcon/AvatarWithIcon'
 import Button from '../Button/Button'
@@ -27,7 +25,7 @@ export default function EventDetails() {
     state =>
       (
         state.routes.find(item => item.name === 'EventDetails')?.params as {
-          marker: IMarkers
+          marker: IEvent.IMarkers
         }
       ).marker
   )

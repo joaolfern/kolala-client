@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Image, StyleSheet } from 'react-native'
+import { IEvent } from '../../Models/Event'
 import { shadow } from '../../screens/EventForm/utils'
-import { IEvent } from '../../types/Event'
 import Avatar from '../Avatar/Avatar'
 import Span from '../Span/Span'
 

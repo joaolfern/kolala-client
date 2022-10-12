@@ -3,21 +3,21 @@ import { StyleSheet, Dimensions } from 'react-native'
 import MapView, { Callout, Marker, Region } from 'react-native-maps'
 import mapStyle from '../../constants/mapStyle'
 import View from '../../components/View/View'
-import { getMarkers, IMarkers } from './api'
 import useUserLocation from './UserMarker/useUserLocation'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { MAP_ICONS } from '../EventForm/constants'
+import Event, { IEvent } from '../../Models/Event'
 
 export default function Home() {
   const navigation = useNavigation()
   const { location } = useUserLocation()
-  const [markers, setMarkers] = useState<IMarkers[]>([])
+  const [markers, setMarkers] = useState<IEvent.IMarkers[]>([])
   const [mapRegion, setMapRegion] = useState<Region | null>(null)
 
   const [showOverlay, setShowoverlay] = useState(false)
 
   async function requestMarkers(location: Region) {
-    const response = await getMarkers({
+    const response = await Event.getMarkers({
       params: {
         lat: location.latitude,
         lng: location.longitude,
@@ -36,7 +36,7 @@ export default function Home() {
     }, [location])
   )
 
-  const displayDetails = (marker: IMarkers) => {
+  const displayDetails = (marker: IEvent.IMarkers) => {
     if (mapRegion) setMapRegion(null)
     navigation.navigate('EventDetails', {
       marker,
