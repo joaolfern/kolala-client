@@ -2,14 +2,13 @@ import dayjs from 'dayjs'
 import React from 'react'
 import { Image, StyleSheet } from 'react-native'
 import Colors from '../../constants/Colors'
-import { IEvent } from '../../types/Event'
+import { IEvent } from '../../Models/Event'
 import Avatar from '../Avatar/Avatar'
 import CategoryTag from '../CategoryTag/CategoryTag'
 import DatetimeLabel from '../DatetimeLabel/DatetimeLabel'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 import EventItemChatButton from './components/EventItemChatButton/EventItemChatButton'
-import { IEventRegistry } from './types'
 
 interface IProps {
   event: IEvent.ListItem

@@ -12,13 +12,11 @@ import Textarea from '../../components/Textarea/Textarea'
 import Select from '../../components/Select/Select'
 import { CATEGORY_RESOURCE } from './constants'
 import Header from '../../components/Header/Header'
-
-import { createEvent } from './api'
 import DateInput from '../../components/DateInput/DateInput'
-import { IEvent } from '../../types/Event'
 import Scroll from '../../components/Scroll/Scroll'
 import { useNavigation, useNavigationState } from '@react-navigation/native'
 import { showToast } from '../../utils/toast'
+import Event, { IEvent } from '../../Models/Event'
 const MapIcon = React.lazy(() => import('./../../components/MapIcon/MapIcon'))
 const LocationInput = React.lazy(
   () => import('../../components/LocationInput/LocationInput')
@@ -114,7 +112,7 @@ function EventForm() {
     setLoadingSubmit(true)
     try {
       if (details) await updateForm(data, formData)
-      else await createEvent(formData)
+      else await Event.createEvent(formData)
       navigation.navigate('Events')
     } catch (err) {
       showToast('Ocorreu um problema')

@@ -14,8 +14,8 @@ import * as ImagePicker from 'expo-image-picker'
 import { useController } from 'react-hook-form'
 import Constants from 'expo-constants'
 import Span from '../Span/Span'
-import { IEvent } from '../../types/Event'
 import { FontAwesome5 } from '@expo/vector-icons'
+import { IEvent } from '../../Models/Event'
 
 type ImageItemProps = {
   item: IEvent.Image
