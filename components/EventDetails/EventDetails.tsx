@@ -57,6 +57,12 @@ export default function EventDetails() {
     navigation.goBack()
   }
 
+  function navigateToProfile(authorId: number) {
+    navigation.navigate('Profile', {
+      profileUserId: authorId,
+    })
+  }
+
   return (
     <Scroll style={styles.Container}>
       <TouchableOpacity style={styles.closeButton} onPress={closeDetails}>
@@ -75,24 +81,30 @@ export default function EventDetails() {
           </Span>
         </Span>
         <Span style={styles.TopRow}>
-          <AvatarWithIcon
-            style={[styles.TopRowEllipsis]}
-            source={
-              details?.author?.picture
-                ? { uri: details?.author?.picture }
-                : undefined
+          <TouchableOpacity
+            onPress={() =>
+              details?.authorId && navigateToProfile(details.authorId)
             }
           >
-            <Span style={styles.AuthorButton}>
-              <FontAwesome5
-                size={16}
-                name='crown'
-                solid
-                color={Colors.secondaryColor}
-                style={styles.AuthorIcon}
-              />
-            </Span>
-          </AvatarWithIcon>
+            <AvatarWithIcon
+              style={[styles.TopRowEllipsis]}
+              source={
+                details?.author?.picture
+                  ? { uri: details?.author?.picture }
+                  : undefined
+              }
+            >
+              <Span style={styles.AuthorButton}>
+                <FontAwesome5
+                  size={16}
+                  name='crown'
+                  solid
+                  color={Colors.secondaryColor}
+                  style={styles.AuthorIcon}
+                />
+              </Span>
+            </AvatarWithIcon>
+          </TouchableOpacity>
           <Span>
             <Button style={[styles.TopRowEllipsis, styles.AltButton]}>
               <FontAwesome5
