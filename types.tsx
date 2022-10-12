@@ -26,7 +26,10 @@ declare global {
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined
   EventDetails: {
-    marker: IEvent.IMarkers
+    preview: {
+      id: number
+      title: string
+    }
   }
   NotFound: undefined
   EventForm?: {

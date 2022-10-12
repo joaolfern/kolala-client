@@ -36,19 +36,20 @@ export default function Home() {
     }, [location])
   )
 
-  const displayDetails = (marker: IEvent.IMarkers) => {
+  const displayDetails = ({ id, title }: IEvent.IMarkers) => {
     if (mapRegion) setMapRegion(null)
     navigation.navigate('EventDetails', {
-      marker,
+      preview: { id, title },
     })
-
-    setShowoverlay(true)
   }
 
   useFocusEffect(
     useCallback(() => {
       setShowoverlay(false)
-    }, [])
+      return () => {
+        setShowoverlay(true)
+      }
+    }, [navigation])
   )
 
   useEffect(() => {

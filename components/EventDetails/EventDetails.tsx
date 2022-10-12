@@ -9,6 +9,7 @@ import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../../constants/Colors'
 import Event, { IEvent } from '../../Models/Event'
 import { shadow } from '../../screens/EventForm/utils'
+import { RootStackParamList } from '../../types'
 import { showToast } from '../../utils/toast'
 import AvatarWithIcon from '../AvatarWithIcon/AvatarWithIcon'
 import Button from '../Button/Button'
@@ -21,13 +22,12 @@ import Text from '../Text/Text'
 import EventDetailsButton from './EventDetailsButton'
 
 export default function EventDetails() {
-  const marker = useNavigationState(
+  const preview = useNavigationState(
     state =>
       (
-        state.routes.find(item => item.name === 'EventDetails')?.params as {
-          marker: IEvent.IMarkers
-        }
-      ).marker
+        state.routes.find(item => item.name === 'EventDetails')
+          ?.params as RootStackParamList['EventDetails']
+      ).preview
   )
   const navigation = useNavigation()
   const [details, setDetails] = useState<IEvent.Details | null>(null)
@@ -50,8 +50,8 @@ export default function EventDetails() {
   }
 
   useEffect(() => {
-    if (marker?.id) getDetails(marker?.id)
-  }, [marker.id])
+    if (preview?.id) getDetails(preview?.id)
+  }, [preview.id])
 
   function closeDetails() {
     navigation.goBack()
@@ -105,7 +105,7 @@ export default function EventDetails() {
           </Span>
         </Span>
         <Span style={styles.TitleRow}>
-          <Text style={styles.Title}>{marker?.title}</Text>
+          <Text style={styles.Title}>{preview?.title}</Text>
           <EventDetailsButton loading={loading} event={details} />
         </Span>
         <Span style={styles.CategoryRow}>
