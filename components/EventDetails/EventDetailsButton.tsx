@@ -37,7 +37,6 @@ function EventDetailsButton({ event, loading }: IEventDetailsButtonProps) {
   const navigation = useNavigation()
 
   function navigateToEdit(event: IEvent.Details) {
-    navigation.goBack()
     navigation.navigate('EventForm', {
       event: event,
     })
