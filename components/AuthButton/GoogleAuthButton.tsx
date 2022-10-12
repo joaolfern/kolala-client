@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Image, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet } from 'react-native'
 import Button from '../Button/Button'
 import Text from '../Text/Text'
 import google from '../../assets/images/google.png'
@@ -11,7 +11,7 @@ import { sendAccessTokenRequest } from './api'
 import authButtonStyle from './authButtonStyle'
 import { setToken } from '../../store/tokenSlice'
 import { setUser } from '../../store/userSlice'
-import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import { useAppDispatch } from '../../store/hooks'
 import Span from '../Span/Span'
 WebBrowser.maybeCompleteAuthSession()
 
@@ -29,9 +29,9 @@ function GoogleAuthButton() {
     async function sendAccessToken(accessToken: string) {
       try {
         const response = await sendAccessTokenRequest({ accessToken })
-        const { profile, token, user } = response.data?.data || {}
+        const { token, user } = response.data?.data || {}
 
-        if (profile && user) dispatch(setUser({ account: user, profile }))
+        if (user) dispatch(setUser(user))
 
         if (token) dispatch(setToken(token))
       } catch (err: any) {

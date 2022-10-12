@@ -1,12 +1,6 @@
 import { useNavigation } from '@react-navigation/native'
 import React, { ReactNode } from 'react'
-import {
-  ButtonProps,
-  StyleProp,
-  StyleSheet,
-  StyleSheetProperties,
-  ViewStyle,
-} from 'react-native'
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import Colors from '../../constants/Colors'
 import { useAppSelector } from '../../store/hooks'
 import { selectUser } from '../../store/userSlice'
@@ -37,8 +31,8 @@ interface IEventDetailsButtonProps {
 }
 
 function EventDetailsButton({ event, loading }: IEventDetailsButtonProps) {
-  const user = useAppSelector(selectUser)
-  const isAuthor = event?.authorId === user.account?.id
+  const { user } = useAppSelector(selectUser)
+  const isAuthor = event?.authorId === user?.id
   const isParticipating = event?.Atendee.find(user => user.id === user.id)
   const navigation = useNavigation()
 

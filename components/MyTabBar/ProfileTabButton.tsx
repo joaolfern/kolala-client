@@ -7,11 +7,11 @@ import AvatarOnlineStatus from '../AvatarOnlineStatus/AvatarOnlineStatus'
 
 function ProfileTabButton() {
   const navigation = useNavigation()
-  const { profile } = useAppSelector(selectUser)
+  const { user } = useAppSelector(selectUser)
 
   const onPress = () => {
     navigation.navigate('Profile', {
-      profileUserId: profile?.id as number,
+      profileUserId: user?.id as number,
     })
   }
 
@@ -23,7 +23,9 @@ function ProfileTabButton() {
     >
       <AvatarOnlineStatus
         isOnline={true}
-        source={profile?.picture ? { uri: profile.picture } : undefined}
+        source={
+          user?.profile?.picture ? { uri: user.profile.picture } : undefined
+        }
       />
     </TouchableOpacity>
   )

@@ -4,8 +4,8 @@ import { IProfile } from '../../types/Profile'
 import { IAccount } from '../../types/User'
 
 export const sendAccessTokenRequest = async (data: { accessToken: string }) =>
-  await Fetch<{ user: IAccount; token: string; profile: IProfile }>(() =>
-    api.post('unauth/access-token', data)
+  await Fetch<{ token: string; user: IAccount & { profile: IProfile } }>(() =>
+    api.post('unauth/login', data)
   )
 
 export const loginWithToken = async (token: string) =>

@@ -28,13 +28,7 @@ function Login() {
           const { user } = response.data?.data || {}
 
           if (user) {
-            const { profile, ...account } = user
-            dispatch(
-              setUser({
-                account,
-                profile,
-              })
-            )
+            dispatch(setUser(user))
           }
 
           dispatch(setToken(storeToken))

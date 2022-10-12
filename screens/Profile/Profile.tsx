@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Image, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
 import Header from '../../components/Header/Header'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import { useAppSelector } from '../../store/hooks'
@@ -8,7 +8,7 @@ import Span from '../../components/Span/Span'
 import Text from '../../components/Text/Text'
 import { IProfile } from '../../types/Profile'
 import { getProfile } from './api'
-import { RootStackScreenProps, RootTabParamList } from '../../types'
+import { RootStackScreenProps } from '../../types'
 import LogoutButton from '../../components/LogoutButton/LogoutButton'
 import useLogout from '../../hooks/useLogout'
 import Avatar from '../../components/Avatar/Avatar'
@@ -16,15 +16,15 @@ import Scroll from '../../components/Scroll/Scroll'
 
 function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
   const { profileUserId } = route?.params
-  const user = useAppSelector(selectUser)
+  const { user } = useAppSelector(selectUser)
   const logout = useLogout()
 
-  const isOwnProfile = useRef(profileUserId === user.profile?.id).current
+  const isOwnProfile = useRef(profileUserId === user?.id).current
   const [profileUser, setProfileUser] = useState<IProfile | null>(null)
 
   useEffect(() => {
-    if (isOwnProfile) {
-      setProfileUser(user.profile)
+    if (isOwnProfile && user?.profile) {
+      setProfileUser(user?.profile)
       return
     }
 
@@ -40,7 +40,7 @@ function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
         console.error(err)
       }
     }
-  }, [])
+  }, [user?.profile])
 
   return (
     <SafeAreaView>
@@ -65,9 +65,7 @@ function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
             </Span>
           </Span>
           <Text style={styles.title}>{profileUser?.name}</Text>
-          {!!(isOwnProfile && user.account?.email) && (
-            <Text>{user.account?.email}</Text>
-          )}
+          {!!(isOwnProfile && user?.email) && <Text>{user?.email}</Text>}
         </Span>
       </Scroll>
     </SafeAreaView>

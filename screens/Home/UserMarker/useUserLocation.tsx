@@ -2,9 +2,52 @@ import React, { useEffect, useState } from 'react'
 import { Region } from 'react-native-maps'
 import * as Location from 'expo-location'
 import { ENVIRONMENT, GOOGLE_API_TOKEN } from '@env'
+import * as SecureStore from 'expo-secure-store'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
+import {
+  clearLocation,
+  selectUser,
+  setLocation,
+} from '../../../store/userSlice'
+const MOCKED_LOCATION = {
+  latitude: -23.4874549,
+  longitude: -47.4991724,
+  latitudeDelta: 0.0922,
+  longitudeDelta: 0.0421,
+}
 
 function useUserLocation() {
-  const [userLocation, setPosition] = useState<Region>()
+  const { location } = useAppSelector(selectUser)
+  const dispatch = useAppDispatch()
+
+  async function updateUserLocation() {
+    dispatch(clearLocation())
+    getUserLocation()
+  }
+
+  async function tryCachedLocation() {
+    try {
+      const cachedLocation = await SecureStore.getItemAsync('location')
+      if (cachedLocation) {
+        const parsedLocation = JSON.parse(cachedLocation) as Region
+        return parsedLocation
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  async function getApiLocation() {
+    Location.setGoogleApiKey(GOOGLE_API_TOKEN)
+
+    let { coords } = await Location.getCurrentPositionAsync()
+    return {
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+      latitudeDelta: 0.0922,
+      longitudeDelta: 0.0421,
+    }
+  }
 
   async function getUserLocation() {
     let { status } = await Location.requestForegroundPermissionsAsync()
@@ -13,37 +56,34 @@ function useUserLocation() {
       console.log(`Location access denied`)
     }
 
-    let devicePosition
+    // const cachedLocation = await tryCachedLocation()
+
+    // if (cachedLocation) {
+    //   return cachedLocation
+    // }
+
     console.log('🐨 env', ENVIRONMENT)
-    if (ENVIRONMENT === `local`) {
-      devicePosition = {
-        latitude: -23.4874549,
-        longitude: -47.4991724,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }
-    } else {
-      Location.setGoogleApiKey(GOOGLE_API_TOKEN)
+    const userLocation =
+      ENVIRONMENT === `local` ? MOCKED_LOCATION : await getApiLocation()
 
-      let { coords } = await Location.getCurrentPositionAsync()
-      devicePosition = {
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }
+    if (userLocation) {
+      return userLocation
     }
+  }
 
-    setPosition(devicePosition)
+  async function getGlobalLocaiton() {
+    const location = await getUserLocation()
+
+    if (location) dispatch(setLocation(location))
   }
 
   useEffect(() => {
-    getUserLocation()
+    getGlobalLocaiton()
   }, [])
 
   return {
-    userLocation,
-    updatedUserLocation: getUserLocation,
+    location,
+    updateUserLocation,
   }
 }
 
