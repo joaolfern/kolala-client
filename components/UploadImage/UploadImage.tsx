@@ -20,11 +20,17 @@ import { IEvent } from '../../Models/Event'
 type ImageItemProps = {
   item: IEvent.Image
   remove(id: string): void
+  isLastItem: boolean
 }
 
-function ImageItem({ item, remove }: ImageItemProps) {
+function ImageItem({ item, remove, isLastItem }: ImageItemProps) {
   return (
-    <Span style={styles.ImageItemWrapper}>
+    <Span
+      style={[
+        styles.ImageItemWrapper,
+        !isLastItem ? styles.ImageItemWrapperMargin : {},
+      ]}
+    >
       <TouchableOpacity
         style={styles.closeButton}
         onPress={() => remove(item.id as string)}
@@ -143,7 +149,12 @@ function UploadImage({
         </TouchableOpacity>
       )}
       {list.map((item, idx) => (
-        <ImageItem item={item} remove={remove} key={item.url + idx} />
+        <ImageItem
+          item={item}
+          remove={remove}
+          key={item.url + idx}
+          isLastItem={idx === list.length - 1}
+        />
       ))}
     </ScrollView>
   )
@@ -156,6 +167,8 @@ const styles = StyleSheet.create({
   },
   ImageItemWrapper: {
     position: 'relative',
+  },
+  ImageItemWrapperMargin: {
     marginRight: 16,
   },
   ImageItem: {
