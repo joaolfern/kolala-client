@@ -4,7 +4,7 @@ import {
   useNavigation,
   useNavigationState,
 } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../../constants/Colors'
 import Event, { IEvent } from '../../Models/Event'
@@ -20,6 +20,33 @@ import Scroll from '../Scroll/Scroll'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 import EventDetailsButton from './EventDetailsButton'
+import { useActionSheet } from '@expo/react-native-action-sheet'
+import { useAppSelector } from '../../store/hooks'
+import { selectUser } from '../../store/userSlice'
+import { IUser } from '../../types/User'
+
+function getEventDetailsMenuOptions(
+  level: IUser['level'],
+  isAuthor: boolean
+): (
+  | typeof basePermission
+  | typeof deletingPermission
+  | typeof reportPermission
+)[] {
+  const basePermission = 'Cancelar'
+  const deletingPermission = 'Deletar evento'
+  const reportPermission = 'Denunciar usuário'
+
+  switch (level) {
+    case 'admin': {
+      return [deletingPermission, basePermission]
+    }
+    case 'user': {
+      if (isAuthor) return [deletingPermission, basePermission]
+      return [reportPermission, basePermission]
+    }
+  }
+}
 
 export default function EventDetails() {
   const preview = useNavigationState(
@@ -32,6 +59,10 @@ export default function EventDetails() {
   const navigation = useNavigation()
   const [details, setDetails] = useState<IEvent.Details | null>(null)
   const [loading, setLoading] = useState(false)
+  const { showActionSheetWithOptions } = useActionSheet()
+  const { user } = useAppSelector(selectUser)
+
+  const isAuthor = details?.authorId === user?.id
 
   async function getDetails(id: number) {
     setLoading(true)
@@ -41,17 +72,19 @@ export default function EventDetails() {
       if (data) {
         setDetails(data)
       }
-    } catch (err) {
-      showToast('Ocorreu um problema')
-      console.error(err)
+    } catch (err: any) {
+      showToast(String(err.message))
+      console.log(err)
     } finally {
       setLoading(false)
     }
   }
 
-  useEffect(() => {
-    if (preview?.id) getDetails(preview?.id)
-  }, [preview.id])
+  useFocusEffect(
+    useCallback(() => {
+      getDetails(preview?.id)
+    }, [preview?.id])
+  )
 
   function closeDetails() {
     navigation.goBack()
@@ -62,6 +95,57 @@ export default function EventDetails() {
       profileUserId: authorId,
     })
   }
+
+  const deleteEvent = useCallback(async () => {
+    if (!preview.id) return
+    try {
+      const response = await Event.delete(String(preview.id))
+      const message = response.data.data
+      navigation.navigate('Root')
+      if (message) showToast(message)
+    } catch (err: any) {
+      showToast(String(err.message))
+      console.log(err)
+    }
+  }, [preview?.id])
+
+  const openMenu = useCallback(
+    (level: IUser['level'], isAuthor: boolean) => {
+      const options = getEventDetailsMenuOptions(level, isAuthor)
+      const destructiveButtonIndex =
+        options.indexOf('Deletar evento') === -1
+          ? undefined
+          : options.indexOf('Deletar evento')
+      const cancelButtonIndex = options.indexOf('Cancelar')
+
+      showActionSheetWithOptions(
+        {
+          options,
+          cancelButtonIndex,
+          destructiveButtonIndex,
+          tintColor: Colors.text,
+
+          containerStyle: {
+            backgroundColor: Colors.lightBackground,
+          },
+        },
+        (selectedIndex?: number) => {
+          if (typeof selectedIndex === 'undefined') return
+
+          const selectedOption = options[selectedIndex]
+          switch (selectedOption) {
+            case 'Deletar evento':
+              deleteEvent()
+              return
+            case 'Denunciar usuário':
+              // Delete
+              return
+          }
+        }
+      )
+    },
+    [deleteEvent]
+  )
 
   return (
     <Scroll style={styles.Container}>
@@ -106,7 +190,10 @@ export default function EventDetails() {
             </AvatarWithIcon>
           </TouchableOpacity>
           <Span>
-            <Button style={[styles.TopRowEllipsis, styles.AltButton]}>
+            <Button
+              style={[styles.TopRowEllipsis, styles.AltButton]}
+              onPress={() => user?.level && openMenu(user?.level, isAuthor)}
+            >
               <FontAwesome5
                 size={20}
                 name='ellipsis-v'
@@ -117,13 +204,15 @@ export default function EventDetails() {
           </Span>
         </Span>
         <Span style={styles.TitleRow}>
-          <Text style={styles.Title}>{preview?.title}</Text>
+          <Text style={styles.Title}>{details?.title || preview?.title}</Text>
           <EventDetailsButton loading={loading} event={details} />
         </Span>
         <Span style={styles.CategoryRow}>
           <CategoryTag
             style={styles.CategoryTag}
-            category={details?.category || 2}
+            category={
+              typeof details?.category === 'undefined' ? 1 : details.category
+            }
           />
         </Span>
         <Span style={styles.DatetimeRow}>

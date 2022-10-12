@@ -114,15 +114,20 @@ function EventForm() {
     setLoadingSubmit(true)
     try {
       if (details) await updateForm(data, formData)
-      else await Event.create(formData)
-      navigation.goBack()
-      navigation.navigate('Events')
+      else await createForm(formData)
     } catch (err) {
       showToast('Ocorreu um problema')
       console.log(err)
     } finally {
       setLoadingSubmit(false)
     }
+  }
+
+  async function createForm(formData: FormData) {
+    await Event.create(formData)
+
+    navigation.goBack()
+    navigation.navigate('Events')
   }
 
   async function updateForm(data: IEvent.FormSubmitEvent, formData: FormData) {
@@ -134,7 +139,9 @@ function EventForm() {
 
     if (!details?.id) throw new Error('EventId not found')
 
-    return await Event.update(String(details.id), formData)
+    await Event.update(String(details.id), formData)
+
+    navigation.goBack()
   }
 
   return (

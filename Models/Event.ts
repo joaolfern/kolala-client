@@ -67,6 +67,18 @@ class Event {
     )
   }
 
+  async delete (id: string) {
+    return (
+      await Fetch<string>(
+        () => api.delete(`auth/events/${id}`, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        })
+      )
+    )
+  }
+
 }
 
 export default new Event()

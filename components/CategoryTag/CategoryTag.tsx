@@ -12,7 +12,7 @@ interface IProps extends ViewProps {
 function CategoryTag({ category, style, ...rest }: IProps) {
   const categoryItem = useMemo(
     () => CATEGORY_RESOURCE.find(item => item.value === category),
-    []
+    [category]
   )
   return (
     <Span style={[styles.Tag, style]} {...rest}>
