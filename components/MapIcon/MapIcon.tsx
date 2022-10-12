@@ -30,7 +30,11 @@ function MapIcon({ name, control }: IProps) {
         return (
           <TouchableOpacity
             key={key + idx}
-            style={[styles.Item, selectedIcon == key && styles.ItemSelect]}
+            style={[
+              styles.Item,
+              idx !== MAP_ICONS_RESOURCE.length - 1 && styles.ItemMargin,
+              selectedIcon == key && styles.ItemSelect,
+            ]}
             onPress={() => {
               onChange(key)
             }}
@@ -55,6 +59,8 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     width: 91,
     height: 69,
+  },
+  ItemMargin: {
     marginRight: 19,
   },
   ItemSelect: {
