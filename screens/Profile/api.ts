@@ -4,6 +4,6 @@ import { IProfile } from '../../types/Profile'
 
 export const getProfile = async (id: number) => (
   await Fetch<IProfile>(
-    () => api.post(`profile/${id}`)
+    () => api.get(`auth/users/profile/${id}`)
   )
 )

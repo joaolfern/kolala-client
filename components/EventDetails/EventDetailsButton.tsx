@@ -17,10 +17,10 @@ interface IButtonComponentProps {
 function ButtonComponent({ children, onPress, style }: IButtonComponentProps) {
   return (
     <Button
-      style={[styles.PrimaryButton, styles.PrimaryButtonActive, style]}
+      style={[styles.PrimaryButton, styles.PrimaryButton, style]}
       onPress={onPress}
     >
-      <Text style={[styles.PrimaryButtonActiveText]}>{children}</Text>
+      <Text style={[styles.PrimaryButtonText]}>{children}</Text>
     </Button>
   )
 }
@@ -43,25 +43,28 @@ function EventDetailsButton({ event, loading }: IEventDetailsButtonProps) {
   }
 
   if (loading || !event)
-    return <Button style={[styles.PrimaryButton, styles.PrimaryButtonActive]} />
+    return <Button style={[styles.Button, styles.PrimaryButton]} />
 
   if (isAuthor)
     return (
-      <ButtonComponent onPress={() => navigateToEdit(event)}>
+      <ButtonComponent
+        style={[styles.Button, styles.PrimaryButton]}
+        onPress={() => navigateToEdit(event)}
+      >
         Editar
       </ButtonComponent>
     )
 
   if (isParticipating)
     return (
-      <Button style={[styles.PrimaryButton, styles.PrimaryButtonActive]}>
-        <Text style={[styles.PrimaryButtonActiveText]}>Participando</Text>
+      <Button style={[styles.Button, styles.PrimaryButton]}>
+        <Text style={[styles.PrimaryButtonText]}>Participando</Text>
       </Button>
     )
 
   return (
-    <Button style={[styles.SecondaryButton]}>
-      <Text style={[styles.PrimaryButtonActiveText]}>Participar</Text>
+    <Button style={[styles.Button, styles.SecondaryButton]}>
+      <Text style={[styles.SecondaryButtonText]}>Participar</Text>
     </Button>
   )
 }
@@ -69,20 +72,23 @@ function EventDetailsButton({ event, loading }: IEventDetailsButtonProps) {
 export default EventDetailsButton
 
 const styles = StyleSheet.create({
-  PrimaryButton: {
+  Button: {
     marginLeft: 'auto',
     height: 34,
     paddingVertical: 0,
   },
-  PrimaryButtonActive: {
+  PrimaryButton: {
     backgroundColor: Colors.primaryColor,
   },
-  PrimaryButtonActiveText: {
+  PrimaryButtonText: {
     color: Colors.background,
   },
   SecondaryButton: {
     borderColor: Colors.primaryColor,
-    borderWidth: 3,
+    borderWidth: 2,
     backgroundColor: 'transparent',
+  },
+  SecondaryButtonText: {
+    color: Colors.primaryColor,
   },
 })
