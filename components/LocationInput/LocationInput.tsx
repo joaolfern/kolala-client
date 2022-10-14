@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
   GooglePlacesAutocomplete,
   GooglePlacesAutocompleteProps,
+  GooglePlacesAutocompleteRef,
 } from 'react-native-google-places-autocomplete'
 // @ts-ignore
 import { GOOGLE_API_TOKEN } from '@env'
@@ -10,23 +11,40 @@ import { useController } from 'react-hook-form'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 
+interface FormValueProps {
+  address: string | undefined
+  lat?: number | undefined
+  lng?: number | undefined
+}
+
 interface IProps extends Partial<GooglePlacesAutocompleteProps> {
   name: string
   control: any
+  defaultValue: FormValueProps
 }
 
-function LocationInput({ control, name, ...rest }: IProps) {
+function LocationInput({ control, name, defaultValue, ...rest }: IProps) {
+  const ref = useRef<GooglePlacesAutocompleteRef>(null)
+  const shouldSetDefault = useRef(true)
   const { field } = useController({
     name,
     control,
-    defaultValue: {},
+    defaultValue,
   })
 
   const { onChange } = field
 
+  useEffect(() => {
+    if (shouldSetDefault.current && ref.current && defaultValue.address) {
+      ref.current.setAddressText(defaultValue.address)
+      shouldSetDefault.current = false
+    }
+  }, [defaultValue])
+
   return (
     <GooglePlacesAutocomplete
       {...rest}
+      ref={ref}
       styles={style}
       placeholder='ex: Avenida Chico Mendes 213, São Paulo'
       textInputProps={{
@@ -36,9 +54,13 @@ function LocationInput({ control, name, ...rest }: IProps) {
       onFail={error => console.log(error)}
       fetchDetails={true}
       onPress={(_, details = null) => {
-        onChange(details?.geometry.location)
+        const data: FormValueProps = {
+          ...details?.geometry.location,
+          address: details?.name,
+        }
+        onChange(data || {})
       }}
-      debounce={700}
+      debounce={800}
       keyboardShouldPersistTaps='always'
       disableScroll={true}
       query={{

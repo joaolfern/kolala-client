@@ -33,6 +33,7 @@ function formatDetailsToForm({
   createdAt,
   id,
   status,
+  address,
   ...details
 }: IEvent.Details): IEvent.FormSubmitEvent {
   return {
@@ -40,6 +41,7 @@ function formatDetailsToForm({
     location: {
       lat,
       lng,
+      address,
     },
     image: EventImage.map(image => image.url),
   }
@@ -54,6 +56,7 @@ function EventForm() {
         }
       )?.event
   )
+  const { lat, lng, address } = details || {}
   const isEditing = !!details
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const originalImagesRef = useRef(details?.EventImage || [])
@@ -96,8 +99,9 @@ function EventForm() {
 
           return
         case 'location':
-          formData.append('lat', value.lat)
-          formData.append('lng', value.lng)
+          Object.entries(value).map(([formKey, formValue]) => {
+            formData.append(formKey, formValue as string)
+          })
 
           return
         default:
@@ -175,6 +179,11 @@ function EventForm() {
             name='location'
             control={control}
             styles={styles.marginBottom}
+            defaultValue={{
+              lat,
+              lng,
+              address,
+            }}
           />
         </Suspense>
 
