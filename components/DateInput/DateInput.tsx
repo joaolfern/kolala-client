@@ -40,7 +40,7 @@ function DateInput({
   }
 
   const handleConfirm = (date: Date) => {
-    onChange(dayjs(date).format('YYYY-MM-DD HH:MM:ss'))
+    onChange(dayjs(date).format('YYYY-MM-DD HH:mm:ss'))
     hideDatePicker()
   }
 
