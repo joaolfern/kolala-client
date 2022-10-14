@@ -96,6 +96,7 @@ export namespace IEvent {
     datetime: Date
     lat: number
     lng: number
+    address: string
     author: IProfile
     Atendee: IAtendee[]
     icon: keyof typeof MAP_ICONS
@@ -120,6 +121,7 @@ export namespace IEvent {
     datetime: Date
     lat: number
     lng: number
+    address: string
     memberCount: number
   }
 
@@ -133,6 +135,7 @@ export namespace IEvent {
     location: {
       lat: number
       lng: number
+      address: string
     }
   }
 
