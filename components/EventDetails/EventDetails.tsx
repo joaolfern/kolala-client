@@ -260,8 +260,8 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     alignSelf: 'flex-end',
-    marginRight: 14,
-    marginTop: 10,
+    marginRight: 12,
+    marginTop: 18,
   },
   closeButtonIcon: {
     elevation: 3,
