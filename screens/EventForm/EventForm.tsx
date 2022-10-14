@@ -149,8 +149,8 @@ function EventForm() {
   }
 
   return (
-    <SafeAreaView>
-      <Scroll keyboardShouldPersistTaps='handled'>
+    <Scroll style={styles.Scroll} keyboardShouldPersistTaps='handled'>
+      <SafeAreaView>
         <Header>Criar evento</Header>
         <UploadImage
           control={control}
@@ -207,14 +207,17 @@ function EventForm() {
             {isEditing ? 'Editar' : 'Criar'} evento
           </Text>
         </Button>
-      </Scroll>
-    </SafeAreaView>
+      </SafeAreaView>
+    </Scroll>
   )
 }
 
 export default EventForm
 
 const styles = StyleSheet.create({
+  Scroll: {
+    backgroundColor: Colors.background,
+  },
   marginBottom: {
     marginBottom: 20,
   },
