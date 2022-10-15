@@ -46,7 +46,7 @@ class Event {
   async create (data: FormData) {
     return (
       await Fetch<{}>(
-        () => api.post('auth/events', data, {
+        () => api.post(this.path, data, {
           headers: {
             'Content-Type': 'multipart/form-data',
           }
@@ -58,7 +58,7 @@ class Event {
   async update (id: string, data: FormData) {
     return (
       await Fetch<{}>(
-        () => api.patch(`auth/events/${id}`, data, {
+        () => api.patch(`${this.path}/${id}`, data, {
           headers: {
             'Content-Type': 'multipart/form-data',
           }
@@ -70,15 +70,18 @@ class Event {
   async delete (id: string) {
     return (
       await Fetch<string>(
-        () => api.delete(`auth/events/${id}`, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          }
-        })
+        () => api.delete(`${this.path}/${id}`)
       )
     )
   }
 
+  async toggleAttendEvent (id: number) {
+    return (
+      await Fetch<string>(
+        () => api.post(`${this.path}/${id}/attend`)
+      )
+    )
+  }
 }
 
 export default new Event()

@@ -80,6 +80,10 @@ export default function EventDetails() {
     }
   }
 
+  function reloadDetails() {
+    getDetails(preview?.id)
+  }
+
   useFocusEffect(
     useCallback(() => {
       getDetails(preview?.id)
@@ -138,7 +142,6 @@ export default function EventDetails() {
               deleteEvent()
               return
             case 'Denunciar usuário':
-              // Delete
               return
           }
         }
@@ -205,7 +208,11 @@ export default function EventDetails() {
         </Span>
         <Span style={styles.TitleRow}>
           <Text style={styles.Title}>{details?.title || preview?.title}</Text>
-          <EventDetailsButton loading={loading} event={details} />
+          <EventDetailsButton
+            loading={loading}
+            event={details}
+            reloadDetails={reloadDetails}
+          />
         </Span>
         <Span style={styles.CategoryRow}>
           <CategoryTag
