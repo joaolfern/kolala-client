@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { ReactNode } from 'react'
+import React, { ReactNode, useState } from 'react'
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import Colors from '../../constants/Colors'
-import { IEvent } from '../../Models/Event'
+import Event, { IEvent } from '../../Models/Event'
 import { useAppSelector } from '../../store/hooks'
 import { selectUser } from '../../store/userSlice'
 import Button from '../Button/Button'
@@ -28,13 +28,19 @@ function ButtonComponent({ children, onPress, style }: IButtonComponentProps) {
 interface IEventDetailsButtonProps {
   event: IEvent.Details | null
   loading: boolean
+  reloadDetails(): void
 }
 
-function EventDetailsButton({ event, loading }: IEventDetailsButtonProps) {
+function EventDetailsButton({
+  event,
+  loading,
+  reloadDetails,
+}: IEventDetailsButtonProps) {
   const { user } = useAppSelector(selectUser)
   const isAuthor = event?.authorId === user?.id
   const isParticipating = event?.Atendee.find(user => user.id === user.id)
   const navigation = useNavigation()
+  const [loadingButton, setLoadingButton] = useState(false)
 
   function navigateToEdit(event: IEvent.Details) {
     navigation.navigate('EventForm', {
@@ -42,8 +48,24 @@ function EventDetailsButton({ event, loading }: IEventDetailsButtonProps) {
     })
   }
 
+  async function toggleAttendEvent(eventId: number) {
+    setLoadingButton(true)
+    try {
+      await Event.toggleAttendEvent(eventId)
+      reloadDetails()
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoadingButton(false)
+    }
+  }
+
   if (loading || !event)
-    return <Button style={[styles.Button, styles.PrimaryButton]} />
+    return (
+      <Button style={[styles.Button, styles.PrimaryButton]}>
+        <Text style={styles.SkeletonText}>Participando</Text>
+      </Button>
+    )
 
   if (isAuthor)
     return (
@@ -57,13 +79,21 @@ function EventDetailsButton({ event, loading }: IEventDetailsButtonProps) {
 
   if (isParticipating)
     return (
-      <Button style={[styles.Button, styles.PrimaryButton]}>
+      <Button
+        style={[styles.Button, styles.PrimaryButton]}
+        onPress={() => toggleAttendEvent(event.id)}
+        disabled={loadingButton}
+      >
         <Text style={[styles.PrimaryButtonText]}>Participando</Text>
       </Button>
     )
 
   return (
-    <Button style={[styles.Button, styles.SecondaryButton]}>
+    <Button
+      style={[styles.Button, styles.SecondaryButton]}
+      onPress={() => toggleAttendEvent(event.id)}
+      disabled={loadingButton}
+    >
       <Text style={[styles.SecondaryButtonText]}>Participar</Text>
     </Button>
   )
@@ -72,6 +102,9 @@ function EventDetailsButton({ event, loading }: IEventDetailsButtonProps) {
 export default EventDetailsButton
 
 const styles = StyleSheet.create({
+  SkeletonText: {
+    opacity: 0,
+  },
   Button: {
     marginLeft: 'auto',
     height: 34,
