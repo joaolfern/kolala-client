@@ -3,6 +3,7 @@ import React, { ReactNode, useState } from 'react'
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import Colors from '../../constants/Colors'
 import Event, { IEvent } from '../../Models/Event'
+import { hasPast } from '../../screens/EventForm/utils'
 import { useAppSelector } from '../../store/hooks'
 import { selectUser } from '../../store/userSlice'
 import Button from '../Button/Button'
@@ -60,14 +61,18 @@ function EventDetailsButton({
     }
   }
 
-  if (loading || !event)
+  // 🎈🎈 TODO skeleton buttton
+  if (loading || !event) {
     return (
       <Button style={[styles.Button, styles.PrimaryButton]}>
         <Text style={styles.SkeletonText}>Participando</Text>
       </Button>
     )
+  }
 
-  if (isAuthor)
+  if (hasPast(event.datetime)) return null
+
+  if (isAuthor) {
     return (
       <ButtonComponent
         style={[styles.Button, styles.PrimaryButton]}
@@ -76,6 +81,7 @@ function EventDetailsButton({
         Editar
       </ButtonComponent>
     )
+  }
 
   if (isParticipating)
     return (
