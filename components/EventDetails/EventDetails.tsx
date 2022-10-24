@@ -24,29 +24,7 @@ import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useAppSelector } from '../../store/hooks'
 import { selectUser } from '../../store/userSlice'
 import { IUser } from '../../types/User'
-
-function getEventDetailsMenuOptions(
-  level: IUser['level'],
-  isAuthor: boolean
-): (
-  | typeof basePermission
-  | typeof deletingPermission
-  | typeof reportPermission
-)[] {
-  const basePermission = 'Cancelar'
-  const deletingPermission = 'Deletar evento'
-  const reportPermission = 'Denunciar usuário'
-
-  switch (level) {
-    case 'admin': {
-      return [deletingPermission, basePermission]
-    }
-    case 'user': {
-      if (isAuthor) return [deletingPermission, basePermission]
-      return [reportPermission, basePermission]
-    }
-  }
-}
+import { getEventDetailsMenuOptions } from './utils'
 
 export default function EventDetails() {
   const preview = useNavigationState(
@@ -115,7 +93,7 @@ export default function EventDetails() {
 
   const openMenu = useCallback(
     (level: IUser['level'], isAuthor: boolean) => {
-      const options = getEventDetailsMenuOptions(level, isAuthor)
+      const options = getEventDetailsMenuOptions({ level, isAuthor })
       const destructiveButtonIndex =
         options.indexOf('Deletar evento') === -1
           ? undefined
