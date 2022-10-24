@@ -6674,6 +6674,13 @@ react-native-svg@12.3.0:
     css-select "^4.2.1"
     css-tree "^1.0.0-alpha.39"
 
+react-native-toggle-element@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-toggle-element/-/react-native-toggle-element-2.0.1.tgz#7318bfc719004bd348c7abfb113117208dbbc724"
+  integrity sha512-+btOh+1HAc/nrhc/ktAPYiNLIHYij+5+V+I6twxbDOx3ezfeiWQJkODAJQBgO2+7xxWn8zmlxQ3X/DIJCuJ4mg==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-native-web@~0.18.7:
   version "0.18.9"
   resolved "https://registry.yarnpkg.com/react-native-web/-/react-native-web-0.18.9.tgz#f5032e0b32ebe99c0ab22d13dbd8ca2944b08f12"

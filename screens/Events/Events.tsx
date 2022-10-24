@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { SectionList, StyleSheet } from 'react-native'
 import Button from '../../components/Button/Button'
 import Header from '../../components/Header/Header'
@@ -10,6 +10,8 @@ import Text from '../../components/Text/Text'
 import Colors from '../../constants/Colors'
 import Spinner from '../../components/Spinner/Spinner'
 import Event, { IEvent } from '../../Models/Event'
+import EventListSectionTitle from './components/EventListSectionTitle/EventListSectionTitle'
+import NoResultMessage from './components/NoResultMessage/NoResultMessage'
 
 function EventListHeader() {
   const navigation = useNavigation()
@@ -28,55 +30,146 @@ function EventListHeader() {
   )
 }
 
-function NoResultMessage() {
-  return <Text style={styles.NoResultMessage}>Nenhum dado</Text>
+export type _eventListTypes = 'organizing' | 'participating'
+
+type IEventList = {
+  [key in _eventListTypes]: {
+    data: IEvent.IEventSections | null
+    arePast: boolean
+    loading: boolean
+  } | null
 }
 
 function EventList() {
-  const [eventList, setEventList] = useState<IEvent.IEventSections[]>([])
-  const [loading, setLoading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(false)
+  const [events, setEvents] = useState<IEventList>({
+    organizing: {
+      arePast: false,
+      data: null,
+      loading: false,
+    },
+    participating: {
+      arePast: false,
+      data: null,
+      loading: false,
+    },
+  })
 
-  async function getEvents() {
-    setLoading(true)
+  async function getEvents(type: _eventListTypes, arePast: boolean = true) {
+    setEvents(
+      prev =>
+        ({
+          ...prev,
+          [type]: {
+            ...prev[type],
+            loading: true,
+          },
+        } as IEventList)
+    )
     try {
-      const response = await Event.listEvents()
+      const config = {
+        params: {
+          arePast,
+        },
+      }
+      const response = await Event.listEvents(type, config)
       const data = response.data?.data
-      if (data) setEventList(data)
+      if (data) {
+        setEvents(prev => {
+          return {
+            ...prev,
+            [type]: {
+              ...prev[type],
+              data,
+              arePast,
+            } as IEventList['organizing'],
+          }
+        })
+      }
     } catch (err) {
       console.log(err)
     } finally {
-      setLoading(false)
+      setEvents(
+        prev =>
+          ({
+            ...prev,
+            [type]: {
+              ...prev[type],
+              loading: false,
+            },
+          } as IEventList)
+      )
     }
+  }
+
+  async function getInitalEvents() {
+    setInitialLoading(true)
+    await getEvents('organizing', events.organizing?.arePast)
+    await getEvents('participating', events.participating?.arePast)
+    setInitialLoading(false)
   }
 
   useFocusEffect(
     useCallback(() => {
-      getEvents()
+      getInitalEvents()
     }, [])
+  )
+
+  const list = [
+    ...(events?.organizing?.data ? [events?.organizing?.data] : []),
+    ...(events?.participating?.data ? [events?.participating?.data] : []),
+  ]
+
+  const loadingElement = (
+    <Span style={styles.Container}>
+      <EventListHeader />
+      <Span style={styles.loadingContainer}>
+        <Spinner />
+      </Span>
+    </Span>
   )
 
   return (
     <SafeAreaView>
-      {loading ? (
-        <Span style={styles.Container}>
-          <EventListHeader />
-          <Span style={styles.loadingContainer}>
-            <Spinner />
-          </Span>
-        </Span>
+      {initialLoading ? (
+        loadingElement
       ) : (
         <SectionList
           style={styles.Container}
           ListHeaderComponent={EventListHeader}
-          sections={eventList}
+          sections={list}
           ListEmptyComponent={NoResultMessage}
-          renderItem={({ item }) => <EventItem event={item} />}
-          renderSectionHeader={({ section: { title, data } }) => (
-            <Span>
-              <Text style={styles.Title}>{title}</Text>
-              {!data.length && <NoResultMessage />}
-            </Span>
-          )}
+          renderItem={({ item, index, section }) =>
+            index === 0 && events[item.title as _eventListTypes]?.loading ? (
+              loadingElement
+            ) : (
+              <EventItem event={item} />
+            )
+          }
+          renderSectionHeader={({ section }) => {
+            const eventType = section.title as _eventListTypes
+
+            return (
+              <EventListSectionTitle
+                section={section}
+                showPastEvents={!!events[eventType]?.arePast}
+                toggleShowPastEvents={() => {
+                  return setEvents(prev => {
+                    const updatedArePast = !prev[eventType]?.arePast
+
+                    getEvents(eventType, updatedArePast)
+                    return {
+                      ...prev,
+                      [eventType]: {
+                        ...prev[eventType],
+                        arePast: updatedArePast,
+                      },
+                    }
+                  })
+                }}
+              />
+            )
+          }}
         />
       )}
     </SafeAreaView>
@@ -85,12 +178,6 @@ function EventList() {
 
 const styles = StyleSheet.create({
   Container: {},
-  NoResultMessage: {
-    color: Colors.gray,
-    margin: 'auto',
-    alignSelf: 'center',
-    marginBottom: 20,
-  },
   EventListHeader: {
     padding: 16,
     paddingBottom: 0,

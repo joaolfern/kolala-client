@@ -32,7 +32,13 @@ function EventItem({ event }: IProps) {
 
   return (
     <TouchableOpacity
-      style={[styles.Container, styles.GapBottom]}
+      style={[
+        styles.Container,
+        styles.GapBottom,
+        ...(dayjs(event.datetime).isBefore(new Date())
+          ? [styles.ContainerDisabled]
+          : []),
+      ]}
       onPress={navigateToDetails}
     >
       <Span style={[styles.Header, styles.InnerGapBottom]}>
@@ -49,7 +55,7 @@ function EventItem({ event }: IProps) {
       <Span style={styles.DataRow}>
         <Span style={styles.DataRowRight}>
           <Text style={styles.Label}>Participantes</Text>
-          <Text>{event.memberCount || 0}</Text>
+          <Text>{event.Atendee.length || 0}</Text>
         </Span>
         <EventItemChatButton />
       </Span>
@@ -69,6 +75,9 @@ const styles = StyleSheet.create({
     shadowColor: '#030002', // Android, iOS & Web
     shadowOpacity: 0.25, // iOS & Web
     shadowRadius: 5,
+  },
+  ContainerDisabled: {
+    backgroundColor: Colors.lightBackground,
   },
   Header: {
     flexDirection: 'row',
