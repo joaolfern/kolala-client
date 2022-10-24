@@ -4,6 +4,7 @@ import React from 'react'
 import { Image, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../../constants/Colors'
 import { IEvent } from '../../Models/Event'
+import { hasPast } from '../../screens/EventForm/utils'
 import Avatar from '../Avatar/Avatar'
 import CategoryTag from '../CategoryTag/CategoryTag'
 import DatetimeLabel from '../DatetimeLabel/DatetimeLabel'
@@ -35,9 +36,7 @@ function EventItem({ event }: IProps) {
       style={[
         styles.Container,
         styles.GapBottom,
-        ...(dayjs(event.datetime).isBefore(new Date())
-          ? [styles.ContainerDisabled]
-          : []),
+        ...(hasPast(event.datetime) ? [styles.ContainerDisabled] : []),
       ]}
       onPress={navigateToDetails}
     >
