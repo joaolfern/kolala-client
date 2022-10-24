@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 import { MAP_ICONS } from '../screens/EventForm/constants'
+import { _eventListTypes } from '../screens/Events/Events'
 import api from '../services/api'
 import { Fetch } from '../services/Fetch'
 import { IAtendee } from '../types/Atendee'
@@ -15,6 +16,11 @@ namespace EventRequestConfig {
 }
 
 
+export interface IListRequestParams {
+  arePast: boolean
+}
+
+export type IListRequestConfig = Omit<AxiosRequestConfig, 'params'> & { params: IListRequestParams }
 
 class Event {
   private path = 'auth/events'
@@ -39,8 +45,8 @@ class Event {
     )
   }
 
-  async listEvents () {
-    return await Fetch<IEvent.IEventSections[]>(() => api.get(this.path))
+  async listEvents (type:_eventListTypes , config: IListRequestConfig) {
+    return await Fetch<IEvent.IEventSections>(() => api.get(`${this.path}/list/${type}`, config))
   }
 
   async create (data: FormData) {
@@ -112,20 +118,8 @@ export namespace IEvent {
 
   export interface Details extends Model {}
 
-  export interface ListItem {
-    id: number
-    createdAt: Date
-    title: string
-    description: string
-    category: number
-    status: number
+  export interface ListItem extends Omit<Model, 'EventImage'> {
     image: string
-    authorId: number
-    datetime: Date
-    lat: number
-    lng: number
-    address: string
-    memberCount: number
   }
 
   export interface FormSubmitEvent {
