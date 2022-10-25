@@ -25,6 +25,7 @@ import { useAppSelector } from '../../store/hooks'
 import { selectUser } from '../../store/userSlice'
 import { IUser } from '../../types/User'
 import { getEventDetailsMenuOptions } from './utils'
+import ModalWrapper from '../ModalWrapper/ModalWrapper'
 
 export default function EventDetails() {
   const preview = useNavigationState(
@@ -129,16 +130,7 @@ export default function EventDetails() {
   )
 
   return (
-    <Scroll style={styles.Container}>
-      <TouchableOpacity style={styles.closeButton} onPress={closeDetails}>
-        <FontAwesome5
-          size={32}
-          name='times-circle'
-          solid
-          color={Colors.gray}
-          style={styles.closeButtonIcon}
-        />
-      </TouchableOpacity>
+    <ModalWrapper onClose={closeDetails}>
       <Span style={styles.wrapper}>
         <Span style={styles.AvatarWrapper}>
           <Span style={styles.Avatar}>
@@ -218,7 +210,7 @@ export default function EventDetails() {
           <Text style={styles.Subtitle}>Chat</Text>
         </Span>
       </Span>
-    </Scroll>
+    </ModalWrapper>
   )
 }
 
@@ -231,22 +223,21 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     padding: 0,
   },
-  wrapper: {
-    alignItems: 'flex-start',
-    position: 'relative',
-    marginTop: Dimensions.get('screen').height * 0.2,
-    flex: 1,
-    backgroundColor: Colors.background,
-    borderRadius: 18,
-    padding: 14,
-    marginBottom: 32,
-
-    ...shadow,
-  },
   closeButton: {
     alignSelf: 'flex-end',
     marginRight: 12,
     marginTop: 18,
+  },
+  wrapper: {
+    alignItems: 'flex-start',
+    position: 'relative',
+    flex: 1,
+    backgroundColor: Colors.background,
+    borderRadius: 18,
+    padding: 14,
+    marginTop: Dimensions.get('screen').height * 0.2 - 16,
+
+    ...shadow,
   },
   closeButtonIcon: {
     elevation: 3,

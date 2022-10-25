@@ -1,6 +1,7 @@
 import { AxiosRequestConfig } from 'axios'
 import { MAP_ICONS } from '../screens/EventForm/constants'
 import { _eventListTypes } from '../screens/Events/Events'
+import { IFilters } from '../screens/FiltersMenu/FiltersMenu'
 import api from '../services/api'
 import { Fetch } from '../services/Fetch'
 import { IAtendee } from '../types/Atendee'
@@ -11,7 +12,7 @@ namespace EventRequestConfig {
     params: {
       lat: number
       lng: number
-    }
+    } & IFilters
   }
 }
 

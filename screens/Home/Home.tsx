@@ -1,40 +1,67 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState, useEffect, useRef } from 'react'
 import { StyleSheet, Dimensions } from 'react-native'
-import MapView, { Callout, Marker, Region } from 'react-native-maps'
+import MapView, { Marker, Region } from 'react-native-maps'
 import mapStyle from '../../constants/mapStyle'
 import View from '../../components/View/View'
 import useUserLocation from './UserMarker/useUserLocation'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { MAP_ICONS } from '../EventForm/constants'
 import Event, { IEvent } from '../../Models/Event'
+import MapFilter from '../../components/MapFilter/MapFilter'
+import { showToast } from '../../utils/toast'
+import {
+  updateIsGettingNewFilter,
+  useMapFilter,
+} from '../../store/mapFilterSlice'
+import { IFilters } from '../FiltersMenu/FiltersMenu'
+import { useAppDispatch } from '../../store/hooks'
 
 export default function Home() {
   const navigation = useNavigation()
   const { location } = useUserLocation()
   const [markers, setMarkers] = useState<IEvent.IMarkers[]>([])
   const [mapRegion, setMapRegion] = useState<Region | null>(null)
+  const hasRunnedFocusEffectRef = useRef(false)
+
+  const currentFiltersString = useRef('')
+  const { filters, isGettingNewFilter } = useMapFilter()
 
   const [showOverlay, setShowoverlay] = useState(false)
+  const dispatch = useAppDispatch()
 
-  async function requestMarkers(location: Region) {
-    const response = await Event.getMarkers({
-      params: {
-        lat: location.latitude,
-        lng: location.longitude,
-      },
-    })
-    const data = response.data.data
+  async function requestMarkers(location: Region, filters: IFilters) {
+    const selectedFiltersString = JSON.stringify(filters)
+    const shouldShowFilterLoading =
+      currentFiltersString.current !== selectedFiltersString
 
-    if (Array.isArray(data)) setMarkers(data)
+    currentFiltersString.current = selectedFiltersString
+
+    if (shouldShowFilterLoading) {
+      dispatch(updateIsGettingNewFilter(true))
+      navigation.navigate('MapToast')
+    }
+    try {
+      const response = await Event.getMarkers({
+        params: {
+          lat: location.latitude,
+          lng: location.longitude,
+          ...filters,
+        },
+      })
+      const data = response.data.data
+
+      if (Array.isArray(data)) setMarkers(data)
+    } catch (err: any) {
+      console.error(err)
+      showToast(err.message)
+    }
+    if (shouldShowFilterLoading) dispatch(updateIsGettingNewFilter(false))
   }
 
-  useFocusEffect(
-    useCallback(() => {
-      if (location) requestMarkers(location)
-
-      return () => {}
-    }, [location])
-  )
+  useEffect(() => {
+    if (location) requestMarkers(location, filters)
+    currentFiltersString.current = JSON.stringify(filters)
+  }, [location, JSON.stringify(filters)])
 
   const displayDetails = ({ id, title }: IEvent.IMarkers) => {
     if (mapRegion) setMapRegion(null)
@@ -81,6 +108,7 @@ export default function Home() {
           )
         })}
       </MapView>
+      <MapFilter />
       {showOverlay && <View style={styles.overlay} />}
     </View>
   )
@@ -111,17 +139,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     height: '100%',
-    zIndex: 2,
+    zIndex: 3,
     backgroundColor: '#00000081',
   },
 })
-
-{
-  /* <Callout>
-<EventDetails
-  marker={selectedMarker}
-  closeDetails={closeDetails}
-/>
-</Callout>
-</Marker> */
-}
