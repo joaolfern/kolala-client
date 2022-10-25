@@ -39,6 +39,8 @@ export type RootStackParamList = {
     profileUserId: number
   }
   Events: undefined
+  FiltersMenu: undefined
+  MapToast: undefined
 }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

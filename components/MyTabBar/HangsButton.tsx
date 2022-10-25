@@ -4,8 +4,7 @@ import Colors from '../../constants/Colors'
 import PersonSVG from '../../assets/images/person.svg'
 import Button from '../Button/Button'
 import Span from '../Span/Span'
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import { NavigationState, useNavigation } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 function HangsButton() {
   const hasNotifications = true
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
     width: 51,
     height: 47,
     marginBottom: 17,
-    marginRight: 17,
+    marginRight: 16,
     position: 'relative',
   },
   Icon: {},

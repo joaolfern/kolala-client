@@ -33,7 +33,7 @@ function ProfileTabButton() {
 
 const styles = StyleSheet.create({
   Button: {
-    marginLeft: 22,
+    marginLeft: 16,
   },
 })
 

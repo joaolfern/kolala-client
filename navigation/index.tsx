@@ -21,6 +21,8 @@ import Profile from '../screens/Profile/Profile'
 import Events from '../screens/Events/Events'
 import EventForm from '../screens/EventForm/EventForm'
 import EventDetails from '../components/EventDetails/EventDetails'
+import FiltersMenu from '../screens/FiltersMenu/FiltersMenu'
+import MapToast from '../components/MapToast/MapToast'
 
 export default function Navigation() {
   return (
@@ -71,6 +73,30 @@ function RootNavigator() {
         <Stack.Screen
           name='EventDetails'
           component={EventDetails}
+          options={{ headerShown: false }}
+        />
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          presentation: 'containedTransparentModal',
+          animation: 'fade_from_bottom',
+        }}
+      >
+        <Stack.Screen
+          component={FiltersMenu}
+          name='FiltersMenu'
+          options={{ headerShown: false }}
+        />
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          presentation: 'transparentModal',
+          animation: 'slide_from_right',
+        }}
+      >
+        <Stack.Screen
+          component={MapToast}
+          name='MapToast'
           options={{ headerShown: false }}
         />
       </Stack.Group>

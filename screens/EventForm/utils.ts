@@ -19,5 +19,5 @@ export const shadow = {
 }
 
 export function hasPast (date: string | Date) {
-  return dayjs(date).isBefore(new Date())
+  return dayjs(date).isBefore(new Date().toISOString())
 }
