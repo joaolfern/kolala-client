@@ -11,6 +11,7 @@ import MapFilter from '../../components/MapFilter/MapFilter'
 import { showToast } from '../../utils/toast'
 import {
   updateIsGettingNewFilter,
+  updateShouldShowToast,
   useMapFilter,
 } from '../../store/mapFilterSlice'
 import { IFilters } from '../FiltersMenu/FiltersMenu'
@@ -21,7 +22,6 @@ export default function Home() {
   const { location } = useUserLocation()
   const [markers, setMarkers] = useState<IEvent.IMarkers[]>([])
   const [mapRegion, setMapRegion] = useState<Region | null>(null)
-  const hasRunnedFocusEffectRef = useRef(false)
 
   const currentFiltersString = useRef('')
   const { filters, isGettingNewFilter } = useMapFilter()
@@ -38,7 +38,7 @@ export default function Home() {
 
     if (shouldShowFilterLoading) {
       dispatch(updateIsGettingNewFilter(true))
-      navigation.navigate('MapToast')
+      dispatch(updateShouldShowToast(true))
     }
     try {
       const response = await Event.getMarkers({

@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   },
   root: {
     alignItems: 'stretch',
-    paddingHorizontal: 12,
+    paddingHorizontal: 0,
     height: 100,
     justifyContent: 'center',
     width: '100%',

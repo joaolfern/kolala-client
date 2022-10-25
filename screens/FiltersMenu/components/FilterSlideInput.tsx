@@ -19,7 +19,7 @@ function FilterSlideInput({ watch, control }: IProps) {
   useEffect(() => {
     takeLastestEvent(() => {
       dispatch(setFilter({ distance }))
-    }, 300)
+    }, 600)
   }, [distance])
 
   return (

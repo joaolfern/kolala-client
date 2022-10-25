@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: Colors.secondaryColor,
     borderRadius: 4,
+    transform: [{ translateY: 20 }],
   },
   text: {
     fontSize: 16,
