@@ -20,5 +20,6 @@ const styles = StyleSheet.create({
     borderLeftWidth: 4,
     borderRightWidth: 4,
     borderTopWidth: 8,
+    transform: [{ translateY: 20 }],
   },
 })

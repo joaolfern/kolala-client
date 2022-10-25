@@ -5,13 +5,17 @@ import { useAppSelector } from './hooks'
 type IFiltersStore = {
   filters: IFilters
   isGettingNewFilter: boolean
+  shouldShowToast: boolean
+  hasToastFinishedMinPresence: boolean
 }
 
 const initialState: IFiltersStore = {
   filters: {
     distance: 30
   },
-  isGettingNewFilter: false
+  isGettingNewFilter: false,
+  shouldShowToast: false,
+  hasToastFinishedMinPresence: false
 }
 
 export const filterSlice = createSlice({
@@ -42,11 +46,36 @@ export const filterSlice = createSlice({
       return (
         state = initialState
       )
-    } ,
+    },
+    updateShouldShowToast: (state, action: PayloadAction<boolean>) => {
+      return (
+        state = {
+          ...state,
+          shouldShowToast: action.payload
+        }
+      )
+    },
+    updateToastPresence: (state, action :PayloadAction<boolean>) => {
+      return (
+        state = {
+          ...state,
+          hasToastFinishedMinPresence: action.payload
+        }
+      )
+    },
+    resetToast: (state) => {
+      const { hasToastFinishedMinPresence, isGettingNewFilter, shouldShowToast } = initialState
+      return (
+        state = {
+          ...state,
+          hasToastFinishedMinPresence, isGettingNewFilter, shouldShowToast
+        }
+      )
+    }
   }
 })
 
-export const { clearFilter, setFilter, updateIsGettingNewFilter } = filterSlice.actions
+export const { clearFilter, setFilter, updateIsGettingNewFilter, updateShouldShowToast, updateToastPresence, resetToast } = filterSlice.actions
 export const selectFilter = (state: { filter: typeof initialState } ) => state
 
 const filterReducer = filterSlice.reducer

@@ -1,27 +1,34 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useFocusEffect } from '@react-navigation/native'
+import React, { useCallback, useEffect, useRef } from 'react'
 import { ActivityIndicator, StyleSheet } from 'react-native'
+import { useDispatch } from 'react-redux'
 import Colors from '../../constants/Colors'
-import { useMapFilter } from '../../store/mapFilterSlice'
+import {
+  resetToast,
+  updateShouldShowToast,
+  updateToastPresence,
+  useMapFilter,
+} from '../../store/mapFilterSlice'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
+import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
 
-function MapToast() {
-  const { isGettingNewFilter } = useMapFilter()
-  const navigation = useNavigation()
-  const [hasFinishedMinimumPresence, setHasFinishedMinimumPresence] =
-    useState(false)
+interface IProps {}
+
+function MapToast({}: IProps) {
+  const { isGettingNewFilter, hasToastFinishedMinPresence } = useMapFilter()
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const dispatch = useDispatch()
 
   function handleUnmount(): void {
-    navigation.goBack()
+    dispatch(updateShouldShowToast(false))
   }
 
   useEffect(() => {
-    if (!isGettingNewFilter && hasFinishedMinimumPresence) {
+    if (!isGettingNewFilter && hasToastFinishedMinPresence) {
       handleUnmount()
     }
-  }, [isGettingNewFilter, hasFinishedMinimumPresence])
+  }, [isGettingNewFilter, hasToastFinishedMinPresence])
 
   useEffect(() => {
     return () => {
@@ -29,24 +36,29 @@ function MapToast() {
         clearTimeout(timerRef.current)
         timerRef.current = null
       }
+      dispatch(resetToast())
     }
   }, [])
 
   useFocusEffect(
     useCallback(() => {
       timerRef.current = setTimeout(() => {
-        setHasFinishedMinimumPresence(true)
+        dispatch(updateToastPresence(true))
       }, 1000)
     }, [])
   )
 
   return (
-    <Span style={styles.Toast}>
+    <Animated.View
+      style={styles.Toast}
+      exiting={SlideOutRight}
+      entering={SlideInRight}
+    >
       <Span style={styles.Header}>
         <ActivityIndicator size={25} color={Colors.primaryColor} />
         <Text style={styles.Title}>Procurando...</Text>
       </Span>
-    </Span>
+    </Animated.View>
   )
 }
 
