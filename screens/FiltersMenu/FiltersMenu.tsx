@@ -47,12 +47,7 @@ const datetypeDisplay = {
 
 function FiltersMenu() {
   const navigator = useNavigation()
-  const {
-    shouldShowToast,
-    filters,
-    hasToastFinishedSuccessPresence,
-    isGettingNewFilter,
-  } = useMapFilter()
+  const { shouldShowToast, filters, isGettingNewFilter } = useMapFilter()
   const [canClearFilters, setCanClearFilters] = useState(false)
 
   const dispatch = useAppDispatch()
@@ -82,9 +77,15 @@ function FiltersMenu() {
     setCanClearFilters(canClearFilters)
   }, [filters])
 
-  const rangeDisplay = `a partir de ${showDate(filters.minDateRange)}${
-    filters.maxDateRange ? ` até ${showDate(filters.maxDateRange) || ''}` : ''
-  }`
+  const rangeDisplay = useMemo(() => {
+    const minRangeDisplay = filters.minDateRange
+      ? `a partir de ${showDate(filters.minDateRange)} `
+      : ''
+    const maxRangeDisplay = filters.maxDateRange
+      ? `até ${showDate(filters.maxDateRange)}`
+      : ''
+    return minRangeDisplay + maxRangeDisplay
+  }, [filters.minDateRange, filters.maxDateRange])
 
   return (
     <>
@@ -95,7 +96,7 @@ function FiltersMenu() {
             title={isGettingNewFilter ? '' : 'Econtrados'}
           >
             <Text>
-              {filters.distance} km e{' '}
+              A {filters.distance} km e{' '}
               {filters.maxDateRange || filters.minDateRange
                 ? rangeDisplay
                 : datetypeDisplay[filters.datetype]}

@@ -23,7 +23,7 @@ interface IProps {
   form: UseFormReturn<IFilters>
 }
 
-const INCLUDE_DAY_FORMAT = 'YYYY-MM-DD [23:59:99]'
+const INCLUDE_DAY_FORMAT = 'YYYY-MM-DD [23:59:00]'
 function FilterDateInput({ form }: IProps) {
   const dispatch = useAppDispatch()
 
