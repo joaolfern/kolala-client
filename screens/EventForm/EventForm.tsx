@@ -188,7 +188,12 @@ function EventForm() {
         </Suspense>
 
         <Label>Data e hora</Label>
-        <DateInput control={control} name='datetime' />
+        <DateInput
+          displayMode='long'
+          control={control}
+          name='datetime'
+          style={styles.ItemMarginBottom}
+        />
 
         <Label>Categoria</Label>
         <Select control={control} name='category' items={CATEGORY_RESOURCE} />
@@ -226,6 +231,9 @@ const styles = StyleSheet.create({
     width: 'auto',
     marginTop: 20,
     marginBottom: 50,
+  },
+  ItemMarginBottom: {
+    marginBottom: 21,
   },
   ButtonText: {
     color: Colors.altText,

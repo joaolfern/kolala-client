@@ -1,5 +1,5 @@
 import React from 'react'
-import { useController } from 'react-hook-form'
+import { Control, useController } from 'react-hook-form'
 import {
   Image,
   ImageURISource,
