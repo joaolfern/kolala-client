@@ -6,7 +6,7 @@ type IFiltersStore = {
   filters: IFilters
   isGettingNewFilter: boolean
   shouldShowToast: boolean
-  hasToastFinishedMinPresence: boolean
+  hasToastFinishedSuccessPresence: boolean
 }
 
 
@@ -19,7 +19,7 @@ export const initialState: IFiltersStore = {
   },
   isGettingNewFilter: false,
   shouldShowToast: false,
-  hasToastFinishedMinPresence: false
+  hasToastFinishedSuccessPresence: false
 }
 
 export const filterSlice = createSlice({
@@ -59,27 +59,27 @@ export const filterSlice = createSlice({
         }
       )
     },
-    updateToastPresence: (state, action :PayloadAction<boolean>) => {
+    updateToastSuccessPresence: (state, action: PayloadAction<boolean>) => {
       return (
         state = {
           ...state,
-          hasToastFinishedMinPresence: action.payload
+          hasToastFinishedSuccessPresence: action.payload
         }
       )
     },
     resetToast: (state) => {
-      const { hasToastFinishedMinPresence, isGettingNewFilter, shouldShowToast } = initialState
+      const { hasToastFinishedSuccessPresence, isGettingNewFilter, shouldShowToast } = initialState
       return (
         state = {
           ...state,
-          hasToastFinishedMinPresence, isGettingNewFilter, shouldShowToast
+          hasToastFinishedSuccessPresence, isGettingNewFilter, shouldShowToast
         }
       )
     }
   }
 })
 
-export const { clearFilter, setFilter, updateIsGettingNewFilter, updateShouldShowToast, updateToastPresence, resetToast } = filterSlice.actions
+export const { clearFilter, setFilter, updateIsGettingNewFilter, updateShouldShowToast, resetToast, updateToastSuccessPresence } = filterSlice.actions
 export const selectFilter = (state: { filter: typeof initialState } ) => state
 
 const filterReducer = filterSlice.reducer
