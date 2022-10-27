@@ -9,9 +9,13 @@ type IFiltersStore = {
   hasToastFinishedMinPresence: boolean
 }
 
-const initialState: IFiltersStore = {
+
+export const initialState: IFiltersStore = {
   filters: {
-    distance: 30
+    distance: 30,
+    datetype: 'week',
+    maxDateRange: null,
+    minDateRange: null
   },
   isGettingNewFilter: false,
   shouldShowToast: false,

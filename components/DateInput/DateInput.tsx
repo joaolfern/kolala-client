@@ -10,10 +10,19 @@ import dayjs from 'dayjs'
 import { StyleSheet } from 'react-native'
 import Colors from '../../constants/Colors'
 
+const DISPLAY_MODES = {
+  short: 'DD/MM',
+  long: 'DD [de] MMM. [às] HH:mm [horas]',
+}
+
 export type IProps = Partial<ReactNativeModalDateTimePickerProps> & {
   name: string
   control: any
   defaultValue?: string
+  placeholder?: string
+  displayMode: keyof typeof DISPLAY_MODES
+  onChangeEventful?: (value: string) => void
+  format?: string
 }
 
 function DateInput({
@@ -21,6 +30,11 @@ function DateInput({
   name,
   control,
   defaultValue = '',
+  placeholder = 'Selecionar data',
+  mode = 'datetime',
+  displayMode,
+  onChangeEventful,
+  format = 'YYYY-MM-DD HH:mm:ss',
   ...rest
 }: IProps) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
@@ -40,7 +54,9 @@ function DateInput({
   }
 
   const handleConfirm = (date: Date) => {
-    onChange(dayjs(date).format('YYYY-MM-DD HH:mm:ss'))
+    const value = dayjs(date).format(format)
+    onChange(value)
+    onChangeEventful?.(value)
     hideDatePicker()
   }
 
@@ -55,15 +71,15 @@ function DateInput({
       >
         <Text style={value ? {} : styles.placeholder}>
           {value
-            ? dayjs(value).format('DD [de] MMM. [às] HH:mm [horas]')
-            : 'Selecionar data'}
+            ? dayjs(value).format(DISPLAY_MODES[displayMode])
+            : placeholder}
         </Text>
       </Button>
       <DateTimePickerModal
         isDarkModeEnabled={true}
         locale='en_GB'
         isVisible={isDatePickerVisible}
-        mode='datetime'
+        mode={mode}
         onConfirm={handleConfirm}
         onCancel={hideDatePicker}
         {...rest}
@@ -79,10 +95,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     minHeight: 58,
     color: Colors.text,
-    marginBottom: 32,
     fontSize: 18,
     paddingHorizontal: 20,
     backgroundColor: 'transparent',
+    marginBottom: 11,
   },
   placeholder: {
     color: Colors.gray,

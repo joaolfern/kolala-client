@@ -1,7 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native'
 import React, { useCallback, useEffect, useRef } from 'react'
 import { ActivityIndicator, StyleSheet } from 'react-native'
-import { useDispatch } from 'react-redux'
 import Colors from '../../constants/Colors'
 import {
   resetToast,
@@ -12,13 +11,14 @@ import {
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
+import { useAppDispatch } from '../../store/hooks'
 
 interface IProps {}
 
 function MapToast({}: IProps) {
   const { isGettingNewFilter, hasToastFinishedMinPresence } = useMapFilter()
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
 
   function handleUnmount(): void {
     dispatch(updateShouldShowToast(false))
