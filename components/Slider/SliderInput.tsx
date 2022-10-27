@@ -39,7 +39,7 @@ const SliderInput = ({
   const renderNotch = useCallback(() => <Notch />, [])
   const renderLabel = useCallback(
     (value: ReactNode) => <SliderLabel text={`${value} ${sulfix}`} />,
-    []
+    [sulfix]
   )
 
   const { field } = useController({
@@ -58,7 +58,7 @@ const SliderInput = ({
 
   const controlledValues = useMemo(() => {
     return disableRange ? { low: value } : { low: value[0], high: value[0] }
-  }, [value])
+  }, [disableRange, value])
 
   return (
     <>
