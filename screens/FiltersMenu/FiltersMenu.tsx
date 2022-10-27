@@ -1,5 +1,6 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import dayjs from 'dayjs'
 import React, { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
@@ -34,9 +35,24 @@ function formatObjToComparison(object: object) {
   return JSON.stringify(object).split('').sort().join()
 }
 
+function showDate(date: string | null) {
+  if (!date) return null
+  return dayjs(date).format('DD/MM')
+}
+
+const datetypeDisplay = {
+  week: 'esta semana/fds',
+  month: 'este mês',
+}
+
 function FiltersMenu() {
   const navigator = useNavigation()
-  const { shouldShowToast, filters } = useMapFilter()
+  const {
+    shouldShowToast,
+    filters,
+    hasToastFinishedSuccessPresence,
+    isGettingNewFilter,
+  } = useMapFilter()
   const [canClearFilters, setCanClearFilters] = useState(false)
 
   const dispatch = useAppDispatch()
@@ -66,9 +82,27 @@ function FiltersMenu() {
     setCanClearFilters(canClearFilters)
   }, [filters])
 
+  const rangeDisplay = `a partir de ${showDate(filters.minDateRange)}${
+    filters.maxDateRange ? ` até ${showDate(filters.maxDateRange) || ''}` : ''
+  }`
+
   return (
     <>
-      {shouldShowToast && <MapToast />}
+      {shouldShowToast && (
+        <MapToast>
+          <MapToast.LoadingHeader
+            loading={isGettingNewFilter}
+            title={isGettingNewFilter ? '' : 'Econtrados'}
+          >
+            <Text>
+              {filters.distance} km e{' '}
+              {filters.maxDateRange || filters.minDateRange
+                ? rangeDisplay
+                : datetypeDisplay[filters.datetype]}
+            </Text>
+          </MapToast.LoadingHeader>
+        </MapToast>
+      )}
       <ModalWrapper onClose={onClose}>
         <Span style={styles.FiltersMenu}>
           <Span style={styles.Header}>
@@ -126,5 +160,9 @@ const styles = StyleSheet.create({
   },
   ClearFilterText: {
     fontWeight: 'bold',
+  },
+  SuccessHeaderText: {
+    fontWeight: 'bold',
+    color: Colors.primaryColor,
   },
 })
