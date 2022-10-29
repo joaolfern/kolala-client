@@ -22,7 +22,9 @@ function EventListHeader() {
 
   return (
     <Span style={styles.EventListHeader}>
-      <Header>Seus eventos</Header>
+      <Header>
+        <Header.Title>Seus eventos</Header.Title>
+      </Header>
       <Button onPress={onPress} style={styles.CreateButton}>
         <Text style={styles.CreateButtonText}>Criar evento</Text>
       </Button>

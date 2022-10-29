@@ -16,7 +16,6 @@ import Button from '../Button/Button'
 import CategoryTag from '../CategoryTag/CategoryTag'
 import DatetimeLabel from '../DatetimeLabel/DatetimeLabel'
 import EventAvatars from '../EventAvatars/EventAvatars'
-import Scroll from '../Scroll/Scroll'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 import EventDetailsButton from './EventDetailsButton'
@@ -26,6 +25,7 @@ import { selectUser } from '../../store/userSlice'
 import { IUser } from '../../types/User'
 import { getEventDetailsMenuOptions } from './utils'
 import ModalWrapper from '../ModalWrapper/ModalWrapper'
+import EllipsisButton from '../EllipsisButton/EllipsisButton'
 
 export default function EventDetails() {
   const preview = useNavigationState(
@@ -162,19 +162,9 @@ export default function EventDetails() {
               </Span>
             </AvatarWithIcon>
           </TouchableOpacity>
-          <Span>
-            <Button
-              style={[styles.TopRowEllipsis, styles.AltButton]}
-              onPress={() => user?.level && openMenu(user?.level, isAuthor)}
-            >
-              <FontAwesome5
-                size={20}
-                name='ellipsis-v'
-                solid
-                color={Colors.gray}
-              />
-            </Button>
-          </Span>
+          <EllipsisButton
+            onPress={() => user?.level && openMenu(user?.level, isAuthor)}
+          />
         </Span>
         <Span style={styles.TitleRow}>
           <Text style={styles.Title}>{details?.title || preview?.title}</Text>
@@ -269,12 +259,6 @@ const styles = StyleSheet.create({
   TopRowEllipsis: {
     width: 48,
     height: 48,
-  },
-  AltButton: {
-    borderRadius: 99999999,
-    backgroundColor: Colors.xLightBackground,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   TitleRow: {
     flexDirection: 'row',

@@ -1,12 +1,18 @@
 import React from 'react'
-import { StyleSheet, TextProps, TouchableOpacity } from 'react-native'
+import {
+  StyleSheet,
+  TextProps,
+  TouchableOpacity,
+  ViewProps,
+} from 'react-native'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 import ArrowRight from '../../assets/images/arrow-right.svg'
 import { useNavigation } from '@react-navigation/native'
-type IProps = TextProps & {}
 
-function Header({ ...rest }: IProps) {
+type IHeader = ViewProps & {}
+
+function Header({ style, children }: IHeader) {
   const navigation = useNavigation()
 
   function onBack() {
@@ -14,16 +20,24 @@ function Header({ ...rest }: IProps) {
   }
 
   return (
-    <Span style={styles.Container}>
+    <Span style={[styles.Container, style]}>
       <TouchableOpacity onPress={onBack}>
         <Span style={styles.BackIconContainer}>
           <ArrowRight style={styles.BackIcon} />
         </Span>
       </TouchableOpacity>
-      <Text style={styles.Text} {...rest} />
+      {children}
     </Span>
   )
 }
+
+type ITitle = TextProps & {}
+
+function Title({ style, ...rest }: ITitle) {
+  return <Text style={[style, styles.Text]} {...rest} />
+}
+
+Header.Title = Title
 
 const styles = StyleSheet.create({
   Container: {
@@ -41,7 +55,7 @@ const styles = StyleSheet.create({
   },
   BackIcon: {
     transform: [{ rotate: '180deg' }],
-    marginRight: 18,
+    marginRight: 14,
   },
 })
 

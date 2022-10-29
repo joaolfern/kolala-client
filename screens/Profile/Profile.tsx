@@ -45,7 +45,9 @@ function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
   return (
     <SafeAreaView>
       <Scroll>
-        <Header>Perfil</Header>
+        <Header>
+          <Header.Title>Perfil</Header.Title>
+        </Header>
         <Span style={styles.topContainer}>
           <Span style={styles.row}>
             <Span style={styles.pictureWrapper}>

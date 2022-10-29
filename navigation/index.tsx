@@ -22,6 +22,7 @@ import Events from '../screens/Events/Events'
 import EventForm from '../screens/EventForm/EventForm'
 import EventDetails from '../components/EventDetails/EventDetails'
 import FiltersMenu from '../screens/FiltersMenu/FiltersMenu'
+import Chat from '../screens/Chat/Chat'
 
 export default function Navigation() {
   return (
@@ -62,6 +63,11 @@ function RootNavigator() {
           component={Events}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name='Chat'
+          component={Chat}
+          options={{ headerShown: false }}
+        />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -74,13 +80,6 @@ function RootNavigator() {
           component={EventDetails}
           options={{ headerShown: false }}
         />
-      </Stack.Group>
-      <Stack.Group
-        screenOptions={{
-          presentation: 'containedTransparentModal',
-          animation: 'fade_from_bottom',
-        }}
-      >
         <Stack.Screen
           component={FiltersMenu}
           name='FiltersMenu'
