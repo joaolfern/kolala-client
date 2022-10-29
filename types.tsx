@@ -41,6 +41,9 @@ export type RootStackParamList = {
   Events: undefined
   FiltersMenu: undefined
   MapToast: undefined
+  Chat: {
+    event: IEvent.ListItem
+  }
 }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

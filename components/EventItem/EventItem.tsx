@@ -56,7 +56,7 @@ function EventItem({ event }: IProps) {
           <Text style={styles.Label}>Participantes</Text>
           <Text>{event.Atendee.length || 0}</Text>
         </Span>
-        <EventItemChatButton />
+        <EventItemChatButton event={event} />
       </Span>
     </TouchableOpacity>
   )

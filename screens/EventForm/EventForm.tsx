@@ -151,7 +151,9 @@ function EventForm() {
   return (
     <Scroll style={styles.Scroll} keyboardShouldPersistTaps='handled'>
       <SafeAreaView>
-        <Header>Criar evento</Header>
+        <Header>
+          <Header.Title>Criar evento</Header.Title>
+        </Header>
         <UploadImage
           control={control}
           name='image'
