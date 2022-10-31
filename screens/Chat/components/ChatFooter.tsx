@@ -1,15 +1,36 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { StyleSheet } from 'react-native'
 import Button from '../../../components/Button/Button'
 import Span from '../../../components/Span/Span'
 import TextInput from '../../../components/TextInput/TextInput'
 import Colors from '../../../constants/Colors'
+import socket from '../../../services/socket'
 import { shadow } from '../../EventForm/utils'
 
+interface IChatRequest {
+  message: string
+}
+
 function ChatFooter() {
-  const { control } = useForm()
+  const { control, handleSubmit } = useForm<IChatRequest>()
+
+  useEffect(() => {
+    function connectToChat() {
+      console.log('should connect')
+      socket.connect()
+      socket.on('updateMessages', args => {
+        console.log('🪢🪢', args)
+      })
+    }
+
+    connectToChat()
+  }, [])
+
+  function sendMessage(data: IChatRequest) {
+    socket.emit('sendMessage', data)
+  }
 
   return (
     <Span style={styles.Footer}>
@@ -19,7 +40,7 @@ function ChatFooter() {
         name='message'
         placeholder='Digite algo'
       />
-      <Button style={styles.Button}>
+      <Button style={styles.Button} onPress={handleSubmit(sendMessage)}>
         <MaterialIcons size={35} name='send' />
       </Button>
     </Span>

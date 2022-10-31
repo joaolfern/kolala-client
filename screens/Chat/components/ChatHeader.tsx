@@ -54,7 +54,10 @@ const styles = StyleSheet.create({
     width: 45,
     height: 45,
   },
-  Title: {},
+  Title: {
+    marginRight: 14,
+    maxWidth: 200,
+  },
   SubTitle: {
     fontSize: 16,
   },

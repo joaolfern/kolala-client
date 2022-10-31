@@ -34,7 +34,7 @@ function Header({ style, children }: IHeader) {
 type ITitle = TextProps & {}
 
 function Title({ style, ...rest }: ITitle) {
-  return <Text style={[style, styles.Text]} {...rest} />
+  return <Text numberOfLines={1} style={[style, styles.Text]} {...rest} />
 }
 
 Header.Title = Title
