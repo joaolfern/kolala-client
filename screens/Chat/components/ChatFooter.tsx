@@ -41,7 +41,7 @@ function ChatFooter() {
         placeholder='Digite algo'
       />
       <Button style={styles.Button} onPress={handleSubmit(sendMessage)}>
-        <MaterialIcons size={35} name='send' />
+        <MaterialIcons size={29} name='send' />
       </Button>
     </Span>
   )
@@ -53,6 +53,7 @@ const styles = StyleSheet.create({
   Footer: {
     paddingHorizontal: 16,
     flexDirection: 'row',
+    paddingTop: 8,
   },
   TextInput: {
     flex: 1,
@@ -65,6 +66,7 @@ const styles = StyleSheet.create({
   },
   Button: {
     height: 58,
+    width: 58,
     borderRadius: 22,
     ...shadow,
   },

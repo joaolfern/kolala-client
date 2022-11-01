@@ -18,7 +18,7 @@ function Chat() {
   return (
     <SafeAreaView style={styles.Container}>
       <ChatHeader event={event} />
-      <ChatContent />
+      <ChatContent event={event} key={1} />
       <ChatFooter />
     </SafeAreaView>
   )

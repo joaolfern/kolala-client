@@ -31,9 +31,10 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     width: 51,
     height: 51,
+    borderRadius: 9999999,
   },
   pictureWrapper: {
-    borderRadius: 99999,
+    borderRadius: 9999999,
     overflow: 'hidden',
   },
 })

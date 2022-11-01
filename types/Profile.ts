@@ -1,8 +1,8 @@
 export type IProfile = {
-  facebookAccount: string | null
+  facebookAccount?: string
   id: number
-  instagramAccount: string | null
+  instagramAccount?: string
   name: string
   picture: string
-  twitterAccount: string | null
+  twitterAccount?: string
 }

@@ -17,7 +17,7 @@ const MOCKED_LOCATION = {
 }
 
 function useUserLocation() {
-  const { location } = useAppSelector(selectUser)
+  const { location, user } = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
 
   async function updateUserLocation() {
