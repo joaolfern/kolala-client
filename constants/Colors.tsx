@@ -11,4 +11,5 @@ export default {
   green: '#00AB64',
   red: 'red',
   altBlack: '#060606',
+  chatTextbox: '#1A1A1A',
 }

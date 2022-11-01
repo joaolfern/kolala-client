@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
   Header: {
     paddingHorizontal: 16,
     borderBottomWidth: 2,
-    paddingBottom: 16,
     borderColor: Colors.lightBackground,
   },
   HeaderContent: {
