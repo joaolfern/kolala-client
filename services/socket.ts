@@ -1,16 +1,41 @@
-import { io } from 'socket.io-client'
-import { REACT_APP_SERVER } from './api'
+import { io } from "socket.io-client";
+import { IMessage } from '../Models/Message'
 
-const socketURL = REACT_APP_SERVER.replace('http', 'ws').replace('https', 'ws')
-const socket = io(socketURL, {
-  transports: ['websocket'],
-  upgrade: true
-});
+class WSService {
+  instance: ReturnType<typeof io> | null = null
 
-console.log('👾👾👾',REACT_APP_SERVER)
+  initialize (token: string) {
+    this.instance = io("http://192.168.1.6:3333", {
+      transports: ['websocket', 'polling'],
+      auth: {
+        token
+      }
+    })
+  }
 
-socket.on('connect', () => {
-  console.info('Connected to socket')
-})
+  joinChat (eventId: number) {
+    this.instance?.emit?.('joinChat', eventId)
+  }
 
-export default socket
+  onInitialLoad (cb: (args: IMessage[]) => void) {
+    this.instance?.on?.('intiialLoad', cb)
+  }
+
+  sendMessage (args: ISendMessageArgs) {
+    this.instance?.emit?.('sendMessage', args)
+  }
+
+  onNewMessage (cb: (args: any) => void) {
+    this.instance?.on?.('newMessage', cb)
+  }
+
+  disconnect () {
+    this?.instance?.disconnect?.()
+  }
+}
+
+export type ISendMessageArgs = { content: string, answerToId?: number }
+
+const ws = new WSService()
+
+export default ws

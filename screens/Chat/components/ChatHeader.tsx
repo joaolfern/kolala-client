@@ -6,13 +6,10 @@ import Header from '../../../components/Header/Header'
 import Span from '../../../components/Span/Span'
 import Text from '../../../components/Text/Text'
 import Colors from '../../../constants/Colors'
-import { IEvent } from '../../../Models/Event'
+import { useChatEvent } from '../Chat'
 
-interface IChatHeader {
-  event: IEvent.ListItem
-}
-
-function ChatHeader({ event }: IChatHeader) {
+function ChatHeader() {
+  const { event } = useChatEvent()
   return (
     <Header style={styles.Header}>
       <Avatar
@@ -23,7 +20,7 @@ function ChatHeader({ event }: IChatHeader) {
         <Span style={styles.TitleGroup}>
           <Header.Title style={styles.Title}>{event?.title}</Header.Title>
           <Text style={styles.SubTitle}>
-            {event.Atendee.length} participantes
+            {event?.Atendee?.length} participantes
           </Text>
         </Span>
         <EllipsisButton onPress={() => {}} />
