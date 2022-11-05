@@ -6,10 +6,11 @@ import Header from '../../../components/Header/Header'
 import Span from '../../../components/Span/Span'
 import Text from '../../../components/Text/Text'
 import Colors from '../../../constants/Colors'
-import { useChatEvent } from '../Chat'
+import { useChat } from '../useChat'
 
 function ChatHeader() {
-  const { event } = useChatEvent()
+  const { event } = useChat()
+
   return (
     <Header style={styles.Header}>
       <Avatar
