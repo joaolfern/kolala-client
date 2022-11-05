@@ -1,12 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import Scroll from '../../../components/Scroll/Scroll'
 import Span from '../../../components/Span/Span'
-import { IEvent } from '../../../Models/Event'
-import { IMessage } from '../../../Models/Message'
+import Message, { IMessage } from '../../../Models/Message'
 import ws from '../../../services/socket'
-import { useChatEvent } from '../Chat'
-import useChat from '../useChat'
 import ChatMessage from './ChatMessage'
 
 const MESSAGE_MOCK: IMessage[] = [
@@ -101,24 +98,41 @@ interface IProps {}
 
 function ChatContent({}: IProps) {
   const [messages, setMessages] = useState<IMessage[]>(MESSAGE_MOCK)
+  const params = useRef({
+    page: 1,
+  })
 
   useEffect(() => {
-    async function getMessages() {
+    async function getMessages(newParams: object) {
+      const requestParams = {
+        ...params.current,
+        ...newParams,
+      }
+
+      params.current = requestParams
+
+      const config = { params: requestParams }
+
       try {
+        const response = await Message.list(config)
+        const { data } = response.data
+
+        const isFirstPage = requestParams.page === 1
+        if (data) {
+          setMessages(prev => (isFirstPage ? data : [...data, ...prev]))
+        }
       } catch (err) {
         console.error(err)
       }
     }
 
+    getMessages(params.current)
+  }, [])
+
+  useEffect(() => {
     ws.onNewMessage((newMessage: IMessage) => {
       setMessages(prev => [...prev, newMessage])
     })
-
-    ws.onInitialLoad(initialMessages => {
-      setMessages(initialMessages)
-    })
-
-    getMessages()
   }, [])
 
   return (

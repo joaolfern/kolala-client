@@ -1,5 +1,6 @@
 import { useFocusEffect } from '@react-navigation/native'
-import React, { useCallback, useLayoutEffect } from 'react'
+import React, { useCallback, useLayoutEffect, useRef } from 'react'
+import Message from '../../Models/Message'
 import ws, { ISendMessageArgs } from '../../services/socket'
 import { useAppSelector } from '../../store/hooks'
 import { selectToken } from '../../store/tokenSlice'

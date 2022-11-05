@@ -1,5 +1,4 @@
 import { io } from "socket.io-client";
-import { IMessage } from '../Models/Message'
 
 class WSService {
   instance: ReturnType<typeof io> | null = null
@@ -15,10 +14,6 @@ class WSService {
 
   joinChat (eventId: number) {
     this.instance?.emit?.('joinChat', eventId)
-  }
-
-  onInitialLoad (cb: (args: IMessage[]) => void) {
-    this.instance?.on?.('intiialLoad', cb)
   }
 
   sendMessage (args: ISendMessageArgs) {
