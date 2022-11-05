@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
   },
   Name: {
     marginBottom: 6,
+    fontSize: 14,
   },
   ContentWrapper: {},
   UserContentWrapper: {
@@ -140,6 +141,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     overflow: 'hidden',
     maxWidth: 250,
+    minWidth: 130,
     paddingBottom: 24,
     position: 'relative',
   },

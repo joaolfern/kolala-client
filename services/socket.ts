@@ -3,17 +3,27 @@ import { io } from "socket.io-client";
 class WSService {
   instance: ReturnType<typeof io> | null = null
 
-  initialize (token: string) {
+  constructor () {
+    this.onNewMessage = this.onNewMessage.bind(this)
+  }
+
+  initialize ({ token, eventId }: {token: string, eventId: number}) {
     this.instance = io("http://192.168.1.6:3333", {
       transports: ['websocket', 'polling'],
       auth: {
         token
       }
     })
+
+    this.instance.on('connection', socket => {
+
+    })
+
+    this.joinChat(eventId)
   }
 
   joinChat (eventId: number) {
-    this.instance?.emit?.('joinChat', eventId)
+    this.instance?.emit?.('joinChat', { eventId })
   }
 
   sendMessage (args: ISendMessageArgs) {

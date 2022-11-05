@@ -4,12 +4,12 @@ import { Fetch } from '../services/Fetch'
 import { IProfile } from '../types/Profile'
 
 class Message {
-  private path = 'chat'
+  private path = 'auth/chat'
 
-  async list (config: AxiosRequestConfig & { params: any }) {
+  async list (eventId: number, config: AxiosRequestConfig & { params: any }) {
     return (
       await Fetch<IMessage[]>(
-        () => api.get(this.path, config)
+        () => api.get(`${this.path}/${eventId}`, config)
       )
     )
   }

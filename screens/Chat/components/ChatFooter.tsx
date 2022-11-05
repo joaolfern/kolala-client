@@ -1,28 +1,21 @@
 import { MaterialIcons } from '@expo/vector-icons'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form'
 import { StyleSheet } from 'react-native'
 import Button from '../../../components/Button/Button'
 import Span from '../../../components/Span/Span'
 import TextInput from '../../../components/TextInput/TextInput'
 import Colors from '../../../constants/Colors'
-import { IEvent } from '../../../Models/Event'
-import { useAppSelector } from '../../../store/hooks'
-import { selectToken } from '../../../store/tokenSlice'
 import { shadow } from '../../EventForm/utils'
-import { useChatEvent } from '../Chat'
-import useChat from '../useChat'
+import { useChat } from '../useChat'
 
 interface IChatEvent {
   content: string
 }
 
 function ChatFooter() {
-  const { event } = useChatEvent()
   const { control, handleSubmit } = useForm<IChatEvent>()
-  const { token } = useAppSelector(selectToken)
-
-  const { sendMessage } = useChat(event?.id as number)
+  const { sendMessage } = useChat()
 
   return (
     <Span style={styles.Footer}>
