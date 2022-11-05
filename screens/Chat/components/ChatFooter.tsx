@@ -6,38 +6,30 @@ import Button from '../../../components/Button/Button'
 import Span from '../../../components/Span/Span'
 import TextInput from '../../../components/TextInput/TextInput'
 import Colors from '../../../constants/Colors'
-import socket from '../../../services/socket'
+import { IEvent } from '../../../Models/Event'
+import { useAppSelector } from '../../../store/hooks'
+import { selectToken } from '../../../store/tokenSlice'
 import { shadow } from '../../EventForm/utils'
+import { useChatEvent } from '../Chat'
+import useChat from '../useChat'
 
-interface IChatRequest {
-  message: string
+interface IChatEvent {
+  content: string
 }
 
 function ChatFooter() {
-  const { control, handleSubmit } = useForm<IChatRequest>()
+  const { event } = useChatEvent()
+  const { control, handleSubmit } = useForm<IChatEvent>()
+  const { token } = useAppSelector(selectToken)
 
-  useEffect(() => {
-    function connectToChat() {
-      console.log('should connect')
-      socket.connect()
-      socket.on('updateMessages', args => {
-        console.log('🪢🪢', args)
-      })
-    }
-
-    connectToChat()
-  }, [])
-
-  function sendMessage(data: IChatRequest) {
-    socket.emit('sendMessage', data)
-  }
+  const { sendMessage } = useChat(event?.id as number)
 
   return (
     <Span style={styles.Footer}>
       <TextInput
         style={styles.TextInput}
         control={control}
-        name='message'
+        name='content'
         placeholder='Digite algo'
       />
       <Button style={styles.Button} onPress={handleSubmit(sendMessage)}>

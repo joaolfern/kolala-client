@@ -10,3 +10,9 @@ export interface IMessage {
   answerTo?: IMessage
   createdAt: string
 }
+
+export interface ISendMessageRequest {
+  eventId: number
+  content: string
+  answerToId?: number
+}

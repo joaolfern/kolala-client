@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet } from 'react-native'
 import Scroll from '../../../components/Scroll/Scroll'
 import Span from '../../../components/Span/Span'
 import { IEvent } from '../../../Models/Event'
 import { IMessage } from '../../../Models/Message'
+import ws from '../../../services/socket'
+import { useChatEvent } from '../Chat'
+import useChat from '../useChat'
 import ChatMessage from './ChatMessage'
 
 const MESSAGE_MOCK: IMessage[] = [
@@ -94,12 +97,30 @@ const MESSAGE_MOCK: IMessage[] = [
   },
 ]
 
-interface IProps {
-  messages?: IMessage[]
-  event: IEvent.ListItem
-}
+interface IProps {}
 
-function ChatContent({ event, messages = MESSAGE_MOCK }: IProps) {
+function ChatContent({}: IProps) {
+  const [messages, setMessages] = useState<IMessage[]>(MESSAGE_MOCK)
+
+  useEffect(() => {
+    async function getMessages() {
+      try {
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    ws.onNewMessage((newMessage: IMessage) => {
+      setMessages(prev => [...prev, newMessage])
+    })
+
+    ws.onInitialLoad(initialMessages => {
+      setMessages(initialMessages)
+    })
+
+    getMessages()
+  }, [])
+
   return (
     <Scroll style={styles.Content}>
       {messages.map((message, idx) => {
