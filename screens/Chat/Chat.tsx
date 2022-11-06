@@ -5,6 +5,7 @@ import React, {
   useRef,
   useEffect,
   useCallback,
+  Ref,
 } from 'react'
 import {
   Control,
@@ -12,7 +13,11 @@ import {
   UseFormHandleSubmit,
   UseFormSetValue,
 } from 'react-hook-form'
-import { FlatList, StyleSheet } from 'react-native'
+import {
+  FlatList,
+  StyleSheet,
+  TextInput as DefaultTextInput,
+} from 'react-native'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Colors from '../../constants/Colors'
 import { IEvent } from '../../Models/Event'
@@ -33,6 +38,8 @@ type IContext = {
   control: Control<ISendMessageArgs, any> | null
   handleSubmit: Function
   setValue: UseFormSetValue<ISendMessageArgs>
+  inputRef: Ref<DefaultTextInput> | null
+  focusInput(): void
 }
 
 const initialState: IContext = {
@@ -42,6 +49,8 @@ const initialState: IContext = {
   control: null,
   handleSubmit: () => {},
   setValue: () => {},
+  inputRef: null,
+  focusInput: () => {},
 }
 
 export const ChatContext = createContext(initialState)
@@ -57,6 +66,7 @@ function Chat() {
   const { control, reset, handleSubmit, setValue } = useForm<ISendMessageArgs>()
   const [messages, setMessages] = useState<IMessage[]>([])
 
+  const inputRef = useRef<DefaultTextInput | null>(null)
   const scrollRef = useRef<FlatList | null>(null)
   const params = useRef({
     page: 1,
@@ -64,6 +74,10 @@ function Chat() {
 
   function focusBottom() {
     scrollRef.current?.scrollToOffset?.({ offset: 0 })
+  }
+
+  function focusInput() {
+    inputRef.current?.focus()
   }
 
   useEffect(() => {
@@ -132,6 +146,8 @@ function Chat() {
     control,
     handleSubmit,
     setValue,
+    inputRef,
+    focusInput,
   }
 
   return (

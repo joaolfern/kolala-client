@@ -1,6 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import React from 'react'
-import { useForm } from 'react-hook-form'
 import { StyleSheet } from 'react-native'
 import Button from '../../../components/Button/Button'
 import Span from '../../../components/Span/Span'
@@ -18,7 +17,7 @@ interface IChatEvent {
 
 function ChatFooter() {
   const dispatch = useAppDispatch()
-  const { sendMessage, control, handleSubmit } = useChat()
+  const { sendMessage, control, handleSubmit, inputRef } = useChat()
   const { replyTarget } = useReply()
 
   function onPress(args: IChatEvent) {
@@ -31,6 +30,7 @@ function ChatFooter() {
       {replyTarget && <ChatReplyPreview />}
       <Span style={styles.Form}>
         <TextInput
+          ref={inputRef}
           style={styles.TextInput}
           control={control}
           name='content'
