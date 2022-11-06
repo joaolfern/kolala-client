@@ -101,6 +101,10 @@ function Chat() {
           setMessages(prev => [newMessage, ...prev])
           if (newMessage.authorId === user?.id) focusBottom()
         })
+
+        ws.onDeleteMessageFromDisplay(id => {
+          setMessages(prev => prev.filter(message => message.id !== id))
+        })
       }
 
       return () => {
