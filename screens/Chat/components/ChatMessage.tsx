@@ -9,10 +9,10 @@ import Text from '../../../components/Text/Text'
 import Colors from '../../../constants/Colors'
 import { IMessage } from '../../../Models/Message'
 import ws from '../../../services/socket'
-import { useAppSelector } from '../../../store/hooks'
+import { updateReplyTarget, useReply } from '../../../store/replySlice'
+import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectUser } from '../../../store/userSlice'
 import { _userLevel } from '../../../types/User'
-import { useReply } from '../Providers/ReplyProvider'
 import { getChatMessageContentOptions } from '../utils'
 
 interface IProps {
@@ -27,7 +27,7 @@ function ChatMessage({
   hasFollwingMessage,
 }: IProps) {
   const { user } = useAppSelector(selectUser)
-  const { updateReplyTarget } = useReply()
+  const dispatch = useAppDispatch()
 
   const isFirstMessage = !isFollowingMessage
   const isAuthor = message.authorId === user?.id
@@ -62,7 +62,7 @@ function ChatMessage({
             ws.deleteMessage({ id: message.id })
             return
           case 'Responder':
-            updateReplyTarget(message)
+            dispatch(updateReplyTarget(message))
             return
           case 'Denunciar usuário':
             return

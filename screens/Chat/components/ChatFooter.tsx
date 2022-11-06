@@ -6,8 +6,9 @@ import Button from '../../../components/Button/Button'
 import Span from '../../../components/Span/Span'
 import TextInput from '../../../components/TextInput/TextInput'
 import Colors from '../../../constants/Colors'
+import { dismissReplyTarget, useReply } from '../../../store/replySlice'
+import { useAppDispatch } from '../../../store/hooks'
 import { shadow } from '../../EventForm/utils'
-import { useReply } from '../Providers/ReplyProvider'
 import { useChat } from '../useChat'
 import ChatReplyPreview from './ChatReplyPreview'
 
@@ -16,13 +17,14 @@ interface IChatEvent {
 }
 
 function ChatFooter() {
+  const dispatch = useAppDispatch()
   const { control, setValue, handleSubmit } = useForm<IChatEvent>()
   const { sendMessage } = useChat()
-  const { replyTarget, dismissReplyTarget } = useReply()
+  const { replyTarget } = useReply()
 
   function onPress(args: IChatEvent) {
     setValue('content', '')
-    dismissReplyTarget()
+    dispatch(dismissReplyTarget())
     sendMessage(args)
   }
 

@@ -4,12 +4,14 @@ import Span from '../../../components/Span/Span'
 import Text from '../../../components/Text/Text'
 import TimesCircle from '../../../components/TimesCircle/TimesCircle'
 import Colors from '../../../constants/Colors'
-import { useReply } from '../Providers/ReplyProvider'
+import { dismissReplyTarget, useReply } from '../../../store/replySlice'
+import { useAppDispatch } from '../../../store/hooks'
 
 interface IProps {}
 
 function ChatReplyPreview() {
-  const { replyTarget, dismissReplyTarget } = useReply()
+  const dispatch = useAppDispatch()
+  const { replyTarget } = useReply()
 
   return (
     <Span style={styles.Container}>
@@ -19,7 +21,7 @@ function ChatReplyPreview() {
         <Text style={styles.Text}>{replyTarget?.content}</Text>
         <TouchableOpacity
           style={styles.DismissButton}
-          onPress={dismissReplyTarget}
+          onPress={() => dispatch(dismissReplyTarget())}
         >
           <TimesCircle size={24} />
         </TouchableOpacity>
