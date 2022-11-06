@@ -1,14 +1,18 @@
+import { useActionSheet } from '@expo/react-native-action-sheet'
 import dayjs from 'dayjs'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { memo } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, TouchableOpacity } from 'react-native'
 import Avatar from '../../../components/Avatar/Avatar'
 import Span from '../../../components/Span/Span'
 import Text from '../../../components/Text/Text'
 import Colors from '../../../constants/Colors'
 import { IMessage } from '../../../Models/Message'
+import ws from '../../../services/socket'
 import { useAppSelector } from '../../../store/hooks'
 import { selectUser } from '../../../store/userSlice'
+import { _userLevel } from '../../../types/User'
+import { getChatMessageContentOptions } from '../utils'
 
 interface IProps {
   message: IMessage
@@ -24,20 +28,58 @@ function ChatMessage({
   const { user } = useAppSelector(selectUser)
 
   const isFirstMessage = !isFollowingMessage
-  const isFromUser = message.authorId === user?.id
+  const isAuthor = message.authorId === user?.id
+
+  const { showActionSheetWithOptions } = useActionSheet()
+
+  const openMenu = useCallback((isAuthor: boolean, level: _userLevel) => {
+    const options = getChatMessageContentOptions({ isAuthor, level })
+    const destructiveButtonIndex =
+      options.indexOf('Deletar mensagem') === -1
+        ? undefined
+        : options.indexOf('Deletar mensagem')
+
+    const cancelButtonIndex = options.indexOf('Cancelar')
+
+    showActionSheetWithOptions(
+      {
+        options,
+        cancelButtonIndex,
+        destructiveButtonIndex,
+        tintColor: Colors.text,
+        containerStyle: {
+          backgroundColor: Colors.lightBackground,
+        },
+      },
+      (selectedIndex?: number) => {
+        if (typeof selectedIndex === 'undefined') return
+
+        const selectedOption = options[selectedIndex]
+        switch (selectedOption) {
+          case 'Deletar mensagem':
+            ws.deleteMessage({ id: message.id })
+            return
+          case 'Responder':
+            return
+          case 'Denunciar usuário':
+            return
+        }
+      }
+    )
+  }, [])
 
   return (
     <Span
       style={[
         styles.Message,
-        ...(isFromUser ? [styles.AlignedRight, styles.UserMessage] : []),
+        ...(isAuthor ? [styles.AlignedRight, styles.UserMessage] : []),
       ]}
     >
       {isFirstMessage && (
         <Span
           style={[
             styles.ContentWrapper,
-            ...(isFromUser ? [styles.UserContentWrapper] : []),
+            ...(isAuthor ? [styles.UserContentWrapper] : []),
           ]}
         >
           <Avatar
@@ -53,12 +95,16 @@ function ChatMessage({
           </Text>
         </Span>
       )}
-      <MessageContent
-        message={message}
-        isFollowingMessage={isFollowingMessage}
-        hasFollwingMessage={hasFollwingMessage}
-        isFromUser={isFromUser}
-      />
+      <TouchableOpacity
+        onPress={() => user?.level && openMenu(isAuthor, user?.level)}
+      >
+        <MessageContent
+          message={message}
+          isFollowingMessage={isFollowingMessage}
+          hasFollwingMessage={hasFollwingMessage}
+          isAuthor={isAuthor}
+        />
+      </TouchableOpacity>
     </Span>
   )
 }
@@ -69,21 +115,21 @@ interface IMessageContent {
   message: IMessage
   isFollowingMessage: boolean
   hasFollwingMessage: boolean
-  isFromUser: boolean
+  isAuthor: boolean
 }
 
 function MessageContent({
   message,
   isFollowingMessage,
   hasFollwingMessage,
-  isFromUser,
+  isAuthor,
 }: IMessageContent) {
   return (
     <Span
       style={[
         styles.Content,
         ...(hasFollwingMessage ? [styles.HasFollowingMessage] : []),
-        ...(isFromUser ? [styles.UserContent] : []),
+        ...(isAuthor ? [styles.UserContent] : []),
       ]}
     >
       <Text style={styles.Datetime}>

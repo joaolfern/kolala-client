@@ -30,8 +30,6 @@ LogBox.ignoreLogs(['EventEmitter.removeListener'])
 export default function App() {
   const isLoadingComplete = useCachedResources()
 
-  console.log(dayjs().toDate())
-
   if (!isLoadingComplete) {
     return null
   } else {

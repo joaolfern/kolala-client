@@ -30,6 +30,14 @@ class WSService {
     this.instance?.emit?.('sendMessage', args)
   }
 
+  deleteMessage (args: { id: number }) {
+    this.instance?.emit?.('deleteMessage', args)
+  }
+
+  onDeleteMessageFromDisplay (cb: (id: number) => void) {
+    this.instance?.on?.('deleteMessageFromDisplay', cb)
+  }
+
   onNewMessage (cb: (args: any) => void) {
     this.instance?.on?.('newMessage', cb)
   }
