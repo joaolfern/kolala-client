@@ -19,7 +19,6 @@ import { RootStackParamList } from '../../types'
 import ChatContent from './components/ChatContent'
 import ChatFooter from './components/ChatFooter'
 import ChatHeader from './components/ChatHeader'
-import ReplyProvider from './Providers/ReplyProvider'
 
 type IContext = {
   event: null | IEvent.ListItem
@@ -121,11 +120,9 @@ function Chat() {
   return (
     <SafeAreaView style={styles.Container}>
       <ChatContext.Provider value={context}>
-        <ReplyProvider>
-          <ChatHeader />
-          <ChatContent ref={scrollRef} />
-          <ChatFooter />
-        </ReplyProvider>
+        <ChatHeader />
+        <ChatContent ref={scrollRef} />
+        <ChatFooter />
       </ChatContext.Provider>
     </SafeAreaView>
   )
