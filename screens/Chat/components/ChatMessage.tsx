@@ -32,13 +32,13 @@ function ChatMessage({
         ...(isFromUser ? [styles.AlignedRight, styles.UserMessage] : []),
       ]}
     >
-      <Span
-        style={[
-          styles.AvatarWrapper,
-          ...(isFromUser ? [styles.UserAvatar] : []),
-        ]}
-      >
-        {isFirstMessage && (
+      {isFirstMessage && (
+        <Span
+          style={[
+            styles.ContentWrapper,
+            ...(isFromUser ? [styles.UserContentWrapper] : []),
+          ]}
+        >
           <Avatar
             style={[styles.Avatar]}
             source={
@@ -47,24 +47,17 @@ function ChatMessage({
                 : undefined
             }
           />
-        )}
-      </Span>
-      <Span
-        style={[
-          styles.ContentWrapper,
-          ...(isFromUser ? [styles.UserContentWrapper] : []),
-        ]}
-      >
-        {isFirstMessage && (
-          <Text style={styles.Name}>{message.author.name}</Text>
-        )}
-        <MessageContent
-          message={message}
-          isFollowingMessage={isFollowingMessage}
-          hasFollwingMessage={hasFollwingMessage}
-          isFromUser={isFromUser}
-        />
-      </Span>
+          <Text numberOfLines={1} style={styles.Name}>
+            {message.author.name}
+          </Text>
+        </Span>
+      )}
+      <MessageContent
+        message={message}
+        isFollowingMessage={isFollowingMessage}
+        hasFollwingMessage={hasFollwingMessage}
+        isFromUser={isFromUser}
+      />
     </Span>
   )
 }
@@ -102,21 +95,12 @@ function MessageContent({
 
 const styles = StyleSheet.create({
   Message: {
-    flexDirection: 'row',
+    alignSelf: 'flex-start',
   },
-  UserMessage: {
-    flexDirection: 'row-reverse',
-    justifyContent: 'flex-end',
-  },
-  AvatarWrapper: {
-    width: 51,
-    height: 51,
-    marginRight: 14,
-  },
-  Avatar: {},
-  UserAvatar: {
-    marginLeft: 14,
-    marginRight: 0,
+  UserMessage: {},
+  Avatar: {
+    width: 30,
+    height: 30,
   },
   HasFollowingMessage: {
     marginBottom: 8,
@@ -141,7 +125,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     overflow: 'hidden',
     maxWidth: 250,
-    minWidth: 130,
+    minWidth: '50%',
     paddingBottom: 24,
     position: 'relative',
   },
