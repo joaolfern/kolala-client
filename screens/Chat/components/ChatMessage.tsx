@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectUser } from '../../../store/userSlice'
 import { _userLevel } from '../../../types/User'
 import { getChatMessageContentOptions } from '../utils'
+import { useChat } from '../useChat'
 
 interface IProps {
   message: IMessage
@@ -33,6 +34,7 @@ function ChatMessage({
   const isAuthor = message.authorId === user?.id
 
   const { showActionSheetWithOptions } = useActionSheet()
+  const { setValue } = useChat()
 
   const openMenu = useCallback((isAuthor: boolean, level: _userLevel) => {
     const options = getChatMessageContentOptions({ isAuthor, level })
@@ -62,6 +64,7 @@ function ChatMessage({
             ws.deleteMessage({ id: message.id })
             return
           case 'Responder':
+            setValue('answerToId', message.id)
             dispatch(updateReplyTarget(message))
             return
           case 'Denunciar usuário':

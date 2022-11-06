@@ -6,12 +6,17 @@ import TimesCircle from '../../../components/TimesCircle/TimesCircle'
 import Colors from '../../../constants/Colors'
 import { dismissReplyTarget, useReply } from '../../../store/replySlice'
 import { useAppDispatch } from '../../../store/hooks'
-
-interface IProps {}
+import { useChat } from '../useChat'
 
 function ChatReplyPreview() {
   const dispatch = useAppDispatch()
   const { replyTarget } = useReply()
+  const { setValue } = useChat()
+
+  function dismiss() {
+    setValue('answerToId', undefined)
+    dispatch(dismissReplyTarget())
+  }
 
   return (
     <Span style={styles.Container}>
@@ -19,10 +24,7 @@ function ChatReplyPreview() {
         <Span style={styles.Marker} />
         <Text>{replyTarget?.author.name}</Text>
         <Text style={styles.Text}>{replyTarget?.content}</Text>
-        <TouchableOpacity
-          style={styles.DismissButton}
-          onPress={() => dispatch(dismissReplyTarget())}
-        >
+        <TouchableOpacity style={styles.DismissButton} onPress={dismiss}>
           <TimesCircle size={24} />
         </TouchableOpacity>
       </Span>
