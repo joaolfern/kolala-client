@@ -6,6 +6,12 @@ import React, {
   useEffect,
   useCallback,
 } from 'react'
+import {
+  Control,
+  useForm,
+  UseFormHandleSubmit,
+  UseFormSetValue,
+} from 'react-hook-form'
 import { FlatList, StyleSheet } from 'react-native'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Colors from '../../constants/Colors'
@@ -24,12 +30,18 @@ type IContext = {
   event: null | IEvent.ListItem
   messages: IMessage[]
   sendMessage(args: ISendMessageArgs): void
+  control: Control<ISendMessageArgs, any> | null
+  handleSubmit: Function
+  setValue: UseFormSetValue<ISendMessageArgs>
 }
 
 const initialState: IContext = {
   event: null,
   messages: [],
   sendMessage: () => {},
+  control: null,
+  handleSubmit: () => {},
+  setValue: () => {},
 }
 
 export const ChatContext = createContext(initialState)
@@ -42,7 +54,7 @@ function Chat() {
       state.routes.find(item => item.name === 'Chat')
         ?.params as RootStackParamList['Chat']
   )
-
+  const { control, reset, handleSubmit, setValue } = useForm<ISendMessageArgs>()
   const [messages, setMessages] = useState<IMessage[]>([])
 
   const scrollRef = useRef<FlatList | null>(null)
@@ -85,6 +97,8 @@ function Chat() {
   async function sendMessage(args: ISendMessageArgs) {
     try {
       ws.sendMessage(args)
+
+      reset({ answerToId: undefined, content: '' })
     } catch (err) {
       console.error(err)
     }
@@ -115,6 +129,9 @@ function Chat() {
     event,
     messages,
     sendMessage,
+    control,
+    handleSubmit,
+    setValue,
   }
 
   return (

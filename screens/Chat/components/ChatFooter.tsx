@@ -18,12 +18,10 @@ interface IChatEvent {
 
 function ChatFooter() {
   const dispatch = useAppDispatch()
-  const { control, setValue, handleSubmit } = useForm<IChatEvent>()
-  const { sendMessage } = useChat()
+  const { sendMessage, control, handleSubmit } = useChat()
   const { replyTarget } = useReply()
 
   function onPress(args: IChatEvent) {
-    setValue('content', '')
     dispatch(dismissReplyTarget())
     sendMessage(args)
   }
