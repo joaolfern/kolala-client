@@ -80,25 +80,25 @@ function Chat() {
   async function sendMessage(args: ISendMessageArgs) {
     try {
       ws.sendMessage(args)
-      const constructedMessage: IMessage = {
-        author: user?.profile as IProfile,
-        authorId: user?.id as number,
-        ...args,
-        ...(args.answerToId ?? true
-          ? [
-              {
-                answerTo: messages.find(
-                  message => message.id === args.answerToId
-                ),
-              },
-            ]
-          : []),
-        createdAt: new Date().toDateString(),
-        eventId: event.id,
-        id: (messages?.slice?.(-1)?.[0]?.id || -1) + 1,
-      }
+      // const constructedMessage: IMessage = {
+      //   author: user?.profile as IProfile,
+      //   authorId: user?.id as number,
+      //   ...args,
+      //   ...(args.answerToId ?? true
+      //     ? [
+      //         {
+      //           answerTo: messages.find(
+      //             message => message.id === args.answerToId
+      //           ),
+      //         },
+      //       ]
+      //     : []),
+      //   createdAt: new Date().toDateString(),
+      //   eventId: event.id,
+      //   id: (messages?.slice?.(-1)?.[0]?.id || -1) + 1,
+      // }
 
-      setMessages(prev => [...prev, constructedMessage])
+      // setMessages(prev => [...prev, constructedMessage])
     } catch (err) {
       console.error(err)
     }
