@@ -12,6 +12,7 @@ import ws from '../../../services/socket'
 import { useAppSelector } from '../../../store/hooks'
 import { selectUser } from '../../../store/userSlice'
 import { _userLevel } from '../../../types/User'
+import { useReply } from '../Providers/ReplyProvider'
 import { getChatMessageContentOptions } from '../utils'
 
 interface IProps {
@@ -26,6 +27,7 @@ function ChatMessage({
   hasFollwingMessage,
 }: IProps) {
   const { user } = useAppSelector(selectUser)
+  const { updateReplyTarget } = useReply()
 
   const isFirstMessage = !isFollowingMessage
   const isAuthor = message.authorId === user?.id
@@ -60,6 +62,7 @@ function ChatMessage({
             ws.deleteMessage({ id: message.id })
             return
           case 'Responder':
+            updateReplyTarget(message)
             return
           case 'Denunciar usuário':
             return
@@ -96,7 +99,8 @@ function ChatMessage({
         </Span>
       )}
       <TouchableOpacity
-        onPress={() => user?.level && openMenu(isAuthor, user?.level)}
+        delayLongPress={200}
+        onLongPress={() => user?.level && openMenu(isAuthor, user?.level)}
       >
         <MessageContent
           message={message}

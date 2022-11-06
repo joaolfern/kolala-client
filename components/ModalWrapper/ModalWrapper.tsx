@@ -4,6 +4,7 @@ import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../../constants/Colors'
 import Scroll from '../Scroll/Scroll'
 import Span from '../Span/Span'
+import TimesCircle from '../TimesCircle/TimesCircle'
 
 interface IProps {
   children: ReactNode
@@ -14,13 +15,7 @@ function ModalWrapper({ children, onClose }: IProps) {
   return (
     <Scroll style={styles.Container}>
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-        <FontAwesome5
-          size={32}
-          name='times-circle'
-          solid
-          color={Colors.gray}
-          style={styles.closeButtonIcon}
-        />
+        <TimesCircle />
       </TouchableOpacity>
       <Span style={styles.Content}>{children}</Span>
     </Scroll>
@@ -43,9 +38,6 @@ const styles = StyleSheet.create({
     marginRight: 12,
     marginTop: 18,
     marginBottom: 16,
-  },
-  closeButtonIcon: {
-    elevation: 3,
   },
   Content: {
     marginBottom: 32,

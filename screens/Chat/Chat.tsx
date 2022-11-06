@@ -19,6 +19,7 @@ import { RootStackParamList } from '../../types'
 import ChatContent from './components/ChatContent'
 import ChatFooter from './components/ChatFooter'
 import ChatHeader from './components/ChatHeader'
+import ReplyProvider from './Providers/ReplyProvider'
 
 type IContext = {
   event: null | IEvent.ListItem
@@ -37,17 +38,15 @@ export const ChatContext = createContext(initialState)
 function Chat() {
   const { token } = useAppSelector(selectToken)
   const { user } = useAppSelector(selectUser)
-  const scrollRef = useRef<FlatList | null>(null)
-
-  scrollRef.current
-
-  const [messages, setMessages] = useState<IMessage[]>([])
   const { event } = useNavigationState(
     state =>
       state.routes.find(item => item.name === 'Chat')
         ?.params as RootStackParamList['Chat']
   )
 
+  const [messages, setMessages] = useState<IMessage[]>([])
+
+  const scrollRef = useRef<FlatList | null>(null)
   const params = useRef({
     page: 1,
   })
@@ -120,13 +119,15 @@ function Chat() {
   }
 
   return (
-    <ChatContext.Provider value={context}>
-      <SafeAreaView style={styles.Container}>
-        <ChatHeader />
-        <ChatContent ref={scrollRef} />
-        <ChatFooter />
-      </SafeAreaView>
-    </ChatContext.Provider>
+    <SafeAreaView style={styles.Container}>
+      <ChatContext.Provider value={context}>
+        <ReplyProvider>
+          <ChatHeader />
+          <ChatContent ref={scrollRef} />
+          <ChatFooter />
+        </ReplyProvider>
+      </ChatContext.Provider>
+    </SafeAreaView>
   )
 }
 

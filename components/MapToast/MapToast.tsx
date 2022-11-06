@@ -1,5 +1,4 @@
-import { useFocusEffect } from '@react-navigation/native'
-import React, { ReactNode, useCallback, useEffect, useRef } from 'react'
+import React, { ReactNode, useEffect, useRef } from 'react'
 import { ActivityIndicator, StyleSheet } from 'react-native'
 import Colors from '../../constants/Colors'
 import {

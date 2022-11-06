@@ -7,7 +7,9 @@ import Span from '../../../components/Span/Span'
 import TextInput from '../../../components/TextInput/TextInput'
 import Colors from '../../../constants/Colors'
 import { shadow } from '../../EventForm/utils'
+import { useReply } from '../Providers/ReplyProvider'
 import { useChat } from '../useChat'
+import ChatReplyPreview from './ChatReplyPreview'
 
 interface IChatEvent {
   content: string
@@ -16,24 +18,28 @@ interface IChatEvent {
 function ChatFooter() {
   const { control, setValue, handleSubmit } = useForm<IChatEvent>()
   const { sendMessage } = useChat()
+  const { replyTarget, dismissReplyTarget } = useReply()
 
   function onPress(args: IChatEvent) {
     setValue('content', '')
-
+    dismissReplyTarget()
     sendMessage(args)
   }
 
   return (
     <Span style={styles.Footer}>
-      <TextInput
-        style={styles.TextInput}
-        control={control}
-        name='content'
-        placeholder='Digite algo'
-      />
-      <Button style={styles.Button} onPress={handleSubmit(onPress)}>
-        <MaterialIcons size={29} name='send' />
-      </Button>
+      {replyTarget && <ChatReplyPreview />}
+      <Span style={styles.Form}>
+        <TextInput
+          style={styles.TextInput}
+          control={control}
+          name='content'
+          placeholder='Digite algo'
+        />
+        <Button style={styles.Button} onPress={handleSubmit(onPress)}>
+          <MaterialIcons size={29} name='send' />
+        </Button>
+      </Span>
     </Span>
   )
 }
@@ -42,9 +48,12 @@ export default ChatFooter
 
 const styles = StyleSheet.create({
   Footer: {
-    paddingHorizontal: 16,
-    flexDirection: 'row',
     paddingTop: 8,
+  },
+  Form: {
+    paddingTop: 8,
+    flexDirection: 'row',
+    paddingHorizontal: 16,
   },
   TextInput: {
     flex: 1,
@@ -52,7 +61,7 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     borderWidth: 0,
     backgroundColor: Colors.xLightBackground,
-    marginRight: 16,
+    marginRight: 14,
     ...shadow,
   },
   Button: {
