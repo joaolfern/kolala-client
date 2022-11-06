@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef, Ref } from 'react'
 import {
   StyleSheet,
   TextInput as DefaultTextInput,
@@ -13,13 +13,10 @@ export type IProps = TextInputProps & {
   defaultValue?: string
 }
 
-function TextInput({
-  style,
-  name,
-  control,
-  defaultValue = '',
-  ...rest
-}: IProps) {
+function TextInput(
+  { style, name, control, defaultValue = '', ...rest }: IProps,
+  ref: Ref<DefaultTextInput> | null
+) {
   const { field } = useController({
     name,
     control,
@@ -29,6 +26,7 @@ function TextInput({
   const { value, onChange } = field
   return (
     <DefaultTextInput
+      ref={ref}
       value={value}
       onChangeText={onChange}
       placeholderTextColor={Colors.gray}
@@ -51,4 +49,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default TextInput
+export default forwardRef(TextInput)

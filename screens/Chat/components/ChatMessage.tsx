@@ -34,7 +34,7 @@ function ChatMessage({
   const isAuthor = message.authorId === user?.id
 
   const { showActionSheetWithOptions } = useActionSheet()
-  const { setValue } = useChat()
+  const { setValue, focusInput } = useChat()
 
   const openMenu = useCallback((isAuthor: boolean, level: _userLevel) => {
     const options = getChatMessageContentOptions({ isAuthor, level })
@@ -66,6 +66,8 @@ function ChatMessage({
           case 'Responder':
             setValue('answerToId', message.id)
             dispatch(updateReplyTarget(message))
+            focusInput()
+
             return
           case 'Denunciar usuário':
             return
