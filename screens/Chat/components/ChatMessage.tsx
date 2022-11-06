@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
 import React from 'react'
+import { memo } from 'react'
 import { StyleSheet } from 'react-native'
 import Avatar from '../../../components/Avatar/Avatar'
 import Span from '../../../components/Span/Span'
@@ -62,7 +63,7 @@ function ChatMessage({
   )
 }
 
-export default ChatMessage
+export default memo(ChatMessage)
 
 interface IMessageContent {
   message: IMessage
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     overflow: 'hidden',
     maxWidth: 250,
-    minWidth: '50%',
+    minWidth: '45%',
     paddingBottom: 24,
     position: 'relative',
   },

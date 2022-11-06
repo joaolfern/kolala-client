@@ -6,7 +6,7 @@ import React, {
   useEffect,
   useCallback,
 } from 'react'
-import { StyleSheet } from 'react-native'
+import { FlatList, StyleSheet } from 'react-native'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import Colors from '../../constants/Colors'
 import { IEvent } from '../../Models/Event'
@@ -16,7 +16,6 @@ import { useAppSelector } from '../../store/hooks'
 import { selectToken } from '../../store/tokenSlice'
 import { selectUser } from '../../store/userSlice'
 import { RootStackParamList } from '../../types'
-import { IProfile } from '../../types/Profile'
 import ChatContent from './components/ChatContent'
 import ChatFooter from './components/ChatFooter'
 import ChatHeader from './components/ChatHeader'
@@ -38,6 +37,9 @@ export const ChatContext = createContext(initialState)
 function Chat() {
   const { token } = useAppSelector(selectToken)
   const { user } = useAppSelector(selectUser)
+  const scrollRef = useRef<FlatList | null>(null)
+
+  scrollRef.current
 
   const [messages, setMessages] = useState<IMessage[]>([])
   const { event } = useNavigationState(
@@ -49,6 +51,10 @@ function Chat() {
   const params = useRef({
     page: 1,
   })
+
+  function focusBottom() {
+    scrollRef.current?.scrollToOffset?.({ offset: 0 })
+  }
 
   useEffect(() => {
     async function getMessages(newParams: object) {
@@ -66,6 +72,7 @@ function Chat() {
         const { data } = response.data
 
         const isFirstPage = requestParams.page === 1
+
         if (data && Array.isArray(data)) {
           setMessages(prev => (isFirstPage ? data : [...data, ...prev]))
         }
@@ -80,25 +87,6 @@ function Chat() {
   async function sendMessage(args: ISendMessageArgs) {
     try {
       ws.sendMessage(args)
-      // const constructedMessage: IMessage = {
-      //   author: user?.profile as IProfile,
-      //   authorId: user?.id as number,
-      //   ...args,
-      //   ...(args.answerToId ?? true
-      //     ? [
-      //         {
-      //           answerTo: messages.find(
-      //             message => message.id === args.answerToId
-      //           ),
-      //         },
-      //       ]
-      //     : []),
-      //   createdAt: new Date().toDateString(),
-      //   eventId: event.id,
-      //   id: (messages?.slice?.(-1)?.[0]?.id || -1) + 1,
-      // }
-
-      // setMessages(prev => [...prev, constructedMessage])
     } catch (err) {
       console.error(err)
     }
@@ -110,7 +98,8 @@ function Chat() {
         ws.initialize({ token, eventId: event.id })
 
         ws.onNewMessage((newMessage: IMessage) => {
-          setMessages(prev => [...prev, newMessage])
+          setMessages(prev => [newMessage, ...prev])
+          if (newMessage.authorId === user?.id) focusBottom()
         })
       }
 
@@ -130,7 +119,7 @@ function Chat() {
     <ChatContext.Provider value={context}>
       <SafeAreaView style={styles.Container}>
         <ChatHeader />
-        <ChatContent />
+        <ChatContent ref={scrollRef} />
         <ChatFooter />
       </SafeAreaView>
     </ChatContext.Provider>

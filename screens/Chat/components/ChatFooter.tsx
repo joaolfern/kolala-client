@@ -14,8 +14,14 @@ interface IChatEvent {
 }
 
 function ChatFooter() {
-  const { control, handleSubmit } = useForm<IChatEvent>()
+  const { control, setValue, handleSubmit } = useForm<IChatEvent>()
   const { sendMessage } = useChat()
+
+  function onPress(args: IChatEvent) {
+    setValue('content', '')
+
+    sendMessage(args)
+  }
 
   return (
     <Span style={styles.Footer}>
@@ -25,7 +31,7 @@ function ChatFooter() {
         name='content'
         placeholder='Digite algo'
       />
-      <Button style={styles.Button} onPress={handleSubmit(sendMessage)}>
+      <Button style={styles.Button} onPress={handleSubmit(onPress)}>
         <MaterialIcons size={29} name='send' />
       </Button>
     </Span>
