@@ -6,13 +6,15 @@ import { useAppSelector } from '../../store/hooks'
 import { selectUser } from '../../store/userSlice'
 import Span from '../../components/Span/Span'
 import Text from '../../components/Text/Text'
-import { IProfile } from '../../types/Profile'
-import { getProfile } from './api'
+import { IProfileViewData } from '../../types/Profile'
 import { RootStackScreenProps } from '../../types'
 import LogoutButton from '../../components/LogoutButton/LogoutButton'
 import useLogout from '../../hooks/useLogout'
 import Avatar from '../../components/Avatar/Avatar'
 import Scroll from '../../components/Scroll/Scroll'
+import ProfileConfigButton from './components/ProfileConfigButton'
+import User from '../../Models/User'
+import { _userLevel } from '../../types/User'
 
 function Profile({ route }: RootStackScreenProps<'Profile'>) {
   const { profileUserId } = route?.params
@@ -20,7 +22,7 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
   const logout = useLogout()
 
   const isOwnProfile = useRef(profileUserId === user?.id).current
-  const [profileUser, setProfileUser] = useState<IProfile | null>(null)
+  const [profileUser, setProfileUser] = useState<IProfileViewData | null>(null)
 
   useEffect(() => {
     if (isOwnProfile && user?.profile) {
@@ -32,7 +34,7 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
 
     async function getProfileUser(id: number) {
       try {
-        const response = await getProfile(id)
+        const response = await User.getProfile(id)
         const profile = response.data.data
 
         if (profile) setProfileUser(profile)
@@ -42,11 +44,35 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
     }
   }, [user?.profile])
 
+  function updateProfileLevel(level: _userLevel) {
+    setProfileUser(prev => {
+      if (prev?.User) {
+        return {
+          ...prev,
+          User: {
+            ...prev?.User,
+            level,
+          },
+        }
+      }
+
+      return prev
+    })
+  }
+
   return (
     <SafeAreaView>
       <Scroll>
-        <Header>
+        <Header style={styles.Header}>
           <Header.Title>Perfil</Header.Title>
+          {profileUser && (
+            <ProfileConfigButton
+              style={styles.SettingsButton}
+              isOwnProfile={isOwnProfile}
+              profileUser={profileUser}
+              updateProfileLevel={updateProfileLevel}
+            />
+          )}
         </Header>
         <Span style={styles.topContainer}>
           <Span style={styles.row}>
@@ -61,12 +87,15 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
               />
             </Span>
             <Span style={styles.logoutWrapper}>
-              <Span style={styles.logout}>
-                <LogoutButton onPress={logout} />
-              </Span>
+              {isOwnProfile && (
+                <Span style={styles.logout}>
+                  <LogoutButton onPress={logout} />
+                </Span>
+              )}
             </Span>
           </Span>
           <Text style={styles.title}>{profileUser?.name}</Text>
+          {profileUser?.User?.level === 'admin' && <Text>admin 🐨</Text>}
           {!!(isOwnProfile && user?.email) && <Text>{user?.email}</Text>}
         </Span>
       </Scroll>
@@ -75,6 +104,10 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
 }
 
 const styles = StyleSheet.create({
+  Header: {},
+  SettingsButton: {
+    marginLeft: 'auto',
+  },
   topContainer: {
     alignItems: 'center',
   },

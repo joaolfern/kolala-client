@@ -1,3 +1,5 @@
+import { IUser } from './User'
+
 export type IProfile = {
   facebookAccount?: string
   id: number
@@ -5,4 +7,8 @@ export type IProfile = {
   name: string
   picture: string
   twitterAccount?: string
+}
+
+export type IProfileViewData = IProfile & {
+  User?: IUser
 }
