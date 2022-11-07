@@ -62,3 +62,8 @@ export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
     BottomTabScreenProps<RootTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
   >
+
+export type ISelect<Value, Label = string> = {
+  value: Value
+  label: Label
+}
