@@ -3,6 +3,7 @@ import { Region } from 'react-native-maps'
 import Event, { IEvent } from '../../../Models/Event'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
+  initialState,
   updateIsGettingNewFilter,
   updateShouldShowToast,
 } from '../../../store/mapFilterSlice'
@@ -12,7 +13,7 @@ import { IFilters } from '../../FiltersMenu/FiltersMenu'
 
 function useMarkers() {
   const { markers } = useAppSelector(selectMarkers)
-  const currentFiltersString = useRef('')
+  const currentFiltersString = useRef(JSON.stringify(initialState.filters))
   const dispatch = useAppDispatch()
 
   function setMarkers(data: IEvent.IMarkers[]) {
