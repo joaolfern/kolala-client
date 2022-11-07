@@ -7,12 +7,7 @@ import React, {
   useCallback,
   Ref,
 } from 'react'
-import {
-  Control,
-  useForm,
-  UseFormHandleSubmit,
-  UseFormSetValue,
-} from 'react-hook-form'
+import { Control, useForm, UseFormSetValue } from 'react-hook-form'
 import {
   FlatList,
   StyleSheet,
