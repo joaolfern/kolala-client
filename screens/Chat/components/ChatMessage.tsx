@@ -16,6 +16,7 @@ import { _userLevel } from '../../../types/User'
 import { getChatMessageContentOptions } from '../utils'
 import { useChat } from '../useChat'
 import ChatAnswerToWrapper from './ChatAnswerToWrapper'
+import { useNavigation } from '@react-navigation/native'
 interface IProps {
   message: IMessage
   isFollowingMessage: boolean
@@ -29,6 +30,7 @@ function ChatMessage({
 }: IProps) {
   const { user } = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
+  const navigation = useNavigation()
 
   const isFirstMessage = !isFollowingMessage
   const isAuthor = message.authorId === user?.id
@@ -76,6 +78,12 @@ function ChatMessage({
     )
   }, [])
 
+  function navigateToProfile() {
+    navigation.navigate('Profile', {
+      profileUserId: message.authorId as number,
+    })
+  }
+
   return (
     <Span
       style={[
@@ -84,7 +92,8 @@ function ChatMessage({
       ]}
     >
       {isFirstMessage && (
-        <Span
+        <TouchableOpacity
+          onPress={navigateToProfile}
           style={[
             styles.ContentWrapper,
             ...(isAuthor ? [styles.UserContentWrapper] : []),
@@ -101,7 +110,7 @@ function ChatMessage({
           <Text numberOfLines={1} style={styles.Name}>
             {message.author.name}
           </Text>
-        </Span>
+        </TouchableOpacity>
       )}
       <Span
         style={[
