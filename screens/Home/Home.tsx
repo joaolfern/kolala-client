@@ -6,61 +6,23 @@ import View from '../../components/View/View'
 import useUserLocation from './UserMarker/useUserLocation'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { MAP_ICONS } from '../EventForm/constants'
-import Event, { IEvent } from '../../Models/Event'
+import { IEvent } from '../../Models/Event'
 import MapFilter from '../../components/MapFilter/MapFilter'
-import { showToast } from '../../utils/toast'
-import {
-  updateIsGettingNewFilter,
-  updateShouldShowToast,
-  useMapFilter,
-} from '../../store/mapFilterSlice'
-import { IFilters } from '../FiltersMenu/FiltersMenu'
-import { useAppDispatch } from '../../store/hooks'
+import { useMapFilter } from '../../store/mapFilterSlice'
+import useMarkers from './hooks/useMarkers'
 
 export default function Home() {
   const navigation = useNavigation()
   const { location } = useUserLocation()
-  const [markers, setMarkers] = useState<IEvent.IMarkers[]>([])
+  const { markers, requestMarkers } = useMarkers()
   const [mapRegion, setMapRegion] = useState<Region | null>(null)
 
-  const currentFiltersString = useRef('')
-  const { filters, isGettingNewFilter } = useMapFilter()
+  const { filters } = useMapFilter()
 
   const [showOverlay, setShowoverlay] = useState(false)
-  const dispatch = useAppDispatch()
-
-  async function requestMarkers(location: Region, filters: IFilters) {
-    const selectedFiltersString = JSON.stringify(filters)
-    const shouldShowFilterLoading =
-      currentFiltersString.current !== selectedFiltersString
-
-    currentFiltersString.current = selectedFiltersString
-
-    if (shouldShowFilterLoading) {
-      dispatch(updateIsGettingNewFilter(true))
-      dispatch(updateShouldShowToast(true))
-    }
-    try {
-      const response = await Event.getMarkers({
-        params: {
-          lat: location.latitude,
-          lng: location.longitude,
-          ...filters,
-        },
-      })
-      const data = response.data.data
-
-      if (Array.isArray(data)) setMarkers(data)
-    } catch (err: any) {
-      console.error(err)
-      showToast(err.message)
-    }
-    if (shouldShowFilterLoading) dispatch(updateIsGettingNewFilter(false))
-  }
 
   useEffect(() => {
     if (location) requestMarkers(location, filters)
-    currentFiltersString.current = JSON.stringify(filters)
   }, [location, JSON.stringify(filters)])
 
   const displayDetails = ({ id, title }: IEvent.IMarkers) => {
