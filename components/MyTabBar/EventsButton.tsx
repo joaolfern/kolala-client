@@ -8,6 +8,7 @@ import {
 import React from 'react'
 import { Image, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../../constants/Colors'
+import useMarkers from '../../screens/Home/hooks/useMarkers'
 import Button from '../Button/Button'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
@@ -15,6 +16,7 @@ import HangsButton from './HangsButton'
 
 function EventsButton() {
   const navigation = useNavigation()
+  const { markers } = useMarkers()
 
   const onPress = () => {
     navigation.navigate('Events')
@@ -30,7 +32,7 @@ function EventsButton() {
         onPress={onPress}
         style={styles.Button}
       >
-        <Text style={styles.Text}>3 eventos</Text>
+        <Text style={styles.Text}>{markers.length} eventos</Text>
       </Button>
     </Span>
   )

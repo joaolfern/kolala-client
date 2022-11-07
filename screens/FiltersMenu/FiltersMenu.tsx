@@ -19,6 +19,7 @@ import {
   initialState,
   useMapFilter,
 } from '../../store/mapFilterSlice'
+import useMarkers from '../Home/hooks/useMarkers'
 import FilterDateInput from './components/FilterRange/FilterDateInput'
 import FilterSlideInput from './components/FilterSlideInput'
 
@@ -46,11 +47,12 @@ const datetypeDisplay = {
 }
 
 function FiltersMenu() {
+  const dispatch = useAppDispatch()
   const navigator = useNavigation()
   const { shouldShowToast, filters, isGettingNewFilter } = useMapFilter()
-  const [canClearFilters, setCanClearFilters] = useState(false)
+  const { markers } = useMarkers()
 
-  const dispatch = useAppDispatch()
+  const [canClearFilters, setCanClearFilters] = useState(false)
 
   const form = useForm<IFilters>({
     defaultValues: {
@@ -93,7 +95,7 @@ function FiltersMenu() {
         <MapToast>
           <MapToast.LoadingHeader
             loading={isGettingNewFilter}
-            title={isGettingNewFilter ? '' : 'Econtrados'}
+            title={isGettingNewFilter ? '' : `${markers.length} Resultados`}
           >
             <Text>
               A {filters.distance} km e{' '}
