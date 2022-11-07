@@ -1,5 +1,4 @@
 import { useNavigation } from '@react-navigation/native'
-import dayjs from 'dayjs'
 import React from 'react'
 import { Image, StyleSheet, TouchableOpacity } from 'react-native'
 import Colors from '../../constants/Colors'

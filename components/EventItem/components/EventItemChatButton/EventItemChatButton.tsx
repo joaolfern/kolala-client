@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native'
 import Colors from '../../../../constants/Colors'
 import { useNavigation } from '@react-navigation/native'
 import { IEvent } from '../../../../Models/Event'
+import Span from '../../../Span/Span'
 
 interface IProps {
   event: IEvent.ListItem
@@ -28,9 +29,18 @@ function EventItemChatButton({ event }: IProps) {
 
 export default EventItemChatButton
 
+EventItemChatButton.Skeleton = Skeleton
+
+function Skeleton() {
+  return <Button style={styles.Button} />
+}
+
 const styles = StyleSheet.create({
   Button: {
     backgroundColor: Colors.secondaryColor,
     flex: 0,
+  },
+  Skeleton: {
+    backgroundColor: Colors.gray,
   },
 })

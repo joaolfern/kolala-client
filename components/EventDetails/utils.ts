@@ -1,3 +1,4 @@
+import { IEvent } from '../../Models/Event'
 import { IUser } from '../../types/User'
 
 interface IGetEventDetailsMenuOptions {
@@ -25,5 +26,12 @@ export function getEventDetailsMenuOptions({ isAuthor, level }: IGetEventDetails
     default: {
       return []
     }
+  }
+}
+
+export function transformDetailsToListItem (details: IEvent.Details): IEvent.ListItem {
+  return {
+    ...details,
+    image: details.EventImage[0].url
   }
 }
