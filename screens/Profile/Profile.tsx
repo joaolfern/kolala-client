@@ -14,7 +14,7 @@ import useLogout from '../../hooks/useLogout'
 import Avatar from '../../components/Avatar/Avatar'
 import Scroll from '../../components/Scroll/Scroll'
 
-function Profile({ route, navigation }: RootStackScreenProps<'Profile'>) {
+function Profile({ route }: RootStackScreenProps<'Profile'>) {
   const { profileUserId } = route?.params
   const { user } = useAppSelector(selectUser)
   const logout = useLogout()
