@@ -12,7 +12,6 @@ import { shadow } from '../../screens/EventForm/utils'
 import { RootStackParamList } from '../../types'
 import { showToast } from '../../utils/toast'
 import AvatarWithIcon from '../AvatarWithIcon/AvatarWithIcon'
-import Button from '../Button/Button'
 import CategoryTag from '../CategoryTag/CategoryTag'
 import DatetimeLabel from '../DatetimeLabel/DatetimeLabel'
 import EventAvatars from '../EventAvatars/EventAvatars'
@@ -23,9 +22,10 @@ import { useActionSheet } from '@expo/react-native-action-sheet'
 import { useAppSelector } from '../../store/hooks'
 import { selectUser } from '../../store/userSlice'
 import { IUser } from '../../types/User'
-import { getEventDetailsMenuOptions } from './utils'
+import { getEventDetailsMenuOptions, transformDetailsToListItem } from './utils'
 import ModalWrapper from '../ModalWrapper/ModalWrapper'
 import EllipsisButton from '../EllipsisButton/EllipsisButton'
+import EventItemChatButton from '../EventItem/components/EventItemChatButton/EventItemChatButton'
 
 export default function EventDetails() {
   const preview = useNavigationState(
@@ -196,8 +196,19 @@ export default function EventDetails() {
           <Text style={styles.Subtitle}>Descrição</Text>
           <Text>{details?.description}</Text>
         </Span>
-        <Span>
-          <Text style={styles.Subtitle}>Chat</Text>
+        <Span style={styles.ChatContainer}>
+          <Span>
+            <Text style={styles.Subtitle}>Chat</Text>
+            <Text>
+              {details?._count.Message} mensage
+              {details?._count.Message !== 1 ? 'ns' : 'm'}
+            </Text>
+          </Span>
+          {details ? (
+            <EventItemChatButton event={transformDetailsToListItem(details)} />
+          ) : (
+            <EventItemChatButton.Skeleton />
+          )}
         </Span>
       </Span>
     </ModalWrapper>
@@ -290,5 +301,10 @@ const styles = StyleSheet.create({
   },
   Description: {
     marginBottom: 18,
+  },
+  ChatContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
   },
 })

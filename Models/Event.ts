@@ -117,7 +117,11 @@ export namespace IEvent {
     data: ListItem[]
   }
 
-  export interface Details extends Model {}
+  export interface Details extends Model {
+    "_count": {
+      Message: number
+    }
+  }
 
   export interface ListItem extends Omit<Model, 'EventImage'> {
     image: string
