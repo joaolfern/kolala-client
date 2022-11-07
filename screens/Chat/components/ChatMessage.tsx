@@ -15,7 +15,7 @@ import { selectUser } from '../../../store/userSlice'
 import { _userLevel } from '../../../types/User'
 import { getChatMessageContentOptions } from '../utils'
 import { useChat } from '../useChat'
-
+import ChatAnswerToWrapper from './ChatAnswerToWrapper'
 interface IProps {
   message: IMessage
   isFollowingMessage: boolean
@@ -103,17 +103,21 @@ function ChatMessage({
           </Text>
         </Span>
       )}
-      <TouchableOpacity
-        delayLongPress={200}
-        onLongPress={() => user?.level && openMenu(isAuthor, user?.level)}
+      <Span
+        style={[
+          styles.MarginWrapper,
+          ...(hasFollwingMessage ? [styles.HasFollowingMessage] : []),
+        ]}
       >
-        <MessageContent
-          message={message}
-          isFollowingMessage={isFollowingMessage}
-          hasFollwingMessage={hasFollwingMessage}
-          isAuthor={isAuthor}
-        />
-      </TouchableOpacity>
+        <ChatAnswerToWrapper message={message}>
+          <TouchableOpacity
+            delayLongPress={200}
+            onLongPress={() => user?.level && openMenu(isAuthor, user?.level)}
+          >
+            <MessageContent message={message} isAuthor={isAuthor} />
+          </TouchableOpacity>
+        </ChatAnswerToWrapper>
+      </Span>
     </Span>
   )
 }
@@ -122,23 +126,16 @@ export default memo(ChatMessage)
 
 interface IMessageContent {
   message: IMessage
-  isFollowingMessage: boolean
-  hasFollwingMessage: boolean
   isAuthor: boolean
 }
 
-function MessageContent({
-  message,
-  isFollowingMessage,
-  hasFollwingMessage,
-  isAuthor,
-}: IMessageContent) {
+function MessageContent({ message, isAuthor }: IMessageContent) {
   return (
     <Span
       style={[
         styles.Content,
-        ...(hasFollwingMessage ? [styles.HasFollowingMessage] : []),
         ...(isAuthor ? [styles.UserContent] : []),
+        ...(message.answerToId ? [styles.ContentWithReplyRadius] : []),
       ]}
     >
       <Text style={styles.Datetime}>
@@ -172,18 +169,24 @@ const styles = StyleSheet.create({
   UserContentWrapper: {
     alignItems: 'flex-end',
   },
+  MarginWrapper: {
+    marginBottom: 16,
+    maxWidth: 250,
+    minWidth: '45%',
+  },
   Content: {
     backgroundColor: Colors.xLightBackground,
-    marginBottom: 16,
     borderRadius: 15,
     borderTopLeftRadius: 7,
     padding: 14,
     paddingTop: 10,
     overflow: 'hidden',
-    maxWidth: 250,
-    minWidth: '45%',
     paddingBottom: 24,
     position: 'relative',
+  },
+  ContentWithReplyRadius: {
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
   },
   UserContent: {
     backgroundColor: Colors.chatTextbox,

@@ -1,12 +1,12 @@
 import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import Span from '../../../components/Span/Span'
-import Text from '../../../components/Text/Text'
 import TimesCircle from '../../../components/TimesCircle/TimesCircle'
-import Colors from '../../../constants/Colors'
 import { dismissReplyTarget, useReply } from '../../../store/replySlice'
 import { useAppDispatch } from '../../../store/hooks'
 import { useChat } from '../useChat'
+import ReplyPreview from '../../../components/ReplyPreview/ReplyPreview'
+import Colors from '../../../constants/Colors'
 
 function ChatReplyPreview() {
   const dispatch = useAppDispatch()
@@ -20,10 +20,11 @@ function ChatReplyPreview() {
 
   return (
     <Span style={styles.Container}>
-      <Span style={styles.Content}>
-        <Span style={styles.Marker} />
-        <Text>{replyTarget?.author.name}</Text>
-        <Text style={styles.Text}>{replyTarget?.content}</Text>
+      <Span style={styles.Wrapper}>
+        <ReplyPreview
+          content={replyTarget?.content}
+          title={replyTarget?.author.name}
+        />
         <TouchableOpacity style={styles.DismissButton} onPress={dismiss}>
           <TimesCircle size={24} />
         </TouchableOpacity>
@@ -36,7 +37,6 @@ export default ChatReplyPreview
 
 const styles = StyleSheet.create({
   Container: {
-    backgroundColor: Colors.background,
     margin: 'auto',
     width: '100%',
     flexGrow: 1,
@@ -44,24 +44,10 @@ const styles = StyleSheet.create({
     bottom: 70,
     paddingHorizontal: 14,
     paddingTop: 6,
+    backgroundColor: Colors.background,
   },
-  Content: {
-    borderRadius: 6,
-    overflow: 'hidden',
-
-    backgroundColor: Colors.xLightBackground,
-    padding: 14,
-  },
-  Text: {
-    fontSize: 14,
-  },
-  Marker: {
-    width: 4,
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    backgroundColor: Colors.secondaryColor,
+  Wrapper: {
+    position: 'relative',
   },
   DismissButton: {
     position: 'absolute',
