@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { StyleSheet } from 'react-native'
+import { Linking, StyleSheet, TouchableOpacity } from 'react-native'
 import Header from '../../components/Header/Header'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
 import { useAppSelector } from '../../store/hooks'
@@ -15,6 +15,7 @@ import Scroll from '../../components/Scroll/Scroll'
 import ProfileSettings from './components/ProfileSettingsButton'
 import User from '../../Models/User'
 import { _userLevel } from '../../types/User'
+import SocialMediaIcon from '../../components/SocialMediaIcon/SocialMediaIcon'
 
 function Profile({ route }: RootStackScreenProps<'Profile'>) {
   const { profileUserId } = route?.params
@@ -60,6 +61,10 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
     })
   }
 
+  async function openLink(url: string) {
+    await Linking.openURL(url)
+  }
+
   return (
     <SafeAreaView>
       <Scroll>
@@ -95,8 +100,40 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
             </Span>
           </Span>
           <Text style={styles.title}>{profileUser?.name}</Text>
-          {profileUser?.User?.level === 'admin' && <Text>admin 🐨</Text>}
           {!!(isOwnProfile && user?.email) && <Text>{user?.email}</Text>}
+          {profileUser?.User?.level === 'admin' && <Text>admin 🐨</Text>}
+        </Span>
+        <Span style={styles.SocialMediaRow}>
+          {profileUser?.instagramAccount && (
+            <TouchableOpacity
+              style={styles.SocialMediaButton}
+              onPress={() =>
+                openLink(
+                  `https://instagram.com/${profileUser?.instagramAccount}`
+                )
+              }
+            >
+              <SocialMediaIcon icon='instagram' />
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity
+            style={styles.SocialMediaButton}
+            onPress={() =>
+              openLink(`https://facebook.com/${profileUser?.facebookAccount}`)
+            }
+          >
+            <SocialMediaIcon icon='facebook' />
+          </TouchableOpacity>
+          {profileUser?.twitterAccount && (
+            <TouchableOpacity
+              style={styles.SocialMediaButton}
+              onPress={() =>
+                openLink(`https://twitter.com/${profileUser?.twitterAccount}`)
+              }
+            >
+              <SocialMediaIcon icon='twitter' />
+            </TouchableOpacity>
+          )}
         </Span>
       </Scroll>
     </SafeAreaView>
@@ -138,6 +175,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 0,
     bottom: 0,
+  },
+  SocialMediaRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 16,
+  },
+  SocialMediaButton: {
+    marginHorizontal: 8,
   },
 })
 

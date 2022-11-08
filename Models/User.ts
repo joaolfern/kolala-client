@@ -12,7 +12,7 @@ export type IUserPromoteConfig = {
 }
 
 export type IUserUpdateProfileConfig = {
-  body: Partial<IProfile>
+  body: FormData
   id: number
 }
 

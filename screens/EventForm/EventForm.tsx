@@ -121,7 +121,7 @@ function EventForm() {
       else await createForm(formData)
     } catch (err) {
       showToast('Ocorreu um problema')
-      console.log(err)
+      console.log(JSON.stringify(err))
     } finally {
       setLoadingSubmit(false)
     }
