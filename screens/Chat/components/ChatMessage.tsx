@@ -118,7 +118,7 @@ function ChatMessage({
           ...(hasFollwingMessage ? [styles.HasFollowingMessage] : []),
         ]}
       >
-        <ChatAnswerToWrapper message={message}>
+        <ChatAnswerToWrapper isAuthor={isAuthor} message={message}>
           <TouchableOpacity
             delayLongPress={200}
             onLongPress={() => user?.level && openMenu(isAuthor, user?.level)}
