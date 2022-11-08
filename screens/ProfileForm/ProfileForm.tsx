@@ -1,9 +1,7 @@
-import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons'
 import { useNavigationState } from '@react-navigation/native'
 import React from 'react'
-import { Control, useForm } from 'react-hook-form'
-import { StyleSheet, TouchableOpacity } from 'react-native'
-import Avatar from '../../components/Avatar/Avatar'
+import { useForm } from 'react-hook-form'
+import { StyleSheet } from 'react-native'
 import Button from '../../components/Button/Button'
 import Header from '../../components/Header/Header'
 import Label from '../../components/Label/Label'
@@ -16,6 +14,7 @@ import Colors from '../../constants/Colors'
 import { IUserUpdateProfileConfig } from '../../Models/User'
 import { RootStackParamList } from '../../types'
 import PictureButton from './components/PictureButton'
+import SocialMediaInput from './components/SocialMediaInput'
 
 export type ProfileFormEvent = IUserUpdateProfileConfig['body'] & {}
 
@@ -72,32 +71,6 @@ function ProfileForm() {
   )
 }
 
-interface IProps {
-  control: Control<ProfileFormEvent>
-  name: keyof ProfileFormEvent
-  icon: any
-  placeholder: string
-}
-
-function SocialMediaInput({ control, icon, name, placeholder }: IProps) {
-  return (
-    <Span style={styles.SocialMediaRow}>
-      <MaterialCommunityIcons
-        style={styles.SocialMediaIcon}
-        name={icon}
-        size={55}
-        color={Colors.text}
-      />
-      <TextInput
-        style={styles.SocialMediaInput}
-        name={name}
-        control={control}
-        placeholder={placeholder}
-      />
-    </Span>
-  )
-}
-
 export default ProfileForm
 
 const styles = StyleSheet.create({
@@ -114,16 +87,7 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 18,
   },
-  SocialMediaRow: {
-    flexDirection: 'row',
-  },
-  SocialMediaIcon: {
-    marginRight: 16,
-    width: 55,
-  },
-  SocialMediaInput: {
-    flex: 1,
-  },
+
   SubmitButton: {
     marginTop: 15,
     marginLeft: 'auto',
