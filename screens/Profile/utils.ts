@@ -8,7 +8,7 @@ interface IGetProfileSettingsOptions {
 
 export function getProfileSettingsOptions ({ isOwnProfile, level, targetLevel }: IGetProfileSettingsOptions) {
   const basePermission = 'Cancelar'
-  const editPermission = 'Editar'
+  const editPermission = 'Editar perfil'
   const reportPermission = 'Denunciar usuário'
   const banPermission = 'Banir usuário'
   const promotePermission = 'Tornar administrador'
