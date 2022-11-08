@@ -1,10 +1,9 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons'
 import React from 'react'
 import { Control } from 'react-hook-form'
 import { StyleSheet } from 'react-native'
+import SocialMediaIcon from '../../../components/SocialMediaIcon/SocialMediaIcon'
 import Span from '../../../components/Span/Span'
 import TextInput from '../../../components/TextInput/TextInput'
-import Colors from '../../../constants/Colors'
 import { ProfileFormEvent } from '../ProfileForm'
 
 interface IProps {
@@ -17,12 +16,7 @@ interface IProps {
 function SocialMediaInput({ control, icon, name, placeholder }: IProps) {
   return (
     <Span style={styles.SocialMediaRow}>
-      <MaterialCommunityIcons
-        style={styles.SocialMediaIcon}
-        name={icon}
-        size={55}
-        color={Colors.text}
-      />
+      <SocialMediaIcon icon={icon} />
       <TextInput
         style={styles.SocialMediaInput}
         name={name}
@@ -38,10 +32,6 @@ export default SocialMediaInput
 const styles = StyleSheet.create({
   SocialMediaRow: {
     flexDirection: 'row',
-  },
-  SocialMediaIcon: {
-    marginRight: 16,
-    width: 55,
   },
   SocialMediaInput: {
     flex: 1,
