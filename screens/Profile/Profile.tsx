@@ -12,7 +12,7 @@ import LogoutButton from '../../components/LogoutButton/LogoutButton'
 import useLogout from '../../hooks/useLogout'
 import Avatar from '../../components/Avatar/Avatar'
 import Scroll from '../../components/Scroll/Scroll'
-import ProfileConfigButton from './components/ProfileConfigButton'
+import ProfileSettings from './components/ProfileSettingsButton'
 import User from '../../Models/User'
 import { _userLevel } from '../../types/User'
 
@@ -66,7 +66,7 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
         <Header style={styles.Header}>
           <Header.Title>Perfil</Header.Title>
           {profileUser && (
-            <ProfileConfigButton
+            <ProfileSettings
               style={styles.SettingsButton}
               isOwnProfile={isOwnProfile}
               profileUser={profileUser}

@@ -14,6 +14,7 @@ import User from '../../../Models/User'
 import { showToast } from '../../../utils/toast'
 import { IProfile, IProfileViewData } from '../../../types/Profile'
 import { IUser, _userLevel } from '../../../types/User'
+import { useNavigation } from '@react-navigation/native'
 
 interface IProps extends TouchableOpacityProps {
   isOwnProfile: boolean
@@ -21,7 +22,7 @@ interface IProps extends TouchableOpacityProps {
   updateProfileLevel(level: _userLevel): void
 }
 
-function ProfileConfigButton({
+function ProfileSettingsButton({
   isOwnProfile,
   style,
   profileUser,
@@ -30,6 +31,7 @@ function ProfileConfigButton({
 }: IProps) {
   const { showActionSheetWithOptions } = useActionSheet()
   const { user } = useAppSelector(selectUser)
+  const { navigate } = useNavigation()
 
   async function promoteUser({
     level,
@@ -50,6 +52,12 @@ function ProfileConfigButton({
     } catch (err) {
       console.log(err)
     }
+  }
+
+  function navigateToProfileForm(profile: IProfileViewData) {
+    navigate('ProfileForm', {
+      profile,
+    })
   }
 
   const openMenu = useCallback(
@@ -96,6 +104,9 @@ function ProfileConfigButton({
                 promoteUser({ targetId, level: 'user' })
               return
             }
+            case 'Editar perfil': {
+              if (profileUser) navigateToProfileForm(profileUser)
+            }
           }
         }
       )
@@ -116,7 +127,7 @@ function ProfileConfigButton({
   )
 }
 
-export default ProfileConfigButton
+export default ProfileSettingsButton
 
 const styles = StyleSheet.create({
   Button: {

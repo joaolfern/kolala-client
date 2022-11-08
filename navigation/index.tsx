@@ -23,6 +23,7 @@ import EventForm from '../screens/EventForm/EventForm'
 import EventDetails from '../components/EventDetails/EventDetails'
 import FiltersMenu from '../screens/FiltersMenu/FiltersMenu'
 import Chat from '../screens/Chat/Chat'
+import ProfileForm from '../screens/ProfileForm/ProfileForm'
 
 export default function Navigation() {
   return (
@@ -83,6 +84,11 @@ function RootNavigator() {
         <Stack.Screen
           component={FiltersMenu}
           name='FiltersMenu'
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          component={ProfileForm}
+          name='ProfileForm'
           options={{ headerShown: false }}
         />
       </Stack.Group>

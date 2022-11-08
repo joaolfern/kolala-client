@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { IEvent } from './Models/Event'
+import { IProfileViewData } from './types/Profile'
 
 export namespace ImagePicker {
   export interface ImagePickerMultipleResult {
@@ -37,6 +38,9 @@ export type RootStackParamList = {
   }
   Profile: {
     profileUserId: number
+  }
+  ProfileForm: {
+    profile: IProfileViewData
   }
   Events: undefined
   FiltersMenu: undefined
