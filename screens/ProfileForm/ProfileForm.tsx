@@ -25,7 +25,9 @@ function ProfileForm() {
         ?.params as RootStackParamList['ProfileForm']
   )
 
-  const { control } = useForm<ProfileFormEvent>()
+  const { control } = useForm<ProfileFormEvent>({
+    defaultValues: profile,
+  })
 
   return (
     <Scroll style={styles.Container}>
