@@ -1,4 +1,5 @@
 import { io } from "socket.io-client";
+import { REACT_APP_SERVER } from './api'
 
 class WSService {
   instance: ReturnType<typeof io> | null = null
@@ -8,7 +9,7 @@ class WSService {
   }
 
   initialize ({ token, eventId }: {token: string, eventId: number}) {
-    this.instance = io("http://192.168.1.6:3333", {
+    this.instance = io(REACT_APP_SERVER, {
       transports: ['websocket', 'polling'],
       auth: {
         token

@@ -50,6 +50,7 @@ export default function Home() {
       <MapView
         minZoomLevel={11}
         style={styles.map}
+        showsMyLocationButton={false}
         customMapStyle={mapStyle}
         // @ts-ignore
         region={mapRegion}

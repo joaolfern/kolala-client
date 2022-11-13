@@ -40,7 +40,7 @@ export default function App() {
             <InitialWidget />
           </ActionSheetProvider>
           <Toast {...{ ref: toastRef }} />
-          <StatusBar backgroundColor='transparent' style={'dark'} />
+          <StatusBar backgroundColor='transparent' style={'light'} />
         </Provider>
       </SafeAreaProvider>
     )
