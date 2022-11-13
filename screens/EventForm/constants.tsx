@@ -31,7 +31,7 @@ export const CATEGORY_RESOURCE: Item[] = [
   },
   {
     label: 'Educação',
-    value: 0,
+    value: 5,
   },
 ]
 

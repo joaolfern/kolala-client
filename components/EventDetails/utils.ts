@@ -32,6 +32,6 @@ export function getEventDetailsMenuOptions({ isAuthor, level }: IGetEventDetails
 export function transformDetailsToListItem (details: IEvent.Details): IEvent.ListItem {
   return {
     ...details,
-    image: details.EventImage[0].url
+    image: details.EventImage[0]?.url
   }
 }

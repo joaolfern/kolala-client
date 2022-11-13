@@ -34,10 +34,18 @@ function formatDetailsToForm({
   id,
   status,
   address,
-  ...details
+  title,
+  description,
+  category,
+  datetime,
+  icon,
 }: IEvent.Details): IEvent.FormSubmitEvent {
   return {
-    ...details,
+    title,
+    description,
+    category,
+    datetime,
+    icon,
     location: {
       lat,
       lng,
@@ -121,7 +129,6 @@ function EventForm() {
       else await createForm(formData)
     } catch (err) {
       showToast('Ocorreu um problema')
-      console.log(JSON.stringify(err))
     } finally {
       setLoadingSubmit(false)
     }
@@ -135,17 +142,21 @@ function EventForm() {
   }
 
   async function updateForm(data: IEvent.FormSubmitEvent, formData: FormData) {
-    originalImagesRef.current
-      .filter(originalItem => !data.image.includes(originalItem.url))
-      .map(item => {
-        formData.append('removedImages[]', String(item.id))
-      })
+    try {
+      originalImagesRef.current
+        .filter(originalItem => !data.image.includes(originalItem.url))
+        .map(item => {
+          formData.append('removedImages[]', String(item.id))
+        })
 
-    if (!details?.id) throw new Error('EventId not found')
+      if (!details?.id) throw new Error('EventId not found')
 
-    await Event.update(String(details.id), formData)
+      await Event.update(String(details.id), formData)
 
-    navigation.goBack()
+      navigation.goBack()
+    } catch (err) {
+      throw err
+    }
   }
 
   return (
