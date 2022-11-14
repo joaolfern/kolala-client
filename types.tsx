@@ -10,7 +10,8 @@ import {
 } from '@react-navigation/native'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { IEvent } from './Models/Event'
-import { IProfileViewData } from './types/Profile'
+import { IProfile, IProfileViewData } from './types/Profile'
+import { IUser } from './types/User'
 
 export namespace ImagePicker {
   export interface ImagePickerMultipleResult {
@@ -47,6 +48,10 @@ export type RootStackParamList = {
   MapToast: undefined
   Chat: {
     event: IEvent.ListItem
+  }
+  Report: undefined
+  ReportForm: {
+    target: IProfile
   }
 }
 

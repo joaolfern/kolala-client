@@ -12,7 +12,7 @@ import ws from '../../../services/socket'
 import { updateReplyTarget, useReply } from '../../../store/replySlice'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import { selectUser } from '../../../store/userSlice'
-import { _userLevel } from '../../../types/User'
+import { IUser, _userLevel } from '../../../types/User'
 import { getChatMessageContentOptions } from '../utils'
 import { useChat } from '../useChat'
 import ChatAnswerToWrapper from './ChatAnswerToWrapper'
@@ -38,7 +38,8 @@ function ChatMessage({
   const { showActionSheetWithOptions } = useActionSheet()
   const { setValue, focusInput } = useChat()
 
-  const openMenu = useCallback((isAuthor: boolean, level: _userLevel) => {
+  const openMenu = useCallback((isAuthor: boolean, user: IUser) => {
+    const { level } = user
     const options = getChatMessageContentOptions({ isAuthor, level })
     const destructiveButtonIndex =
       options.indexOf('Deletar mensagem') === -1
@@ -72,6 +73,9 @@ function ChatMessage({
 
             return
           case 'Denunciar usuário':
+            navigation.navigate('ReportForm', {
+              target: user.profile,
+            })
             return
         }
       }
@@ -121,7 +125,7 @@ function ChatMessage({
         <ChatAnswerToWrapper isAuthor={isAuthor} message={message}>
           <TouchableOpacity
             delayLongPress={200}
-            onLongPress={() => user?.level && openMenu(isAuthor, user?.level)}
+            onLongPress={() => user?.level && openMenu(isAuthor, user)}
           >
             <MessageContent message={message} isAuthor={isAuthor} />
           </TouchableOpacity>

@@ -24,6 +24,8 @@ import EventDetails from '../components/EventDetails/EventDetails'
 import FiltersMenu from '../screens/FiltersMenu/FiltersMenu'
 import Chat from '../screens/Chat/Chat'
 import ProfileForm from '../screens/ProfileForm/ProfileForm'
+import Report from '../screens/Report/Report'
+import ReportForm from '../screens/ReportForm/ReportForm'
 
 export default function Navigation() {
   return (
@@ -67,6 +69,16 @@ function RootNavigator() {
         <Stack.Screen
           name='Chat'
           component={Chat}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          component={Report}
+          name='Report'
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          component={ReportForm}
+          name='ReportForm'
           options={{ headerShown: false }}
         />
       </Stack.Group>

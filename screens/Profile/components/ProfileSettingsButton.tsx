@@ -106,6 +106,13 @@ function ProfileSettingsButton({
             }
             case 'Editar perfil': {
               if (profileUser) navigateToProfileForm(profileUser)
+              return
+            }
+            case 'Denunciar usuário': {
+              navigate('ReportForm', {
+                target: profileUser,
+              })
+              return
             }
           }
         }
