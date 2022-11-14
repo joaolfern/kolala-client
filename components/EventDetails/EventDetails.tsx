@@ -26,6 +26,7 @@ import { getEventDetailsMenuOptions, transformDetailsToListItem } from './utils'
 import ModalWrapper from '../ModalWrapper/ModalWrapper'
 import EllipsisButton from '../EllipsisButton/EllipsisButton'
 import EventItemChatButton from '../EventItem/components/EventItemChatButton/EventItemChatButton'
+import useReport from '../../hooks/useReport'
 
 export default function EventDetails() {
   const preview = useNavigationState(
@@ -93,7 +94,8 @@ export default function EventDetails() {
   }, [preview?.id])
 
   const openMenu = useCallback(
-    (level: IUser['level'], isAuthor: boolean) => {
+    (user: IUser, isAuthor: boolean) => {
+      const { level } = user
       const options = getEventDetailsMenuOptions({ level, isAuthor })
       const destructiveButtonIndex =
         options.indexOf('Deletar evento') === -1
@@ -121,6 +123,9 @@ export default function EventDetails() {
               deleteEvent()
               return
             case 'Denunciar usuário':
+              navigation.navigate('ReportForm', {
+                target: user.profile,
+              })
               return
           }
         }
@@ -162,9 +167,7 @@ export default function EventDetails() {
               </Span>
             </AvatarWithIcon>
           </TouchableOpacity>
-          <EllipsisButton
-            onPress={() => user?.level && openMenu(user?.level, isAuthor)}
-          />
+          <EllipsisButton onPress={() => user && openMenu(user, isAuthor)} />
         </Span>
         <Span style={styles.TitleRow}>
           <Text style={styles.Title}>{details?.title || preview?.title}</Text>

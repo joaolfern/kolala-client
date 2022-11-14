@@ -1,4 +1,3 @@
-import { Item } from 'react-native-picker-select'
 import { ISelect } from '../../types'
 
 export const REPORT_CATEGORY_RESOURCE: ISelect<number>[] = [
@@ -8,7 +7,7 @@ export const REPORT_CATEGORY_RESOURCE: ISelect<number>[] = [
   },
   {
     value: 1,
-    label: 'Assédio moral'
+    label: 'Contéudo ofensivo'
   },
   {
     value: 2,
