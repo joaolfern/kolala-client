@@ -116,14 +116,16 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
               <SocialMediaIcon icon='instagram' />
             </TouchableOpacity>
           )}
-          <TouchableOpacity
-            style={styles.SocialMediaButton}
-            onPress={() =>
-              openLink(`https://facebook.com/${profileUser?.facebookAccount}`)
-            }
-          >
-            <SocialMediaIcon icon='facebook' />
-          </TouchableOpacity>
+          {profileUser?.facebookAccount && (
+            <TouchableOpacity
+              style={styles.SocialMediaButton}
+              onPress={() =>
+                openLink(`https://facebook.com/${profileUser?.facebookAccount}`)
+              }
+            >
+              <SocialMediaIcon icon='facebook' />
+            </TouchableOpacity>
+          )}
           {profileUser?.twitterAccount && (
             <TouchableOpacity
               style={styles.SocialMediaButton}
