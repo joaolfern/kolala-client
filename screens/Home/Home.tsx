@@ -21,10 +21,6 @@ export default function Home() {
 
   const [showOverlay, setShowoverlay] = useState(false)
 
-  useEffect(() => {
-    if (location) requestMarkers(location, filters)
-  }, [location, JSON.stringify(filters)])
-
   const displayDetails = ({ id, title }: IEvent.IMarkers) => {
     if (mapRegion) setMapRegion(null)
     navigation.navigate('EventDetails', {
@@ -39,6 +35,12 @@ export default function Home() {
         setShowoverlay(true)
       }
     }, [navigation])
+  )
+
+  useFocusEffect(
+    useCallback(() => {
+      if (location) requestMarkers(location, filters)
+    }, [location, JSON.stringify(filters)])
   )
 
   useEffect(() => {
