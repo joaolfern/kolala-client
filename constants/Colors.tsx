@@ -2,6 +2,7 @@ export default {
   primaryColor: '#F18EB0',
   secondaryColor: '#38CBA6',
   orangeColor: '#E66533',
+  yellow: '#ffc234',
   text: '#E8E8E8',
   altText: '#000000',
   background: '#272022',
