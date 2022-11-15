@@ -26,11 +26,6 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
   const [profileUser, setProfileUser] = useState<IProfileViewData | null>(null)
 
   useEffect(() => {
-    if (isOwnProfile && user?.profile) {
-      setProfileUser(user?.profile)
-      return
-    }
-
     getProfileUser(profileUserId)
 
     async function getProfileUser(id: number) {

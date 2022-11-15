@@ -1,3 +1,4 @@
+import Colors from '../../constants/Colors'
 import { ISelect } from '../../types'
 
 export const REPORT_CATEGORY_RESOURCE: ISelect<number>[] = [
@@ -7,7 +8,7 @@ export const REPORT_CATEGORY_RESOURCE: ISelect<number>[] = [
   },
   {
     value: 1,
-    label: 'Contéudo ofensivo'
+    label: 'Conteúdo ofensivo'
   },
   {
     value: 2,
@@ -23,13 +24,19 @@ export const REPORT_CATEGORY_RESOURCE: ISelect<number>[] = [
   }
 ]
 
+export const REPORT_STATUS_COLOR_RESOURCE = {
+  0: Colors.yellow,
+  1: Colors.green,
+  2: Colors.red,
+}
+
 export const REPORT_STATUS_RESOURCE: ISelect<number>[] = [
   {
-    value: 1,
+    value: 0,
     label: 'Pendente'
   },
   {
-    value: 0,
+    value: 1,
     label: 'Aprovado'
   },
   {
