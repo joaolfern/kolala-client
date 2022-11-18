@@ -15,23 +15,25 @@ import { showToast } from '../../../utils/toast'
 import { IProfileViewData } from '../../../types/Profile'
 import { IUser, _userLevel } from '../../../types/User'
 import { useNavigation } from '@react-navigation/native'
+import useUserOperations from '../../../hooks/useUserOperations'
 
 interface IProps extends TouchableOpacityProps {
   isOwnProfile: boolean
   profileUser: IProfileViewData
-  updateProfileLevel(level: _userLevel): void
+  updateProfile(): void
 }
 
 function ProfileSettingsButton({
   isOwnProfile,
   style,
   profileUser,
-  updateProfileLevel,
+  updateProfile,
   ...rest
 }: IProps) {
   const { showActionSheetWithOptions } = useActionSheet()
   const { user } = useAppSelector(selectUser)
   const { navigate } = useNavigation()
+  const { updateStatus } = useUserOperations()
 
   async function promoteUser({
     level,
@@ -48,7 +50,7 @@ function ProfileSettingsButton({
         targetId,
       })
       showToast('Level do usuário atualizado com sucesso!')
-      updateProfileLevel(level)
+      updateProfile()
     } catch (err) {
       console.log(err)
     }
@@ -64,7 +66,10 @@ function ProfileSettingsButton({
     ({
       user,
       profileUser,
+      updateProfile,
+      isOwnProfile,
     }: {
+      updateProfile: Function
       user: IUser
       profileUser: IProfileViewData
       isOwnProfile: boolean
@@ -90,7 +95,7 @@ function ProfileSettingsButton({
             backgroundColor: Colors.lightBackground,
           },
         },
-        (selectedIndex?: number) => {
+        async (selectedIndex?: number) => {
           if (typeof selectedIndex === 'undefined') return
 
           const selectedOption = options[selectedIndex]
@@ -98,6 +103,22 @@ function ProfileSettingsButton({
             case 'Tornar administrador': {
               if (typeof targetId !== 'undefined')
                 promoteUser({ targetId, level: 'admin' })
+              return
+            }
+            case 'Restaurar conta': {
+              if (typeof targetId !== 'undefined')
+                await updateStatus(
+                  { body: { status: 1 }, targetId },
+                  updateProfile
+                )
+              return
+            }
+            case 'Suspender conta': {
+              if (typeof targetId !== 'undefined')
+                await updateStatus(
+                  { body: { status: 0 }, targetId },
+                  updateProfile
+                )
               return
             }
             case 'Remover administrador': {
@@ -127,7 +148,9 @@ function ProfileSettingsButton({
       style={[styles.Button, style]}
       {...rest}
       onPress={() =>
-        user && profileUser && openMenu({ user, profileUser, isOwnProfile })
+        user &&
+        profileUser &&
+        openMenu({ user, profileUser, isOwnProfile, updateProfile })
       }
     >
       <MaterialIcons size={28} name='settings' color={Colors.text} />

@@ -25,36 +25,20 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
   const isOwnProfile = useRef(profileUserId === user?.id).current
   const [profileUser, setProfileUser] = useState<IProfileViewData | null>(null)
 
+  async function getProfileUser(id: number) {
+    try {
+      const response = await User.getProfile(id)
+      const profile = response.data.data
+
+      if (profile) setProfileUser(profile)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
   useEffect(() => {
     getProfileUser(profileUserId)
-
-    async function getProfileUser(id: number) {
-      try {
-        const response = await User.getProfile(id)
-        const profile = response.data.data
-
-        if (profile) setProfileUser(profile)
-      } catch (err) {
-        console.error(err)
-      }
-    }
   }, [user?.profile])
-
-  function updateProfileLevel(level: _userLevel) {
-    setProfileUser(prev => {
-      if (prev?.User) {
-        return {
-          ...prev,
-          User: {
-            ...prev?.User,
-            level,
-          },
-        }
-      }
-
-      return prev
-    })
-  }
 
   async function openLink(url: string) {
     await Linking.openURL(url)
@@ -70,7 +54,7 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
               style={styles.SettingsButton}
               isOwnProfile={isOwnProfile}
               profileUser={profileUser}
-              updateProfileLevel={updateProfileLevel}
+              updateProfile={() => getProfileUser(profileUserId)}
             />
           )}
         </Header>
@@ -97,6 +81,7 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
           <Text style={styles.title}>{profileUser?.name}</Text>
           {!!(isOwnProfile && user?.email) && <Text>{user?.email}</Text>}
           {profileUser?.User?.level === 'admin' && <Text>admin 🐨</Text>}
+          {profileUser?.User?.status === 0 && <Text>⛔ Suspensa</Text>}
         </Span>
         <Span style={styles.SocialMediaRow}>
           {profileUser?.instagramAccount && (

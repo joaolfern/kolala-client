@@ -15,7 +15,7 @@ export function getProfileSettingsOptions({
   const editPermission = 'Editar perfil'
   const reportPermission = 'Denunciar usuário'
   const banPermission = 'Suspender conta'
-  const unbanPermission = 'Restaurar Conta'
+  const unbanPermission = 'Restaurar conta'
   const promotePermission = 'Tornar administrador'
   const demotePermission = 'Remover administrador'
 
@@ -27,13 +27,12 @@ export function getProfileSettingsOptions({
     ...(isOwnProfile
       ? [editPermission]
       : [
-          reportPermission,
           ...(hasAdminPermission
             ? [
                 isBanned ? unbanPermission : banPermission,
                 target.level === 'user' ? promotePermission : demotePermission,
               ]
-            : []),
+            : [reportPermission]),
         ]),
     basePermission,
   ]

@@ -16,16 +16,25 @@ export type IUserUpdateProfileConfig = {
   id: number
 }
 
+export type IUserUpdateStatus = {
+  body: {
+    status: number
+  }
+  targetId: number
+}
+
 class User {
+  private path = 'auth/users'
+
   async getProfile (id: number) {
     return await Fetch<IProfileViewData>(
-      () => api.get(`auth/users/profile/${id}`)
+      () => api.get(`${this.path}/profile/${id}`)
     )
   }
 
   async updateProfile ({ body, id }: IUserUpdateProfileConfig) {
     return await Fetch<string>(
-      () => api.patch(`auth/users/profile/${id}`, body, {
+      () => api.patch(`${this.path}/profile/${id}`, body, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -35,11 +44,15 @@ class User {
 
   async promote ({ targetId, body }: IUserPromoteConfig)  {
     return await Fetch<string>(
-      () => api.post(`auth/users/promote/${targetId}`, body)
+      () => api.post(`${this.path}/promote/${targetId}`, body)
     )
   }
 
-
+  async updateStatsus ({ body, targetId }: IUserUpdateStatus) {
+    return await Fetch(
+      () => api.patch(`${this.path}/status/${targetId}`, body)
+    )
+  }
 }
 
 export default new User()
