@@ -7,6 +7,7 @@ import Text from '../../../components/Text/Text'
 import Colors from '../../../constants/Colors'
 import { IReport } from '../../../Models/Report'
 import {
+  REPORT_CATEGORY_RESOURCE,
   REPORT_STATUS_COLOR_RESOURCE,
   REPORT_STATUS_RESOURCE,
 } from '../constants'
@@ -45,7 +46,14 @@ function ReportCard({ report, style, reloadList, ...rest }: IProps) {
             </Text>
           </Span>
         </Span>
-        <Text style={styles.Description}>{report.description}</Text>
+        <Text style={[styles.TitleText, styles.MarginTop]}>
+          {
+            REPORT_CATEGORY_RESOURCE.find(
+              item => item.value === report.category
+            )?.label
+          }
+        </Text>
+        <Text>{report.description}</Text>
         <Text style={styles.Timestamp}>
           {dayjs(report.createdAt).format('HH:mm DD [de] MMM[.]')}
         </Text>
@@ -78,7 +86,7 @@ const styles = StyleSheet.create({
     marginLeft: 'auto',
     color: Colors.gray,
   },
-  Description: {
+  MarginTop: {
     marginTop: 14,
   },
 })
