@@ -53,6 +53,7 @@ export type RootStackParamList = {
   ReportForm: {
     target: IProfile
   }
+  EventsOverview: undefined
 }
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

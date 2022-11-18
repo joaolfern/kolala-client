@@ -26,6 +26,7 @@ import Chat from '../screens/Chat/Chat'
 import ProfileForm from '../screens/ProfileForm/ProfileForm'
 import Report from '../screens/Report/Report'
 import ReportForm from '../screens/ReportForm/ReportForm'
+import EventsOverview from '../screens/EventsOverview/EventsOverview'
 
 export default function Navigation() {
   return (
@@ -91,6 +92,11 @@ function RootNavigator() {
         <Stack.Screen
           name='EventDetails'
           component={EventDetails}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name='EventsOverview'
+          component={EventsOverview}
           options={{ headerShown: false }}
         />
         <Stack.Screen

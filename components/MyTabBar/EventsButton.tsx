@@ -19,10 +19,8 @@ function EventsButton() {
   const { markers } = useMarkers()
 
   const onPress = () => {
-    navigation.navigate('Events')
+    navigation.navigate('EventsOverview')
   }
-
-  // 🎈🎈 TODO COUNTER
 
   return (
     <Span style={styles.Wrapper}>

@@ -15,14 +15,11 @@ namespace EventRequestConfig {
     } & IFilters
   }
 }
-
-
 export interface IListRequestParams {
   arePast: boolean
 }
 
 export type IListRequestConfig = Omit<AxiosRequestConfig, 'params'> & { params: IListRequestParams }
-
 class Event {
   private path = 'auth/events'
 
@@ -152,5 +149,7 @@ export namespace IEvent {
     lng: number
     icon: keyof typeof MAP_ICONS
     title: string
+    address: string
+    datetime: string
   }
 }
