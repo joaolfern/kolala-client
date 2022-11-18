@@ -19,7 +19,7 @@ function ChatHeader() {
       />
       <Span style={styles.HeaderContent}>
         <Span style={styles.TitleGroup}>
-          <Header.Title style={styles.Title}>{event?.title}</Header.Title>
+          <Header.Title style={styles.Title}>{event?.title} </Header.Title>
           <Text style={styles.SubTitle}>
             {event?.Atendee?.length} participantes
           </Text>
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   },
   TitleGroup: {
     marginLeft: 14,
+    flex: 1,
   },
   Avatar: {
     width: 45,
@@ -53,7 +54,6 @@ const styles = StyleSheet.create({
   },
   Title: {
     marginRight: 14,
-    maxWidth: 190,
   },
   SubTitle: {
     fontSize: 16,
