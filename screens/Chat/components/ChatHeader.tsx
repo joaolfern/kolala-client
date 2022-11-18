@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   Title: {
     marginRight: 14,
-    maxWidth: 200,
+    maxWidth: 190,
   },
   SubTitle: {
     fontSize: 16,
