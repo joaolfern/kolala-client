@@ -12,7 +12,7 @@ import { selectUser } from '../../../store/userSlice'
 import { getProfileSettingsOptions } from '../utils'
 import User from '../../../Models/User'
 import { showToast } from '../../../utils/toast'
-import { IProfile, IProfileViewData } from '../../../types/Profile'
+import { IProfileViewData } from '../../../types/Profile'
 import { IUser, _userLevel } from '../../../types/User'
 import { useNavigation } from '@react-navigation/native'
 
@@ -71,12 +71,13 @@ function ProfileSettingsButton({
     }) => {
       const level = user.level
       const targetId = profileUser.User?.id
-      const targetLevel = profileUser.User?.level || 'user'
+
+      if (!profileUser.User) return
 
       const options = getProfileSettingsOptions({
         level,
         isOwnProfile,
-        targetLevel,
+        target: profileUser.User,
       })
       const cancelButtonIndex = options.indexOf('Cancelar')
 
