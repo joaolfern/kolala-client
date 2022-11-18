@@ -74,7 +74,9 @@ const styles = StyleSheet.create({
   },
   Timestamp: {
     fontSize: 14,
+    marginTop: 4,
     marginLeft: 'auto',
+    color: Colors.gray,
   },
   Description: {
     marginTop: 14,
