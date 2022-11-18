@@ -27,11 +27,12 @@ yarn run test
 
 👤 **joaoaoluiz**
 
-* Github: [@joaoaoluiz](https://github.com/joaoaoluiz)
+- Github: [@joaoaoluiz](https://github.com/joaoaoluiz)
 
 ## Show your support
 
-Give a ⭐️ if this project helped you!
+Give a ⭐️ if you find this project rad!
 
-***
+---
+
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
