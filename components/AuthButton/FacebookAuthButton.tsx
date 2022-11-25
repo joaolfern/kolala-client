@@ -4,16 +4,16 @@ import Button from '../Button/Button'
 import Text from '../Text/Text'
 import facebook from '../../assets/images/facebook.png'
 import * as WebBrowser from 'expo-web-browser'
-import * as Google from 'expo-auth-session/providers/google'
+import * as Facebook from 'expo-auth-session/providers/facebook'
 import { sendAccessTokenRequest } from './api'
 import authButtonStyle from './authButtonStyle'
 import Span from '../Span/Span'
-import { EXPO_CLIENT_ID } from '../../env'
+import { EXPO_FB_CLIENT_ID } from '../../env'
 WebBrowser.maybeCompleteAuthSession()
 
 function FacebookAuthButton() {
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    expoClientId: EXPO_CLIENT_ID,
+  const [request, response, promptAsync] = Facebook.useAuthRequest({
+    expoClientId: EXPO_FB_CLIENT_ID,
     iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
     androidClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
     webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
