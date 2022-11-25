@@ -1,5 +1,5 @@
 import { io } from "socket.io-client";
-import { REACT_APP_SERVER } from './api'
+import { REACT_APP_SERVER } from '../env'
 
 class WSService {
   instance: ReturnType<typeof io> | null = null

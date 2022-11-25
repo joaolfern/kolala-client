@@ -1,4 +1,4 @@
-import { useNavigationState } from '@react-navigation/native'
+import { useNavigation, useNavigationState } from '@react-navigation/native'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { StyleSheet } from 'react-native'
@@ -12,10 +12,8 @@ import Text from '../../components/Text/Text'
 import TextInput from '../../components/TextInput/TextInput'
 import Colors from '../../constants/Colors'
 import User, { IUserUpdateProfileConfig } from '../../Models/User'
-import { REACT_APP_SERVER } from '../../services/api'
 import { RootStackParamList } from '../../types'
 import { IProfile } from '../../types/Profile'
-import { showToast } from '../../utils/toast'
 import PictureButton from './components/PictureButton'
 import SocialMediaInput from './components/SocialMediaInput'
 
@@ -25,21 +23,21 @@ function makeFormData(data: ProfileFormEvent, formData: FormData) {
   Object.entries(data).forEach(([key, value]) => {
     switch (key) {
       case 'picture':
-        if (typeof value === 'string') {
-          const isHosted = value.includes(REACT_APP_SERVER)
-          if (isHosted) return
+        // if (typeof value === 'string') {
+        //   const isHosted = value.includes(REACT_APP_SERVER)
+        //   if (isHosted) return
 
-          let uriArray = value.split('.')
-          let fileType = uriArray[uriArray.length - 1]
+        //   let uriArray = value.split('.')
+        //   let fileType = uriArray[uriArray.length - 1]
 
-          const file: any = {
-            uri: value,
-            name: `${data.name}.${fileType}`,
-            type: `image/${fileType}`,
-          }
-          formData.append(key, file)
-          return
-        }
+        //   const file: any = {
+        //     uri: value,
+        //     name: `${data.name}.${fileType}`,
+        //     type: `image/${fileType}`,
+        //   }
+        //   formData.append(key, file)
+        //   return
+        // }
         return
       default:
         formData.append(key, value as any)
@@ -55,7 +53,7 @@ function ProfileForm() {
       state.routes.find(item => item.name === 'ProfileForm')
         ?.params as RootStackParamList['ProfileForm']
   )
-
+  const { goBack } = useNavigation()
   const { control, handleSubmit } = useForm<ProfileFormEvent>({
     defaultValues: profile,
   })
@@ -72,11 +70,10 @@ function ProfileForm() {
     try {
       await User.updateProfile(config)
     } catch (err) {
-      showToast('Ocorreu um problema')
-      console.log(err)
     } finally {
       setLoadingSubmit(false)
     }
+    goBack()
   }
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Linking, StyleSheet, TouchableOpacity } from 'react-native'
 import Header from '../../components/Header/Header'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
@@ -16,6 +16,7 @@ import ProfileSettings from './components/ProfileSettingsButton'
 import User from '../../Models/User'
 import { _userLevel } from '../../types/User'
 import SocialMediaIcon from '../../components/SocialMediaIcon/SocialMediaIcon'
+import { useFocusEffect } from '@react-navigation/native'
 
 function Profile({ route }: RootStackScreenProps<'Profile'>) {
   const { profileUserId } = route?.params
@@ -36,9 +37,11 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
     }
   }
 
-  useEffect(() => {
-    getProfileUser(profileUserId)
-  }, [user?.profile])
+  useFocusEffect(
+    useCallback(() => {
+      getProfileUser(profileUserId)
+    }, [user?.profile])
+  )
 
   async function openLink(url: string) {
     await Linking.openURL(url)

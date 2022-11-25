@@ -17,7 +17,7 @@ import Scroll from '../../components/Scroll/Scroll'
 import { useNavigation, useNavigationState } from '@react-navigation/native'
 import { showToast } from '../../utils/toast'
 import Event, { IEvent } from '../../Models/Event'
-import { REACT_APP_SERVER } from '../../services/api'
+import { REACT_APP_SERVER } from '../../env'
 const MapIcon = React.lazy(() => import('./../../components/MapIcon/MapIcon'))
 const LocationInput = React.lazy(
   () => import('../../components/LocationInput/LocationInput')
