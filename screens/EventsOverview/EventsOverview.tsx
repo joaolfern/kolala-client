@@ -119,7 +119,9 @@ const styles = StyleSheet.create({
   CardTitle: {
     fontWeight: 'bold',
   },
-  CardAddress: {},
+  CardAddress: {
+    flex: 1,
+  },
   CardContent: {
     flex: 1,
   },
