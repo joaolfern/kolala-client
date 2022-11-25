@@ -5,14 +5,13 @@ import Text from '../Text/Text'
 import google from '../../assets/images/google.png'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
-// @ts-ignore
-import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from '@env'
 import { sendAccessTokenRequest } from './api'
 import authButtonStyle from './authButtonStyle'
 import { setToken } from '../../store/tokenSlice'
 import { setUser } from '../../store/userSlice'
 import { useAppDispatch } from '../../store/hooks'
 import Span from '../Span/Span'
+import { ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from '../../env'
 WebBrowser.maybeCompleteAuthSession()
 
 function GoogleAuthButton() {

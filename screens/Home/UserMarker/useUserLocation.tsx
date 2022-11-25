@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Region } from 'react-native-maps'
 import * as Location from 'expo-location'
-import { ENVIRONMENT, GOOGLE_API_TOKEN } from '@env'
 import * as SecureStore from 'expo-secure-store'
 import { useAppDispatch, useAppSelector } from '../../../store/hooks'
 import {
@@ -9,6 +8,7 @@ import {
   selectUser,
   setLocation,
 } from '../../../store/userSlice'
+import { ENVIRONMENT, GOOGLE_API_TOKEN } from '../../../env'
 const MOCKED_LOCATION = {
   latitude: -23.4874549,
   longitude: -47.4991724,
@@ -55,13 +55,6 @@ function useUserLocation() {
     if (status !== 'granted') {
       console.log(`Location access denied`)
     }
-
-    // const cachedLocation = await tryCachedLocation()
-
-    // if (cachedLocation) {
-    //   return cachedLocation
-    // }
-
     console.log('🐨 env', ENVIRONMENT)
     const userLocation =
       ENVIRONMENT === `local` ? MOCKED_LOCATION : await getApiLocation()

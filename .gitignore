@@ -1,3 +1,4 @@
+env.ts
 node_modules/
 .expo/
 dist/
@@ -12,4 +13,3 @@ web-build/
 
 # macOS
 .DS_Store
-.env

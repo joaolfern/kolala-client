@@ -4,12 +4,11 @@ import {
   GooglePlacesAutocompleteProps,
   GooglePlacesAutocompleteRef,
 } from 'react-native-google-places-autocomplete'
-// @ts-ignore
-import { GOOGLE_API_TOKEN } from '@env'
 import Colors from '../../constants/Colors'
 import { useController } from 'react-hook-form'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
+import { GOOGLE_API_TOKEN } from '../../env'
 
 interface FormValueProps {
   address: string | undefined

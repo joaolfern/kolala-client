@@ -41,7 +41,6 @@
     "react-dom": "18.0.0",
     "react-hook-form": "^7.34.0",
     "react-native": "0.69.6",
-    "react-native-dotenv": "^3.3.1",
     "react-native-google-places-autocomplete": "^2.4.1",
     "react-native-maps": "0.31.1",
     "react-native-modal-datetime-picker": "^14.0.0",

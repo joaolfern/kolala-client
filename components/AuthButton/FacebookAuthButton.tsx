@@ -5,11 +5,10 @@ import Text from '../Text/Text'
 import facebook from '../../assets/images/facebook.png'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
-// @ts-ignore
-import { EXPO_CLIENT_ID } from '@env'
 import { sendAccessTokenRequest } from './api'
 import authButtonStyle from './authButtonStyle'
 import Span from '../Span/Span'
+import { EXPO_CLIENT_ID } from '../../env'
 WebBrowser.maybeCompleteAuthSession()
 
 function FacebookAuthButton() {
