@@ -6,7 +6,7 @@ import google from '../../assets/images/google.png'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
 // @ts-ignore
-import { EXPO_CLIENT_ID } from '@env'
+import { EXPO_CLIENT_ID, ANDROID_CLIENT_ID } from '@env'
 import { sendAccessTokenRequest } from './api'
 import authButtonStyle from './authButtonStyle'
 import { setToken } from '../../store/tokenSlice'
@@ -19,7 +19,7 @@ function GoogleAuthButton() {
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: EXPO_CLIENT_ID,
     iosClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
-    androidClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
+    androidClientId: ANDROID_CLIENT_ID,
     webClientId: 'GOOGLE_GUID.apps.googleusercontent.com',
   })
 
