@@ -1,17 +1,13 @@
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import React from 'react'
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import { View, StyleSheet } from 'react-native'
 import EventsButton from './EventsButton'
-import HomeButton from './HomeButton'
 import ProfileTabButton from './ProfileTabButton'
 
-function MyTabBar({ state, ...rest }: BottomTabBarProps) {
-  const [map] = state.routes
-
+function MyTabBar({}: BottomTabBarProps) {
   return (
     <View style={styles.TabBar}>
       <ProfileTabButton />
-      <HomeButton state={state} index={1} route={map} {...rest} />
       <EventsButton />
     </View>
   )

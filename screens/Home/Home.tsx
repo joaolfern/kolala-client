@@ -10,11 +10,16 @@ import { IEvent } from '../../Models/Event'
 import MapFilter from '../../components/MapFilter/MapFilter'
 import { useMapFilter } from '../../store/mapFilterSlice'
 import useMarkers from './hooks/useMarkers'
+import HomeButton from '../../components/MyTabBar/HomeButton'
 
 export default function Home() {
+  const mapRef = useRef<null | MapView>(null)
+
   const navigation = useNavigation()
   const { location } = useUserLocation()
   const { markers, requestMarkers } = useMarkers()
+  const [markersInterator, setMarkersInterator] = useState(0)
+
   const [mapRegion, setMapRegion] = useState<Region | null>(null)
 
   const { filters } = useMapFilter()
@@ -47,9 +52,16 @@ export default function Home() {
     if (location) setMapRegion(location)
   }, [location])
 
+  function focusMarker() {
+    const { lat, lng } = markers[markersInterator]
+    setMarkersInterator(prev => prev + 1)
+    mapRef.current?.pointForCoordinate({ latitude: lat, longitude: lng })
+  }
+
   return (
     <View style={styles.container}>
       <MapView
+        ref={mapRef}
         minZoomLevel={11}
         style={styles.map}
         showsMyLocationButton={false}
@@ -73,6 +85,7 @@ export default function Home() {
           )
         })}
       </MapView>
+      <HomeButton />
       <MapFilter />
       {showOverlay && <View style={styles.overlay} />}
     </View>
