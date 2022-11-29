@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react'
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
 import MapView, { Marker, Region } from 'react-native-maps'
 import mapStyle from '../../constants/mapStyle'
 import View from '../../components/View/View'
@@ -52,8 +52,9 @@ export default function Home() {
     if (location) setMapRegion(location)
   }, [location])
 
-  function focusMarker() {
-    const { lat, lng } = markers[markersInterator]
+  function focusNextMarker() {
+    const { lat, lng } = markers?.[markersInterator]
+    if (!lat || !lng) return
     setMarkersInterator(prev => prev + 1)
     mapRef.current?.pointForCoordinate({ latitude: lat, longitude: lng })
   }
@@ -85,8 +86,8 @@ export default function Home() {
           )
         })}
       </MapView>
-      <HomeButton />
       <MapFilter />
+      <HomeButton onPress={focusNextMarker} />
       {showOverlay && <View style={styles.overlay} />}
     </View>
   )

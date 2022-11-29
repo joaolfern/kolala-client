@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { Image, StyleSheet } from 'react-native'
 import Button from '../Button/Button'
 import Text from '../Text/Text'

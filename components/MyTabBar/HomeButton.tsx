@@ -11,31 +11,22 @@ type IProps = TouchableOpacityProps & {}
 
 function HomeButton({ ...rest }: IProps) {
   return (
-    <Span style={styles.Wrapper}>
-      <TouchableOpacity
-        accessibilityRole='button'
-        style={styles.Button}
-        {...rest}
-      >
-        <Compass />
-      </TouchableOpacity>
-    </Span>
+    <TouchableOpacity
+      style={styles.Button}
+      onPressIn={() => console.log('eooo')}
+    >
+      <Compass />
+    </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
-  Wrapper: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  Button: {},
-  Icon: {
-    aspectRatio: 1,
-    width: 51,
-    height: 51,
+  Button: {
+    marginTop: 'auto',
+    zIndex: 1,
+    height: 50,
+    width: 50,
+    marginBottom: 16,
   },
 })
 
