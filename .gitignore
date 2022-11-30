@@ -1,4 +1,4 @@
-env.ts
+android/*
 node_modules/
 .expo/
 dist/

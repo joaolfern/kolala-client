@@ -23,7 +23,12 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png"
       },
-      "package": "com.lucariooo.kolala"
+      "package": "com.lucariooo.kolala",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyCPoBRfc1HtIhq0czj3jdhNgCC4b3eaccU"
+        }
+      }
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
