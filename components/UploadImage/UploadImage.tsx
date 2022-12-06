@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react'
 import {
   Image,
-  ScrollView,
   StyleSheet,
   TouchableOpacity,
   ViewProps,
+  FlatList,
 } from 'react-native'
 import Text from '../Text/Text'
 import View from '../View/View'
@@ -66,6 +66,7 @@ function UploadImage({
   ...rest
 }: UploadImageProps) {
   const [list, setList] = useState<IEvent.Image[]>(defaultValue)
+  const listRef = useRef<FlatList>(null)
 
   const { field } = useController({
     name,
@@ -131,32 +132,41 @@ function UploadImage({
 
       const eventList = newList.map(item => item.url)
       onChange(eventList)
+      listRef?.current?.scrollToIndex?.({ index: list.length - 1 })
+
       return newList
     })
   }
 
-  const { onChange, value } = field
+  const { onChange } = field
 
   return (
-    <ScrollView style={styles.Container} horizontal={true}>
-      {list.length < listMax && (
-        <TouchableOpacity onPress={handleChoosePhoto}>
-          <View style={[styles.Input, styles.ImageItem]} {...rest}>
-            <CameraSVG style={styles.Icon} />
-            <Text style={styles.Title}>Inclua fotos</Text>
-            <Text>{!!listMax && `${list.length} de ${listMax}`}</Text>
-          </View>
-        </TouchableOpacity>
-      )}
-      {list.map((item, idx) => (
+    <FlatList
+      ref={listRef}
+      ListHeaderComponent={
+        <>
+          {list.length < listMax && (
+            <TouchableOpacity onPress={handleChoosePhoto}>
+              <View style={[styles.Input, styles.ImageItem]} {...rest}>
+                <CameraSVG style={styles.Icon} />
+                <Text style={styles.Title}>Inclua fotos</Text>
+                <Text>{!!listMax && `${list.length} de ${listMax}`}</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+        </>
+      }
+      data={list}
+      horizontal={true}
+      renderItem={({ item, index }) => (
         <ImageItem
           item={item}
           remove={remove}
-          key={item.url + idx}
-          isLastItem={idx === list.length - 1}
+          key={item.url}
+          isLastItem={index === list.length - 1}
         />
-      ))}
-    </ScrollView>
+      )}
+    />
   )
 }
 
