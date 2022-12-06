@@ -23,7 +23,7 @@
     "@react-navigation/native": "^6.0.10",
     "@react-navigation/native-stack": "^6.6.2",
     "@reduxjs/toolkit": "^1.8.5",
-    "axios": "^0.27.2",
+    "axios": "^1.2.1",
     "dayjs": "^1.11.5",
     "expo": "~46.0.17",
     "expo-asset": "~8.6.1",
