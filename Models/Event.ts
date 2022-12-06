@@ -19,6 +19,7 @@ export interface IListRequestParams {
   arePast: boolean
 }
 
+
 export type IListRequestConfig = Omit<AxiosRequestConfig, 'params'> & { params: IListRequestParams }
 class Event {
   private path = 'auth/events'
@@ -125,6 +126,7 @@ export namespace IEvent {
   }
 
   export interface FormSubmitEvent {
+    address?: string
     title: string
     image: string[]
     category: number

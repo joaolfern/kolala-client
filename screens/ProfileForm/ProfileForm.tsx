@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { StyleSheet } from 'react-native'
 import Button from '../../components/Button/Button'
+import FormItem from '../../components/FormItem/FormItem'
 import Header from '../../components/Header/Header'
 import Label from '../../components/Label/Label'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
@@ -54,7 +55,11 @@ function ProfileForm() {
         ?.params as RootStackParamList['ProfileForm']
   )
   const { goBack } = useNavigation()
-  const { control, handleSubmit } = useForm<ProfileFormEvent>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ProfileFormEvent>({
     defaultValues: profile,
   })
 
@@ -85,32 +90,35 @@ function ProfileForm() {
         <Span style={styles.Row}>
           <PictureButton name='picture' profile={profile} />
         </Span>
-        <Span>
-          <Label>Nome</Label>
+
+        <FormItem label='Nome' error={errors.name}>
           <TextInput
             name='name'
             control={control}
-            placeholder='Como outros irão te chamar'
+            placeholder='Como outros te chamarão'
           />
-        </Span>
+        </FormItem>
         <Label>Outras redes sociais</Label>
         <SocialMediaInput
           control={control}
           name='instagramAccount'
           icon='instagram'
           placeholder='Seu usuário do instagram'
+          errors={errors}
         />
         <SocialMediaInput
           control={control}
           name='twitterAccount'
           icon='twitter'
           placeholder='Seu usuário do twitter'
+          errors={errors}
         />
         <SocialMediaInput
           control={control}
           name='facebookAccount'
           icon='facebook'
           placeholder='Seu usuário do facebook'
+          errors={errors}
         />
         <Button
           style={styles.SubmitButton}

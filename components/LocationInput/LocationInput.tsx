@@ -20,9 +20,16 @@ interface IProps extends Partial<GooglePlacesAutocompleteProps> {
   name: string
   control: any
   defaultValue: FormValueProps
+  clearError(): void
 }
 
-function LocationInput({ control, name, defaultValue, ...rest }: IProps) {
+function LocationInput({
+  control,
+  name,
+  defaultValue,
+  clearError,
+  ...rest
+}: IProps) {
   const ref = useRef<GooglePlacesAutocompleteRef>(null)
   const shouldSetDefault = useRef(true)
   const { field } = useController({
@@ -58,6 +65,7 @@ function LocationInput({ control, name, defaultValue, ...rest }: IProps) {
           address: details?.name,
         }
         onChange(data || {})
+        clearError()
       }}
       debounce={800}
       keyboardShouldPersistTaps='always'
@@ -84,7 +92,6 @@ function LocationInput({ control, name, defaultValue, ...rest }: IProps) {
 
 const style: GooglePlacesAutocompleteProps['styles'] = {
   container: {
-    marginBottom: 20,
     justifyContent: 'center',
   },
   textInput: {

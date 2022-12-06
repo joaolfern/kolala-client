@@ -15,7 +15,12 @@ type IProps = Omit<PickerSelectProps, 'onValueChange'> & {
   defaultValue?: string
 }
 
-export default function Select({ name, control, defaultValue, ...rest }: IProps) {
+export default function Select({
+  name,
+  control,
+  defaultValue,
+  ...rest
+}: IProps) {
   const { field } = useController({
     name,
     control,
@@ -38,7 +43,7 @@ export default function Select({ name, control, defaultValue, ...rest }: IProps)
         style={[
           styles.Arrow,
           {
-            transform: [{ translateY: -21 }],
+            transform: [{ translateY: -10 }],
           },
         ]}
       />
@@ -53,7 +58,6 @@ const style: PickerStyle = {
     borderRadius: 10,
     minHeight: 58,
     color: Colors.text,
-    marginBottom: 25,
     fontSize: 18,
     paddingHorizontal: 20,
     paddingRight: 30,
@@ -67,7 +71,6 @@ const style: PickerStyle = {
     borderRadius: 10,
     minHeight: 58,
     color: Colors.text,
-    marginBottom: 25,
     fontSize: 18,
     paddingHorizontal: 20,
     paddingRight: 30,

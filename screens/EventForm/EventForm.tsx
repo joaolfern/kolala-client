@@ -7,7 +7,7 @@ import TextInput from '../../components/TextInput/TextInput'
 import Label from '../../components/Label/Label'
 import Button from '../../components/Button/Button'
 import Colors from '../../constants/Colors'
-import { useForm } from 'react-hook-form'
+import { FieldError, useForm } from 'react-hook-form'
 import Textarea from '../../components/Textarea/Textarea'
 import Select from '../../components/Select/Select'
 import { CATEGORY_RESOURCE } from './constants'
@@ -18,6 +18,8 @@ import { useNavigation, useNavigationState } from '@react-navigation/native'
 import { showToast } from '../../utils/toast'
 import Event, { IEvent } from '../../Models/Event'
 import { REACT_APP_SERVER } from '../../env'
+import FormItem from '../../components/FormItem/FormItem'
+import Span from '../../components/Span/Span'
 const MapIcon = React.lazy(() => import('./../../components/MapIcon/MapIcon'))
 const LocationInput = React.lazy(
   () => import('../../components/LocationInput/LocationInput')
@@ -74,6 +76,8 @@ function EventForm() {
     handleSubmit,
     control,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<IEvent.FormSubmitEvent>({
     defaultValues: details ? formatDetailsToForm(details) : undefined,
@@ -85,6 +89,7 @@ function EventForm() {
 
   function makeFormData(data: IEvent.FormSubmitEvent, formData: FormData) {
     Object.entries(data).forEach(([key, value]) => {
+      if (value === undefined) return
       switch (key) {
         case 'image':
           value?.map?.((uri: string | IEvent.Image[], idx: number) => {
@@ -108,7 +113,7 @@ function EventForm() {
           return
         case 'location':
           Object.entries(value).map(([formKey, formValue]) => {
-            formData.append(formKey, formValue as string)
+            if (formValue) formData.append(formKey, formValue as string)
           })
 
           return
@@ -127,8 +132,21 @@ function EventForm() {
     try {
       if (details) await updateForm(data, formData)
       else await createForm(formData)
-    } catch (err) {
-      showToast('Ocorreu um problema')
+    } catch (err: any) {
+      if (err) {
+        if (err._message) showToast('Ocorreu um problema')
+
+        const formMessages = err?.response?.data
+        if (formMessages) {
+          Object.entries(formMessages).map(
+            ([key, message]: [string, unknown]) => {
+              setError(key as keyof IEvent.FormSubmitEvent, {
+                message: message as string,
+              })
+            }
+          )
+        }
+      }
     } finally {
       setLoadingSubmit(false)
     }
@@ -165,61 +183,75 @@ function EventForm() {
         <Header>
           <Header.Title>Criar evento</Header.Title>
         </Header>
-        <UploadImage
-          control={control}
-          name='image'
-          style={styles.marginBottom}
-          defaultValue={details?.EventImage}
-        />
 
-        <Label>Título</Label>
-        <TextInput
-          name='title'
-          control={control}
-          placeholder='ex: Festival de cinema brasileiro'
-        />
-
-        <Label>Descrição</Label>
-        <Textarea
-          name='description'
-          control={control}
-          placeholder='ex: Grupo que se reúne semanalmente para apreciar os clássicos da sétima arte nacional, debater e compartilhar experiências.'
-        />
-
-        <Label>Local</Label>
-        <Suspense fallback={<TextInput control={control} name='' />}>
-          <LocationInput
-            name='location'
+        <FormItem label={undefined} error={errors.image as FieldError}>
+          <UploadImage
             control={control}
-            styles={styles.marginBottom}
-            defaultValue={{
-              lat,
-              lng,
-              address,
-            }}
+            name='image'
+            style={styles.marginBottom}
+            defaultValue={details?.EventImage}
           />
-        </Suspense>
+        </FormItem>
 
-        <Label>Data e hora</Label>
-        <DateInput
-          displayMode='long'
-          control={control}
-          name='datetime'
-          style={styles.ItemMarginBottom}
-        />
+        <FormItem label='Título' error={errors.title}>
+          <TextInput
+            name='title'
+            control={control}
+            placeholder='ex: Festival de cinema brasileiro'
+          />
+        </FormItem>
 
-        <Label>Categoria</Label>
-        <Select control={control} name='category' items={CATEGORY_RESOURCE} />
+        <FormItem label='Descrição' error={errors.description}>
+          <Textarea
+            name='description'
+            control={control}
+            placeholder='ex: Grupo que se reúne semanalmente para apreciar os clássicos da sétima arte nacional, debater e compartilhar experiências.'
+          />
+        </FormItem>
 
-        <Label>Ícone no mapa</Label>
-        <Suspense fallback={<TextInput control={control} name='' />}>
-          <MapIcon control={control} name='icon' />
-        </Suspense>
+        <FormItem label='Local' error={errors.address as FieldError}>
+          <Suspense fallback={<TextInput control={control} name='' />}>
+            <LocationInput
+              name='location'
+              control={control}
+              styles={styles.marginBottom}
+              clearError={() => setError('address', { message: undefined })}
+              defaultValue={{
+                lat,
+                lng,
+                address,
+              }}
+            />
+          </Suspense>
+        </FormItem>
+
+        <FormItem label='Data e hora' error={errors.datetime as FieldError}>
+          <DateInput
+            displayMode='long'
+            control={control}
+            name='datetime'
+            style={styles.ItemMarginBottom}
+          />
+        </FormItem>
+
+        <FormItem label='Categoria' error={errors.category}>
+          <Select control={control} name='category' items={CATEGORY_RESOURCE} />
+        </FormItem>
+
+        <Span>
+          <Label>Ícone no mapa</Label>
+          <Suspense fallback={<TextInput control={control} name='' />}>
+            <MapIcon control={control} name='icon' />
+          </Suspense>
+        </Span>
 
         <Button
           loading={loadingSubmit}
           style={styles.Button}
-          onPress={handleSubmit(onSubmit)}
+          onPress={e => {
+            clearErrors()
+            handleSubmit(onSubmit)(e)
+          }}
         >
           <Text style={styles.ButtonText}>
             {isEditing ? 'Editar' : 'Criar'} evento
@@ -245,9 +277,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 50,
   },
-  ItemMarginBottom: {
-    marginBottom: 21,
-  },
+  ItemMarginBottom: {},
   ButtonText: {
     color: Colors.altText,
     fontWeight: '600',

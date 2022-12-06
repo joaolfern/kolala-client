@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   Textarea: {
     textAlignVertical: 'top',
     paddingVertical: 10,
+    marginBottom: 0,
   },
 })
 

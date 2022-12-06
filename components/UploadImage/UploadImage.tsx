@@ -163,7 +163,6 @@ function UploadImage({
 const styles = StyleSheet.create({
   Container: {
     flexDirection: 'row',
-    paddingBottom: 16,
   },
   ImageItemWrapper: {
     position: 'relative',
