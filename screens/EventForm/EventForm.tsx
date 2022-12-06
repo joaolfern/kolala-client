@@ -102,7 +102,7 @@ function EventForm() {
 
               const file: any = {
                 uri,
-                name: `${data.title} (${idx}).${fileType}`,
+                name: `${data.title}(${idx}).${fileType}`,
                 type: `image/${fileType}`,
               }
               formData.append(`${key}[]`, file)

@@ -26,7 +26,6 @@ import { getEventDetailsMenuOptions, transformDetailsToListItem } from './utils'
 import ModalWrapper from '../ModalWrapper/ModalWrapper'
 import EllipsisButton from '../EllipsisButton/EllipsisButton'
 import EventItemChatButton from '../EventItem/components/EventItemChatButton/EventItemChatButton'
-import useReport from '../../hooks/useReport'
 
 export default function EventDetails() {
   const preview = useNavigationState(
