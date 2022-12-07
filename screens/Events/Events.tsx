@@ -12,22 +12,15 @@ import Spinner from '../../components/Spinner/Spinner'
 import Event, { IEvent } from '../../Models/Event'
 import EventListSectionTitle from './components/EventListSectionTitle/EventListSectionTitle'
 import NoResultMessage from './components/NoResultMessage/NoResultMessage'
+import CreateEventButton from '../../components/CreateEventButton/CreateEventButton'
 
 function EventListHeader() {
-  const navigation = useNavigation()
-
-  const onPress = () => {
-    navigation.navigate('EventForm')
-  }
-
   return (
     <Span style={styles.EventListHeader}>
       <Header>
         <Header.Title>Seus eventos</Header.Title>
       </Header>
-      <Button onPress={onPress} style={styles.CreateButton}>
-        <Text style={styles.CreateButtonText}>Criar evento</Text>
-      </Button>
+      <CreateEventButton />
     </Span>
   )
 }
@@ -188,13 +181,6 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     padding: 16,
-  },
-  CreateButton: {
-    alignSelf: 'flex-start',
-    marginLeft: 'auto',
-  },
-  CreateButtonText: {
-    color: Colors.altText,
   },
   loadingContainer: {
     padding: 16,

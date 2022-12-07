@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import React from 'react'
 import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import Avatar from '../../components/Avatar/Avatar'
+import CreateEventButton from '../../components/CreateEventButton/CreateEventButton'
 import Header from '../../components/Header/Header'
 import ModalWrapper from '../../components/ModalWrapper/ModalWrapper'
 import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
@@ -36,23 +37,27 @@ function EventsOverview() {
           <Header>
             <Header.Title>Eventos encontrados</Header.Title>
           </Header>
-          <TouchableOpacity
-            onPress={navigateToReports}
-            style={[styles.MyReportsButton, styles.Row]}
-          >
-            <MaterialIcons
-              style={styles.DescriptionIcon}
-              name='campaign'
-              color={Colors.orangeColor}
-              size={24}
-            />
-            <Text style={styles.MyReportsText}>Minhas denúncias</Text>
-          </TouchableOpacity>
+          <Span style={styles.HeaderRow}>
+            <CreateEventButton />
+
+            <TouchableOpacity
+              onPress={navigateToReports}
+              style={[styles.MyReportsButton, styles.Row]}
+            >
+              <MaterialIcons
+                style={styles.DescriptionIcon}
+                name='campaign'
+                color={Colors.orangeColor}
+                size={24}
+              />
+              <Text style={styles.MyReportsText}>Minhas denúncias</Text>
+            </TouchableOpacity>
+          </Span>
         </SafeAreaView>
       }
       style={styles.Container}
       data={markers}
-      renderItem={({ item, index }) => {
+      renderItem={({ item }) => {
         return (
           <TouchableOpacity
             style={styles.Card}
@@ -100,6 +105,9 @@ const styles = StyleSheet.create({
   ContainerTitle: {
     fontWeight: 'bold',
     fontSize: 24,
+  },
+  HeaderRow: {
+    flexDirection: 'column-reverse',
   },
   MyReportsButton: {
     marginBottom: 24,
