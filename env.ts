@@ -1,4 +1,4 @@
-export const REACT_APP_SERVER = 'http://192.168.1.7:3333/'
+export const REACT_APP_SERVER = 'https://koalala.loca.lt'
 // 'https://koalala.loca.lt'
 export const ENVIRONMENT = 'local'
 export const ANDROID_CLIENT_ID = '925600786502-85n72luaobffp5kakds734avc8bfa6c4.apps.googleusercontent.com'

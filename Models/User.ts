@@ -37,7 +37,10 @@ class User {
       () => api.patch(`${this.path}/profile/${id}`, body, {
         headers: {
           'Content-Type': 'multipart/form-data',
-        }
+        },
+        transformRequest: (data, headers) => {
+          return body
+        },
       })
     )
   }

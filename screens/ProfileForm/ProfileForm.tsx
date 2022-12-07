@@ -12,7 +12,10 @@ import Span from '../../components/Span/Span'
 import Text from '../../components/Text/Text'
 import TextInput from '../../components/TextInput/TextInput'
 import Colors from '../../constants/Colors'
+import { REACT_APP_SERVER } from '../../env'
 import User, { IUserUpdateProfileConfig } from '../../Models/User'
+import { useAppDispatch } from '../../store/hooks'
+import { setUser, setUserProfile } from '../../store/userSlice'
 import { RootStackParamList } from '../../types'
 import { IProfile } from '../../types/Profile'
 import PictureButton from './components/PictureButton'
@@ -24,21 +27,21 @@ function makeFormData(data: ProfileFormEvent, formData: FormData) {
   Object.entries(data).forEach(([key, value]) => {
     switch (key) {
       case 'picture':
-        // if (typeof value === 'string') {
-        //   const isHosted = value.includes(REACT_APP_SERVER)
-        //   if (isHosted) return
+        if (typeof value === 'string') {
+          const isHosted = value.includes(REACT_APP_SERVER)
+          if (isHosted) return
 
-        //   let uriArray = value.split('.')
-        //   let fileType = uriArray[uriArray.length - 1]
+          let uriArray = value.split('.')
+          let fileType = uriArray[uriArray.length - 1]
 
-        //   const file: any = {
-        //     uri: value,
-        //     name: `${data.name}.${fileType}`,
-        //     type: `image/${fileType}`,
-        //   }
-        //   formData.append(key, file)
-        //   return
-        // }
+          const file: any = {
+            uri: value,
+            name: `${data.name?.replace(/ /g, '-')}.${fileType}`,
+            type: `image/${fileType}`,
+          }
+          formData.append(key, file)
+          return
+        }
         return
       default:
         formData.append(key, value as any)
@@ -54,6 +57,7 @@ function ProfileForm() {
       state.routes.find(item => item.name === 'ProfileForm')
         ?.params as RootStackParamList['ProfileForm']
   )
+  const dispatch = useAppDispatch()
   const { goBack } = useNavigation()
   const {
     control,
@@ -76,10 +80,27 @@ function ProfileForm() {
       await User.updateProfile(config)
     } catch (err) {
     } finally {
-      setLoadingSubmit(false)
+      setTimeout(() => {
+        goBack()
+        setLoadingSubmit(false)
+        updateStoredProfile(profile.id)
+      }, 5000)
+      // see
+      // https://github.com/axios/axios/issues/4499
     }
-    goBack()
   }
+
+  async function updateStoredProfile(userId: number) {
+    try {
+      const response = await User.getProfile(userId)
+      const profile = response.data.data as IProfile
+      dispatch(setUserProfile(profile))
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  console.log(profile.picture)
 
   return (
     <Scroll style={styles.Container}>
@@ -88,7 +109,11 @@ function ProfileForm() {
           <Header.Title>Editar perfil</Header.Title>
         </Header>
         <Span style={styles.Row}>
-          <PictureButton name='picture' profile={profile} />
+          <PictureButton
+            name='picture'
+            defaultValue={profile.picture}
+            control={control}
+          />
         </Span>
 
         <FormItem label='Nome' error={errors.name}>

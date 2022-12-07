@@ -24,6 +24,15 @@ const userSlice = createSlice({
         user: action.payload
       }
     ),
+    setUserProfile: (state, action: PayloadAction<IUser['profile']>) => (
+      state = {
+        ...state,
+        user: {
+          ...(state.user as IUser),
+          profile: action.payload
+        }
+      }
+    ),
     clearUser: (state, action) => {
       SecureStore.deleteItemAsync('location')
       return state = initialState
@@ -50,7 +59,7 @@ const userSlice = createSlice({
 })
 
 
-export const { setUser, clearUser, setLocation, clearLocation } = userSlice.actions
+export const { setUser, setUserProfile, clearUser, setLocation, clearLocation } = userSlice.actions
 
 export const selectUser = (state: { user: IUserInitialState } ) => state.user
 

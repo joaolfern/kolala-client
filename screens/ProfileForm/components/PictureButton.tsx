@@ -3,19 +3,46 @@ import React from 'react'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 import Avatar from '../../../components/Avatar/Avatar'
 import Colors from '../../../constants/Colors'
+import useAskForImages from '../../../hooks/useAskForImages'
 import { IProfileViewData } from '../../../types/Profile'
 import { ProfileFormEvent } from '../ProfileForm'
+import * as ImagePicker from 'expo-image-picker'
+import { Control, useController } from 'react-hook-form'
 
 interface IProps {
-  profile: IProfileViewData
   name: keyof ProfileFormEvent
+  control: Control<ProfileFormEvent>
+  defaultValue?: string
 }
 
-// 🎈🎈 TODO
+function PictureButton({ control, name, defaultValue }: IProps) {
+  const { field } = useController({
+    name,
+    control,
+    defaultValue,
+  })
+  const { onChange, value } = field
+  const { handleCameraPermission } = useAskForImages()
 
-function PictureButton({ profile }: IProps) {
+  async function launchGallery() {
+    const grantedPermission = await handleCameraPermission()
+    if (!grantedPermission) return
+
+    let result = (await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 1,
+      selectionLimit: 1,
+      allowsMultipleSelection: false,
+    })) as ImagePicker.ImageInfo | ImagePicker.ImagePickerMultipleResult
+
+    if (!result.cancelled) {
+      const uriItem = (result as ImagePicker.ImageInfo).uri
+      onChange(uriItem)
+    }
+  }
+
   return (
-    <TouchableOpacity style={styles.PictureButton}>
+    <TouchableOpacity style={styles.PictureButton} onPress={launchGallery}>
       <MaterialIcons
         style={styles.PictureIcon}
         name='camera-alt'
@@ -24,7 +51,7 @@ function PictureButton({ profile }: IProps) {
       />
       <Avatar
         style={styles.Picture}
-        source={profile?.picture ? { uri: profile.picture } : undefined}
+        source={value ? { uri: value as string } : undefined}
       />
     </TouchableOpacity>
   )

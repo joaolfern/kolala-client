@@ -12,10 +12,10 @@ import CameraSVG from '../../assets/images/camera.svg'
 import Colors from '../../constants/Colors'
 import * as ImagePicker from 'expo-image-picker'
 import { useController } from 'react-hook-form'
-import Constants from 'expo-constants'
 import Span from '../Span/Span'
 import { FontAwesome5 } from '@expo/vector-icons'
 import { IEvent } from '../../Models/Event'
+import useAskForImages from '../../hooks/useAskForImages'
 
 type ImageItemProps = {
   item: IEvent.Image
@@ -67,6 +67,7 @@ function UploadImage({
 }: UploadImageProps) {
   const [list, setList] = useState<IEvent.Image[]>(defaultValue)
   const listRef = useRef<FlatList>(null)
+  const { handleCameraPermission } = useAskForImages()
 
   const { field } = useController({
     name,
@@ -74,26 +75,8 @@ function UploadImage({
     defaultValue: defaultValue.map(image => image.url),
   })
 
-  async function handleCameraPermission() {
-    if (Constants?.platform?.ios) {
-      const cameraRollStatus =
-        await ImagePicker.requestMediaLibraryPermissionsAsync()
-      const cameraStatus = await ImagePicker.requestCameraPermissionsAsync()
-      if (
-        cameraRollStatus.status !== 'granted' ||
-        cameraStatus.status !== 'granted'
-      ) {
-        alert('Sorry, we need these permissions to make this work!')
-        return false
-      }
-    }
-
-    return true
-  }
-
   const handleChoosePhoto = async () => {
     const grantedPermission = await handleCameraPermission()
-
     if (!grantedPermission) return
 
     let result = (await ImagePicker.launchImageLibraryAsync({
