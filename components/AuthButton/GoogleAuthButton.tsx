@@ -12,6 +12,7 @@ import { setUser } from '../../store/userSlice'
 import { useAppDispatch } from '../../store/hooks'
 import Span from '../Span/Span'
 import { ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from '../../env'
+import { showToast } from '../../utils/toast'
 WebBrowser.maybeCompleteAuthSession()
 
 function GoogleAuthButton() {
@@ -34,7 +35,10 @@ function GoogleAuthButton() {
 
         if (token) dispatch(setToken(token))
       } catch (err: any) {
-        console.log(err.message)
+        const message = err?.response?.data
+        if (message) {
+          showToast(message)
+        }
       }
     }
 
