@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import React, { ReactNode, useState } from 'react'
+import React, { ReactNode, useMemo, useState } from 'react'
 import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import Colors from '../../constants/Colors'
 import Event, { IEvent } from '../../Models/Event'
@@ -39,7 +39,12 @@ function EventDetailsButton({
 }: IEventDetailsButtonProps) {
   const { user } = useAppSelector(selectUser)
   const isAuthor = event?.authorId === user?.id
-  const isParticipating = event?.Atendee.find(user => user.id === user.id)
+  const isParticipating = useMemo(() => {
+    return event?.Atendee.some(atendee => {
+      return user?.id === atendee.userId
+    })
+  }, [event?.Atendee, user?.id])
+
   const navigation = useNavigation()
   const [loadingButton, setLoadingButton] = useState(false)
 
