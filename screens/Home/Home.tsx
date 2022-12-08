@@ -4,7 +4,11 @@ import MapView, { Marker, Region } from 'react-native-maps'
 import mapStyle from '../../constants/mapStyle'
 import View from '../../components/View/View'
 import useUserLocation from './UserMarker/useUserLocation'
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import {
+  useFocusEffect,
+  useIsFocused,
+  useNavigation,
+} from '@react-navigation/native'
 import { MAP_ICONS } from '../EventForm/constants'
 import { IEvent } from '../../Models/Event'
 import MapFilter from '../../components/MapFilter/MapFilter'
@@ -19,7 +23,7 @@ export default function Home() {
   const { location } = useUserLocation()
   const { markers, requestMarkers } = useMarkers()
   const [markersInterator, setMarkersInterator] = useState(0)
-
+  const isFocused = useIsFocused()
   const [mapRegion, setMapRegion] = useState<Region | null>(null)
 
   const { filters } = useMapFilter()
@@ -42,11 +46,9 @@ export default function Home() {
     }, [navigation])
   )
 
-  useFocusEffect(
-    useCallback(() => {
-      if (location) requestMarkers(location, filters)
-    }, [location, JSON.stringify(filters)])
-  )
+  useEffect(() => {
+    if (location) requestMarkers(location, filters)
+  }, [isFocused, location, JSON.stringify(filters)])
 
   useEffect(() => {
     if (location) setMapRegion(location)
