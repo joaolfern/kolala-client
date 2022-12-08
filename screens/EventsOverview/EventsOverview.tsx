@@ -13,6 +13,7 @@ import Text from '../../components/Text/Text'
 import Colors from '../../constants/Colors'
 import { IEvent } from '../../Models/Event'
 import { MAP_ICONS } from '../EventForm/constants'
+import NoResultMessage from '../Events/components/NoResultMessage/NoResultMessage'
 import useMarkers from '../Home/hooks/useMarkers'
 
 function EventsOverview() {
@@ -57,6 +58,7 @@ function EventsOverview() {
       }
       style={styles.Container}
       data={markers}
+      ListEmptyComponent={NoResultMessage}
       renderItem={({ item }) => {
         return (
           <TouchableOpacity
@@ -108,9 +110,10 @@ const styles = StyleSheet.create({
   },
   HeaderRow: {
     flexDirection: 'column-reverse',
+    marginBottom: 24,
   },
   MyReportsButton: {
-    marginBottom: 24,
+    marginBottom: 18,
     marginLeft: 'auto',
   },
   MyReportsText: {
