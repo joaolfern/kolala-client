@@ -20,6 +20,9 @@ import Event, { IEvent } from '../../Models/Event'
 import { REACT_APP_SERVER } from '../../env'
 import FormItem from '../../components/FormItem/FormItem'
 import Span from '../../components/Span/Span'
+import useMarkers from '../Home/hooks/useMarkers'
+import useUserLocation from '../Home/UserMarker/useUserLocation'
+import { useMapFilter } from '../../store/mapFilterSlice'
 const MapIcon = React.lazy(() => import('./../../components/MapIcon/MapIcon'))
 const LocationInput = React.lazy(
   () => import('../../components/LocationInput/LocationInput')
@@ -71,6 +74,9 @@ function EventForm() {
   const [loadingSubmit, setLoadingSubmit] = useState(false)
   const originalImagesRef = useRef(details?.EventImage || [])
   const navigation = useNavigation()
+  const { requestMarkers } = useMarkers()
+  const { location } = useUserLocation()
+  const { filters } = useMapFilter()
 
   const {
     handleSubmit,
@@ -132,6 +138,7 @@ function EventForm() {
     try {
       if (details) await updateForm(data, formData)
       else await createForm(formData)
+      if (location) requestMarkers(location, filters)
     } catch (err: any) {
       if (err) {
         if (err._message) showToast('Ocorreu um problema')
