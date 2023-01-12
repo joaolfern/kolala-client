@@ -28,15 +28,15 @@ function PictureButton({ control, name, defaultValue }: IProps) {
     const grantedPermission = await handleCameraPermission()
     if (!grantedPermission) return
 
-    let result = (await ImagePicker.launchImageLibraryAsync({
+    let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       selectionLimit: 1,
       allowsMultipleSelection: false,
-    })) as ImagePicker.ImageInfo | ImagePicker.ImagePickerMultipleResult
+    })
 
-    if (!result.cancelled) {
-      const uriItem = (result as ImagePicker.ImageInfo).uri
+    if (!result.canceled) {
+      const uriItem = result.assets[0].uri
       onChange(uriItem)
     }
   }

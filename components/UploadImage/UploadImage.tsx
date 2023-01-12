@@ -79,15 +79,15 @@ function UploadImage({
     const grantedPermission = await handleCameraPermission()
     if (!grantedPermission) return
 
-    let result = (await ImagePicker.launchImageLibraryAsync({
+    let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       selectionLimit: listMax - list.length,
       allowsMultipleSelection: true,
-    })) as ImagePicker.ImageInfo | ImagePicker.ImagePickerMultipleResult
+    })
 
-    if (!result.cancelled) {
-      const uriList = 'selected' in result ? result.selected : [result]
+    if (!result.canceled) {
+      const uriList = result.assets
       const formattedList = uriList
         .map(item => {
           const formattedItem = {

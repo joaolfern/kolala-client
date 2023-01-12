@@ -1,5 +1,6 @@
 {
   "expo": {
+    "originalFullName": "@lucariooo/kolala",
     "owner": "lucariooo",
     "name": "kolala",
     "slug": "kolala",
@@ -13,7 +14,8 @@
       "backgroundColor": "#272022"
     },
     "updates": {
-      "fallbackToCacheTimeout": 0
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/66e38ebe-24d8-4d80-ad52-7e3877b5bdac"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -37,6 +39,9 @@
       "eas": {
         "projectId": "66e38ebe-24d8-4d80-ad52-7e3877b5bdac"
       }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
     }
   }
 }
