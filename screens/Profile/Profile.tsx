@@ -33,7 +33,7 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
 
       if (profile) setProfileUser(profile)
     } catch (err) {
-      console.error(err)
+      console.error(JSON.stringify(err))
     }
   }
 

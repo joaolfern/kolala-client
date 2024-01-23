@@ -1,4 +1,4 @@
-import { useFocusEffect, useNavigationState } from '@react-navigation/native'
+import { useFocusEffect, useNavigationState } from "@react-navigation/native";
 import React, {
   createContext,
   useState,
@@ -6,36 +6,36 @@ import React, {
   useEffect,
   useCallback,
   Ref,
-} from 'react'
-import { Control, useForm, UseFormSetValue } from 'react-hook-form'
+} from "react";
+import { Control, useForm, UseFormSetValue } from "react-hook-form";
 import {
   FlatList,
   StyleSheet,
   TextInput as DefaultTextInput,
-} from 'react-native'
-import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
-import Colors from '../../constants/Colors'
-import { IEvent } from '../../Models/Event'
-import Message, { IMessage } from '../../Models/Message'
-import ws, { ISendMessageArgs } from '../../services/socket'
-import { useAppSelector } from '../../store/hooks'
-import { selectToken } from '../../store/tokenSlice'
-import { selectUser } from '../../store/userSlice'
-import { RootStackParamList } from '../../types'
-import ChatContent from './components/ChatContent'
-import ChatFooter from './components/ChatFooter'
-import ChatHeader from './components/ChatHeader'
+} from "react-native";
+import SafeAreaView from "../../components/SafeAreaView/SafeAreaView";
+import Colors from "../../constants/Colors";
+import { IEvent } from "../../Models/Event";
+import Message, { IMessage } from "../../Models/Message";
+import ws, { ISendMessageArgs } from "../../services/socket";
+import { useAppSelector } from "../../store/hooks";
+import { selectToken } from "../../store/tokenSlice";
+import { selectUser } from "../../store/userSlice";
+import { RootStackParamList } from "../../types";
+import ChatContent from "./components/ChatContent";
+import ChatFooter from "./components/ChatFooter";
+import ChatHeader from "./components/ChatHeader";
 
 type IContext = {
-  event: null | IEvent.ListItem
-  messages: IMessage[]
-  sendMessage(args: ISendMessageArgs): void
-  control: Control<ISendMessageArgs, any> | null
-  handleSubmit: Function
-  setValue: UseFormSetValue<ISendMessageArgs>
-  inputRef: Ref<DefaultTextInput> | null
-  focusInput(): void
-}
+  event: null | IEvent.ListItem;
+  messages: IMessage[];
+  sendMessage(args: ISendMessageArgs): void;
+  control: Control<ISendMessageArgs, any> | null;
+  handleSubmit: Function;
+  setValue: UseFormSetValue<ISendMessageArgs>;
+  inputRef: Ref<DefaultTextInput> | null;
+  focusInput(): void;
+};
 
 const initialState: IContext = {
   event: null,
@@ -46,33 +46,34 @@ const initialState: IContext = {
   setValue: () => {},
   inputRef: null,
   focusInput: () => {},
-}
+};
 
-export const ChatContext = createContext(initialState)
+export const ChatContext = createContext(initialState);
 
 function Chat() {
-  const { token } = useAppSelector(selectToken)
-  const { user } = useAppSelector(selectUser)
+  const token = useAppSelector(selectToken);
+  const { user } = useAppSelector(selectUser);
   const { event } = useNavigationState(
-    state =>
-      state.routes.find(item => item.name === 'Chat')
-        ?.params as RootStackParamList['Chat']
-  )
-  const { control, reset, handleSubmit, setValue } = useForm<ISendMessageArgs>()
-  const [messages, setMessages] = useState<IMessage[]>([])
+    (state) =>
+      state.routes.find((item) => item.name === "Chat")
+        ?.params as RootStackParamList["Chat"]
+  );
+  const { control, reset, handleSubmit, setValue } =
+    useForm<ISendMessageArgs>();
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
-  const inputRef = useRef<DefaultTextInput | null>(null)
-  const scrollRef = useRef<FlatList | null>(null)
+  const inputRef = useRef<DefaultTextInput | null>(null);
+  const scrollRef = useRef<FlatList | null>(null);
   const params = useRef({
     page: 1,
-  })
+  });
 
   function focusBottom() {
-    scrollRef.current?.scrollToOffset?.({ offset: 0 })
+    scrollRef.current?.scrollToOffset?.({ offset: 0 });
   }
 
   function focusInput() {
-    inputRef.current?.focus()
+    inputRef.current?.focus();
   }
 
   useEffect(() => {
@@ -80,59 +81,59 @@ function Chat() {
       const requestParams = {
         ...params.current,
         ...newParams,
-      }
+      };
 
-      params.current = requestParams
+      params.current = requestParams;
 
-      const config = { params: requestParams }
+      const config = { params: requestParams };
 
       try {
-        const response = await Message.list(event?.id as number, config)
-        const { data } = response.data
+        const response = await Message.list(event?.id as number, config);
+        const { data } = response.data;
 
-        const isFirstPage = requestParams.page === 1
+        const isFirstPage = requestParams.page === 1;
 
         if (data && Array.isArray(data)) {
-          setMessages(prev => (isFirstPage ? data : [...data, ...prev]))
+          setMessages((prev) => (isFirstPage ? data : [...data, ...prev]));
         }
       } catch (err) {
-        console.error(err)
+        console.error(err);
       }
     }
 
-    getMessages(params.current)
-  }, [])
+    getMessages(params.current);
+  }, []);
 
   async function sendMessage(args: ISendMessageArgs) {
     try {
-      ws.sendMessage(args)
+      ws.sendMessage(args);
 
-      reset({ answerToId: undefined, content: '' })
+      reset({ answerToId: undefined, content: "" });
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   }
 
   useFocusEffect(
     useCallback(() => {
       if (event.id ?? true) {
-        ws.initialize({ token, eventId: event.id })
+        ws.initialize({ token, eventId: event.id });
 
         ws.onNewMessage((newMessage: IMessage) => {
-          setMessages(prev => [newMessage, ...prev])
-          if (newMessage.authorId === user?.id) focusBottom()
-        })
+          setMessages((prev) => [newMessage, ...prev]);
+          if (newMessage.authorId === user?.id) focusBottom();
+        });
 
-        ws.onDeleteMessageFromDisplay(id => {
-          setMessages(prev => prev.filter(message => message.id !== id))
-        })
+        ws.onDeleteMessageFromDisplay((id) => {
+          setMessages((prev) => prev.filter((message) => message.id !== id));
+        });
       }
 
       return () => {
-        ws.disconnect()
-      }
+        ws.disconnect();
+      };
     }, [event.id, token])
-  )
+  );
 
   const context = {
     event,
@@ -143,7 +144,7 @@ function Chat() {
     setValue,
     inputRef,
     focusInput,
-  }
+  };
 
   return (
     <SafeAreaView style={styles.Container}>
@@ -153,15 +154,15 @@ function Chat() {
         <ChatFooter />
       </ChatContext.Provider>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   Container: {
     paddingVertical: 16,
     backgroundColor: Colors.background,
-    height: '100%',
+    height: "100%",
   },
-})
+});
 
-export default Chat
+export default Chat;

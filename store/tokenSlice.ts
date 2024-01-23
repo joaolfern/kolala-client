@@ -1,29 +1,25 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import * as SecureStore from 'expo-secure-store'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import * as SecureStore from "expo-secure-store";
 
-const initialState: string = ''
+const initialState: string = "";
 
 export const tokenSlice = createSlice({
-  name: 'token',
+  name: "token",
   initialState,
   reducers: {
     setToken: (state, action: PayloadAction<string>) => {
-      SecureStore.setItemAsync('token', action.payload)
-      return (
-        state = action.payload
-      )
-    } ,
+      SecureStore.setItemAsync("token", action.payload);
+      return (state = action.payload);
+    },
     clearToken: (state) => {
-      SecureStore.deleteItemAsync('token')
-      return (
-        state = initialState
-      )
-    }  ,
-  }
-})
+      SecureStore.deleteItemAsync("token");
+      return (state = initialState);
+    },
+  },
+});
 
-export const { clearToken, setToken } = tokenSlice.actions
-export const selectToken = (state: { token: string } ) => state
+export const { clearToken, setToken } = tokenSlice.actions;
+export const selectToken = (state: { token: string }) => state.token;
 
-const tokenReducer = tokenSlice.reducer
-export default tokenReducer
+const tokenReducer = tokenSlice.reducer;
+export default tokenReducer;

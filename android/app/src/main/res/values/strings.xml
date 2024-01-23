@@ -1,0 +1,7 @@
+<resources>
+  <string name="app_name">kolala</string>
+  <string name="expo_splash_screen_resize_mode" translatable="false">contain</string>
+  <string name="expo_splash_screen_status_bar_translucent" translatable="false">false</string>
+  <string name="expo_runtime_version">exposdk:50.0.0</string>
+  <!-- <string name="server_client_id">510169131539-a3v30s8bppju12u440sgkqmpd5bmvt4k.apps.googleusercontent.com</string> -->
+</resources>

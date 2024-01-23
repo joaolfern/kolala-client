@@ -19,7 +19,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.lucariooo.kolala"
     },
     "android": {
       "adaptiveIcon": {
@@ -32,9 +33,7 @@
         }
       }
     },
-    "web": {
-      "favicon": "./assets/images/favicon.png"
-    },
+
     "extra": {
       "eas": {
         "projectId": "66e38ebe-24d8-4d80-ad52-7e3877b5bdac"
@@ -42,6 +41,11 @@
     },
     "runtimeVersion": {
       "policy": "sdkVersion"
-    }
+    },
+    "plugins": [
+      "@react-native-google-signin/google-signin",
+      "expo-font",
+      "expo-secure-store"
+    ]
   }
 }
