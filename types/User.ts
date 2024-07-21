@@ -1,14 +1,14 @@
-import { IProfile } from './Profile'
+import type { IProfile } from "./Profile";
 
-export type _userLevel = 'user' | 'admin'
+export type UserLevel = "user" | "admin";
 
 export interface IAccount {
-  id: number
-  email: string
-  status: number
-  authMethod: string
-  authKey: string
-  level: _userLevel
+  id: number;
+  email: string;
+  status: number;
+  authMethod: string;
+  authKey: string;
+  level: UserLevel;
 }
 
-export type IUser = IAccount & { profile: IProfile }
+export type IUser = IAccount & { profile: IProfile };

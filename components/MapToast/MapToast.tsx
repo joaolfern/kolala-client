@@ -1,55 +1,58 @@
-import React, { ReactNode, useEffect, useRef } from 'react'
-import { ActivityIndicator, StyleSheet } from 'react-native'
-import Colors from '../../constants/Colors'
+import type { ReactNode } from "react";
+import { useEffect, useRef } from "react";
+import { ActivityIndicator, StyleSheet } from "react-native";
+import Animated, { SlideInRight, SlideOutRight } from "react-native-reanimated";
+
+import Colors from "../../constants/Colors";
+import { useAppDispatch } from "../../store/hooks";
 import {
   resetToast,
   updateShouldShowToast,
   updateToastSuccessPresence,
   useMapFilter,
-} from '../../store/mapFilterSlice'
-import Span from '../Span/Span'
-import Text from '../Text/Text'
-import Animated, { SlideInRight, SlideOutRight } from 'react-native-reanimated'
-import { useAppDispatch } from '../../store/hooks'
+} from "../../store/mapFilterSlice";
+import Span from "../Span/Span";
+import Text from "../Text/Text";
 
 interface IProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 function MapToast({ children }: IProps) {
-  const { isGettingNewFilter, hasToastFinishedSuccessPresence } = useMapFilter()
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const dispatch = useAppDispatch()
+  const { isGettingNewFilter, hasToastFinishedSuccessPresence } =
+    useMapFilter();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dispatch = useAppDispatch();
 
   function handleUnmount(): void {
-    dispatch(updateShouldShowToast(false))
-    dispatch(updateToastSuccessPresence(false))
+    dispatch(updateShouldShowToast(false));
+    dispatch(updateToastSuccessPresence(false));
   }
 
   useEffect(() => {
     if (!isGettingNewFilter && hasToastFinishedSuccessPresence) {
-      handleUnmount()
+      handleUnmount();
     }
-  }, [isGettingNewFilter, hasToastFinishedSuccessPresence])
+  }, [isGettingNewFilter, hasToastFinishedSuccessPresence]);
 
   useEffect(() => {
     return () => {
       if (timerRef.current) {
-        clearTimeout(timerRef.current)
-        timerRef.current = null
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
       }
-      dispatch(resetToast())
-    }
-  }, [])
+      dispatch(resetToast());
+    };
+  }, []);
 
   useEffect(() => {
     if (!isGettingNewFilter) {
-      if (timerRef.current) clearTimeout(timerRef.current)
+      if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
-        dispatch(updateToastSuccessPresence(true))
-      }, 2500)
+        dispatch(updateToastSuccessPresence(true));
+      }, 2500);
     }
-  }, [isGettingNewFilter])
+  }, [isGettingNewFilter]);
 
   return (
     <Animated.View
@@ -59,18 +62,18 @@ function MapToast({ children }: IProps) {
     >
       {children}
     </Animated.View>
-  )
+  );
 }
 
 interface IMapToastHeader {
-  title?: ReactNode
-  loading: boolean
-  children: ReactNode
+  title?: ReactNode;
+  loading: boolean;
+  children: ReactNode;
 }
 
 function MapToastHeader({
   loading,
-  title = 'Procurando...',
+  title = "Procurando...",
   children,
 }: IMapToastHeader) {
   return (
@@ -87,18 +90,18 @@ function MapToastHeader({
       </Span>
       {children}
     </>
-  )
+  );
 }
 
-MapToast.LoadingHeader = MapToastHeader
+MapToast.LoadingHeader = MapToastHeader;
 
 const styles = StyleSheet.create({
   Toast: {
     backgroundColor: Colors.altBlack,
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
-    alignSelf: 'flex-end',
-    width: '80%',
+    alignSelf: "flex-end",
+    width: "80%",
     zIndex: 2,
     borderTopLeftRadius: 19,
     borderBottomLeftRadius: 19,
@@ -109,16 +112,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
   },
   Header: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginBottom: 10,
   },
   Title: {
     color: Colors.primaryColor,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   Loading: {
     marginRight: 16,
   },
-})
+});
 
-export default MapToast
+export default MapToast;

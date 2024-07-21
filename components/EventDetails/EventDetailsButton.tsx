@@ -1,18 +1,22 @@
-import { useNavigation } from '@react-navigation/native'
-import React, { ReactNode, useMemo, useState } from 'react'
-import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
-import Colors from '../../constants/Colors'
-import Event, { IEvent } from '../../Models/Event'
-import { hasPast } from '../../screens/EventForm/utils'
-import { useAppSelector } from '../../store/hooks'
-import { selectUser } from '../../store/userSlice'
-import Button from '../Button/Button'
-import Text from '../Text/Text'
+import { useNavigation } from "@react-navigation/native";
+import type { ReactNode } from "react";
+import { useMemo, useState } from "react";
+import type { StyleProp, ViewStyle } from "react-native";
+import { StyleSheet } from "react-native";
+
+import Colors from "../../constants/Colors";
+import type { IEvent } from "../../Models/Event";
+import Event from "../../Models/Event";
+import { hasPast } from "../../screens/EventForm/utils";
+import { useAppSelector } from "../../store/hooks";
+import { selectUser } from "../../store/userSlice";
+import Button from "../Button/Button";
+import Text from "../Text/Text";
 
 interface IButtonComponentProps {
-  children: ReactNode
-  style?: StyleProp<ViewStyle>
-  onPress(): void
+  children: ReactNode;
+  style?: StyleProp<ViewStyle>;
+  onPress(): void;
 }
 
 function ButtonComponent({ children, onPress, style }: IButtonComponentProps) {
@@ -23,13 +27,13 @@ function ButtonComponent({ children, onPress, style }: IButtonComponentProps) {
     >
       <Text style={[styles.PrimaryButtonText]}>{children}</Text>
     </Button>
-  )
+  );
 }
 
 interface IEventDetailsButtonProps {
-  event: IEvent.Details | null
-  loading: boolean
-  reloadDetails(): void
+  event: IEvent.Details | null;
+  loading: boolean;
+  reloadDetails(): void;
 }
 
 function EventDetailsButton({
@@ -37,32 +41,32 @@ function EventDetailsButton({
   loading,
   reloadDetails,
 }: IEventDetailsButtonProps) {
-  const { user } = useAppSelector(selectUser)
-  const isAuthor = event?.authorId === user?.id
+  const { user } = useAppSelector(selectUser);
+  const isAuthor = event?.authorId === user?.id;
   const isParticipating = useMemo(() => {
-    return event?.Atendee.some(atendee => {
-      return user?.id === atendee.userId
-    })
-  }, [event?.Atendee, user?.id])
+    return event?.Atendee.some((atendee) => {
+      return user?.id === atendee.userId;
+    });
+  }, [event?.Atendee, user?.id]);
 
-  const navigation = useNavigation()
-  const [loadingButton, setLoadingButton] = useState(false)
+  const navigation = useNavigation();
+  const [loadingButton, setLoadingButton] = useState(false);
 
   function navigateToEdit(event: IEvent.Details) {
-    navigation.navigate('EventForm', {
-      event: event,
-    })
+    navigation.navigate("EventForm", {
+      event,
+    });
   }
 
   async function toggleAttendEvent(eventId: number) {
-    setLoadingButton(true)
+    setLoadingButton(true);
     try {
-      await Event.toggleAttendEvent(eventId)
-      reloadDetails()
+      await Event.toggleAttendEvent(eventId);
+      reloadDetails();
     } catch (err) {
-      console.log(err)
+      console.log(err);
     } finally {
-      setLoadingButton(false)
+      setLoadingButton(false);
     }
   }
 
@@ -72,10 +76,10 @@ function EventDetailsButton({
       <Button style={[styles.Button, styles.PrimaryButton]}>
         <Text style={styles.SkeletonText}>Participando</Text>
       </Button>
-    )
+    );
   }
 
-  if (hasPast(event.datetime)) return null
+  if (hasPast(event.datetime)) return null;
 
   if (isAuthor) {
     return (
@@ -85,7 +89,7 @@ function EventDetailsButton({
       >
         Editar
       </ButtonComponent>
-    )
+    );
   }
 
   if (isParticipating)
@@ -97,7 +101,7 @@ function EventDetailsButton({
       >
         <Text style={[styles.PrimaryButtonText]}>Participando</Text>
       </Button>
-    )
+    );
 
   return (
     <Button
@@ -107,17 +111,17 @@ function EventDetailsButton({
     >
       <Text style={[styles.SecondaryButtonText]}>Participar</Text>
     </Button>
-  )
+  );
 }
 
-export default EventDetailsButton
+export default EventDetailsButton;
 
 const styles = StyleSheet.create({
   SkeletonText: {
     opacity: 0,
   },
   Button: {
-    marginLeft: 'auto',
+    marginLeft: "auto",
     height: 34,
     paddingVertical: 0,
   },
@@ -130,9 +134,9 @@ const styles = StyleSheet.create({
   SecondaryButton: {
     borderColor: Colors.primaryColor,
     borderWidth: 2,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   SecondaryButtonText: {
     color: Colors.primaryColor,
   },
-})
+});

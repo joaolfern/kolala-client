@@ -1,22 +1,20 @@
-import React, { useRef } from "react";
-import { Image, StyleSheet } from "react-native";
-import Button from "../Button/Button";
-import Text from "../Text/Text";
-import google from "../../assets/images/google.png";
-import { sendAccessTokenRequest } from "./api";
-import authButtonStyle from "./authButtonStyle";
-import { setToken } from "../../store/tokenSlice";
-import { setUser } from "../../store/userSlice";
-import { useAppDispatch } from "../../store/hooks";
-import Span from "../Span/Span";
-import { ANDROID_CLIENT_ID, EXPO_CLIENT_ID } from "../../env";
-import { showToast } from "../../utils/toast";
-
 import {
   GoogleSignin,
-  GoogleSigninButton,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import { Image, StyleSheet } from "react-native";
+
+import google from "../../assets/images/google.png";
+import { EXPO_CLIENT_ID } from "../../env";
+import { useAppDispatch } from "../../store/hooks";
+import { setToken } from "../../store/tokenSlice";
+import { setUser } from "../../store/userSlice";
+import { showToast } from "../../utils/toast";
+import Button from "../Button/Button";
+import Span from "../Span/Span";
+import Text from "../Text/Text";
+import { sendAccessTokenRequest } from "./api";
+import authButtonStyle from "./authButtonStyle";
 
 GoogleSignin.configure();
 

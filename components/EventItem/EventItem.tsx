@@ -1,33 +1,33 @@
-import { useNavigation } from '@react-navigation/native'
-import React from 'react'
-import { Image, StyleSheet, TouchableOpacity } from 'react-native'
-import Colors from '../../constants/Colors'
-import { IEvent } from '../../Models/Event'
-import { hasPast } from '../../screens/EventForm/utils'
-import Avatar from '../Avatar/Avatar'
-import CategoryTag from '../CategoryTag/CategoryTag'
-import DatetimeLabel from '../DatetimeLabel/DatetimeLabel'
-import Span from '../Span/Span'
-import Text from '../Text/Text'
-import EventItemChatButton from './components/EventItemChatButton/EventItemChatButton'
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+
+import Colors from "../../constants/Colors";
+import type { IEvent } from "../../Models/Event";
+import { hasPast } from "../../screens/EventForm/utils";
+import Avatar from "../Avatar/Avatar";
+import CategoryTag from "../CategoryTag/CategoryTag";
+import DatetimeLabel from "../DatetimeLabel/DatetimeLabel";
+import Span from "../Span/Span";
+import Text from "../Text/Text";
+import EventItemChatButton from "./components/EventItemChatButton/EventItemChatButton";
 
 interface IProps {
-  event: IEvent.ListItem
+  event: IEvent.ListItem;
 }
 
 function EventItem({ event }: IProps) {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   function navigateToDetails() {
-    navigation.navigate('Root')
+    navigation.navigate("Root");
     setTimeout(() => {
-      navigation.navigate('EventDetails', {
+      navigation.navigate("EventDetails", {
         preview: {
           id: event.id,
           title: event.title,
         },
-      })
-    }, 300)
+      });
+    }, 300);
   }
 
   return (
@@ -58,10 +58,10 @@ function EventItem({ event }: IProps) {
         <EventItemChatButton event={event} />
       </Span>
     </TouchableOpacity>
-  )
+  );
 }
 
-export default EventItem
+export default EventItem;
 
 const styles = StyleSheet.create({
   Container: {
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     borderRadius: 13,
     padding: 20,
     elevation: 5, // Android
-    shadowColor: '#030002', // Android, iOS & Web
+    shadowColor: "#030002", // Android, iOS & Web
     shadowOpacity: 0.25, // iOS & Web
     shadowRadius: 5,
   },
@@ -78,8 +78,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lightBackground,
   },
   Header: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   Image: {
     width: 50,
@@ -88,13 +88,13 @@ const styles = StyleSheet.create({
     marginRight: 16,
   },
   HeaderTitle: {
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
   HeaderTitleText: {
     marginBottom: 5,
   },
   DataRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   DataRowLeft: {
     flexGrow: 1,
@@ -109,6 +109,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   Label: {
-    fontWeight: '600',
+    fontWeight: "600",
   },
-})
+});

@@ -1,13 +1,13 @@
-import React from 'react'
-import { StyleSheet } from 'react-native'
-import Colors from '../../constants/Colors'
-import Avatar, { IAvatar } from '../Avatar/Avatar'
-import AvatarWithIcon from '../AvatarWithIcon/AvatarWithIcon'
-import Span from '../Span/Span'
+import { StyleSheet } from "react-native";
+
+import Colors from "../../constants/Colors";
+import type { IAvatar } from "../Avatar/Avatar";
+import AvatarWithIcon from "../AvatarWithIcon/AvatarWithIcon";
+import Span from "../Span/Span";
 
 type IProps = IAvatar & {
-  isOnline: boolean
-}
+  isOnline: boolean;
+};
 
 function AvatarOnlineStatus({ isOnline, ...rest }: IProps) {
   return (
@@ -15,11 +15,11 @@ function AvatarOnlineStatus({ isOnline, ...rest }: IProps) {
       <Span
         style={[
           styles.onlineMarker,
-          styles[isOnline ? 'onlineMarkerOnline' : 'onlineMarkerOffline'],
+          styles[isOnline ? "onlineMarkerOnline" : "onlineMarkerOffline"],
         ]}
       />
     </AvatarWithIcon>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
   onlineMarkerOffline: {
     backgroundColor: Colors.red,
   },
-})
+});
 
-export default AvatarOnlineStatus
+export default AvatarOnlineStatus;

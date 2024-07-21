@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet } from "react-native";
 
 const authButtonStyle = StyleSheet.create({
   Image: {
@@ -8,12 +8,12 @@ const authButtonStyle = StyleSheet.create({
   },
   View: {
     padding: 19,
-    width: '100%',
+    width: "100%",
   },
   Button: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
     height: 59,
     paddingLeft: 26,
     shadowOffset: {
@@ -22,8 +22,8 @@ const authButtonStyle = StyleSheet.create({
     },
   },
   Text: {
-    fontWeight: '600',
+    fontWeight: "600",
   },
-})
+});
 
-export default authButtonStyle
+export default authButtonStyle;

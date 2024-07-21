@@ -1,26 +1,24 @@
-import React, { useCallback } from 'react'
-import { MaterialIcons } from '@expo/vector-icons'
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableOpacityProps,
-} from 'react-native'
-import Colors from '../../../constants/Colors'
-import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useAppSelector } from '../../../store/hooks'
-import { selectUser } from '../../../store/userSlice'
-import { getProfileSettingsOptions } from '../utils'
-import User from '../../../Models/User'
-import { showToast } from '../../../utils/toast'
-import { IProfileViewData } from '../../../types/Profile'
-import { IUser, _userLevel } from '../../../types/User'
-import { useNavigation } from '@react-navigation/native'
-import useUserOperations from '../../../hooks/useUserOperations'
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { useCallback } from "react";
+import type { TouchableOpacityProps } from "react-native";
+import { StyleSheet, TouchableOpacity } from "react-native";
+
+import Colors from "@/constants/Colors";
+import useUserOperations from "@/hooks/useUserOperations";
+import User from "@/Models/User";
+import { useAppSelector } from "@/store/hooks";
+import { selectUser } from "@/store/userSlice";
+import type { IProfileViewData } from "@/types/Profile";
+import type { IUser, UserLevel } from "@/types/User";
+import { showToast } from "@/utils/toast";
+import { getProfileSettingsOptions } from "../utils";
 
 interface IProps extends TouchableOpacityProps {
-  isOwnProfile: boolean
-  profileUser: IProfileViewData
-  updateProfile(): void
+  isOwnProfile: boolean;
+  profileUser: IProfileViewData;
+  updateProfile(): void;
 }
 
 function ProfileSettingsButton({
@@ -30,17 +28,17 @@ function ProfileSettingsButton({
   updateProfile,
   ...rest
 }: IProps) {
-  const { showActionSheetWithOptions } = useActionSheet()
-  const { user } = useAppSelector(selectUser)
-  const { navigate } = useNavigation()
-  const { updateStatus } = useUserOperations()
+  const { showActionSheetWithOptions } = useActionSheet();
+  const { user } = useAppSelector(selectUser);
+  const { navigate } = useNavigation();
+  const { updateStatus } = useUserOperations();
 
   async function promoteUser({
     level,
     targetId,
   }: {
-    targetId: number
-    level: _userLevel
+    targetId: number;
+    level: UserLevel;
   }) {
     try {
       await User.promote({
@@ -48,18 +46,18 @@ function ProfileSettingsButton({
           level,
         },
         targetId,
-      })
-      showToast('Level do usuário atualizado com sucesso!')
-      updateProfile()
+      });
+      showToast("Level do usuário atualizado com sucesso!");
+      updateProfile();
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
   }
 
   function navigateToProfileForm(profile: IProfileViewData) {
-    navigate('ProfileForm', {
+    navigate("ProfileForm", {
       profile,
-    })
+    });
   }
 
   const openMenu = useCallback(
@@ -69,22 +67,22 @@ function ProfileSettingsButton({
       updateProfile,
       isOwnProfile,
     }: {
-      updateProfile: Function
-      user: IUser
-      profileUser: IProfileViewData
-      isOwnProfile: boolean
+      updateProfile: Function;
+      user: IUser;
+      profileUser: IProfileViewData;
+      isOwnProfile: boolean;
     }) => {
-      const level = user.level
-      const targetId = profileUser.User?.id
+      const { level } = user;
+      const targetId = profileUser.User?.id;
 
-      if (!profileUser.User) return
+      if (!profileUser.User) return;
 
       const options = getProfileSettingsOptions({
         level,
         isOwnProfile,
         target: profileUser.User,
-      })
-      const cancelButtonIndex = options.indexOf('Cancelar')
+      });
+      const cancelButtonIndex = options.indexOf("Cancelar");
 
       showActionSheetWithOptions(
         {
@@ -96,52 +94,51 @@ function ProfileSettingsButton({
           },
         },
         async (selectedIndex?: number) => {
-          if (typeof selectedIndex === 'undefined') return
+          if (typeof selectedIndex === "undefined") return;
 
-          const selectedOption = options[selectedIndex]
+          const selectedOption = options[selectedIndex];
           switch (selectedOption) {
-            case 'Tornar administrador': {
-              if (typeof targetId !== 'undefined')
-                promoteUser({ targetId, level: 'admin' })
-              return
+            case "Tornar administrador": {
+              if (typeof targetId !== "undefined")
+                promoteUser({ targetId, level: "admin" });
+              return;
             }
-            case 'Restaurar conta': {
-              if (typeof targetId !== 'undefined')
+            case "Restaurar conta": {
+              if (typeof targetId !== "undefined")
                 await updateStatus(
                   { body: { status: 1 }, targetId },
                   updateProfile
-                )
-              return
+                );
+              return;
             }
-            case 'Suspender conta': {
-              if (typeof targetId !== 'undefined')
+            case "Suspender conta": {
+              if (typeof targetId !== "undefined")
                 await updateStatus(
                   { body: { status: 0 }, targetId },
                   updateProfile
-                )
-              return
+                );
+              return;
             }
-            case 'Remover administrador': {
-              if (typeof targetId !== 'undefined')
-                promoteUser({ targetId, level: 'user' })
-              return
+            case "Remover administrador": {
+              if (typeof targetId !== "undefined")
+                promoteUser({ targetId, level: "user" });
+              return;
             }
-            case 'Editar perfil': {
-              if (profileUser) navigateToProfileForm(profileUser)
-              return
+            case "Editar perfil": {
+              if (profileUser) navigateToProfileForm(profileUser);
+              return;
             }
-            case 'Denunciar usuário': {
-              navigate('ReportForm', {
+            case "Denunciar usuário": {
+              navigate("ReportForm", {
                 target: profileUser,
-              })
-              return
+              });
             }
           }
         }
-      )
+      );
     },
     []
-  )
+  );
 
   return (
     <TouchableOpacity
@@ -153,12 +150,12 @@ function ProfileSettingsButton({
         openMenu({ user, profileUser, isOwnProfile, updateProfile })
       }
     >
-      <MaterialIcons size={28} name='settings' color={Colors.text} />
+      <MaterialIcons size={28} name="settings" color={Colors.text} />
     </TouchableOpacity>
-  )
+  );
 }
 
-export default ProfileSettingsButton
+export default ProfileSettingsButton;
 
 const styles = StyleSheet.create({
   Button: {
@@ -166,4 +163,4 @@ const styles = StyleSheet.create({
     borderRadius: 99999,
     padding: 10,
   },
-})
+});

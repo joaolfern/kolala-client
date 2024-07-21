@@ -1,106 +1,111 @@
-import { FontAwesome5 } from '@expo/vector-icons'
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import { FontAwesome5 } from "@expo/vector-icons";
 import {
   useFocusEffect,
   useNavigation,
   useNavigationState,
-} from '@react-navigation/native'
-import React, { useCallback, useState } from 'react'
-import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
-import Colors from '../../constants/Colors'
-import Event, { IEvent } from '../../Models/Event'
-import { shadow } from '../../screens/EventForm/utils'
-import { RootStackParamList } from '../../types'
-import { showToast } from '../../utils/toast'
-import AvatarWithIcon from '../AvatarWithIcon/AvatarWithIcon'
-import CategoryTag from '../CategoryTag/CategoryTag'
-import DatetimeLabel from '../DatetimeLabel/DatetimeLabel'
-import EventAvatars from '../EventAvatars/EventAvatars'
-import Span from '../Span/Span'
-import Text from '../Text/Text'
-import EventDetailsButton from './EventDetailsButton'
-import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useAppSelector } from '../../store/hooks'
-import { selectUser } from '../../store/userSlice'
-import { IUser } from '../../types/User'
-import { getEventDetailsMenuOptions, transformDetailsToListItem } from './utils'
-import ModalWrapper from '../ModalWrapper/ModalWrapper'
-import EllipsisButton from '../EllipsisButton/EllipsisButton'
-import EventItemChatButton from '../EventItem/components/EventItemChatButton/EventItemChatButton'
+} from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { Dimensions, StyleSheet, TouchableOpacity } from "react-native";
+
+import Colors from "../../constants/Colors";
+import type { IEvent } from "../../Models/Event";
+import Event from "../../Models/Event";
+import { shadow } from "../../screens/EventForm/utils";
+import { useAppSelector } from "../../store/hooks";
+import { selectUser } from "../../store/userSlice";
+import type { RootStackParamList } from "../../types";
+import type { IUser } from "../../types/User";
+import { showToast } from "../../utils/toast";
+import AvatarWithIcon from "../AvatarWithIcon/AvatarWithIcon";
+import CategoryTag from "../CategoryTag/CategoryTag";
+import DatetimeLabel from "../DatetimeLabel/DatetimeLabel";
+import EllipsisButton from "../EllipsisButton/EllipsisButton";
+import EventAvatars from "../EventAvatars/EventAvatars";
+import EventItemChatButton from "../EventItem/components/EventItemChatButton/EventItemChatButton";
+import ModalWrapper from "../ModalWrapper/ModalWrapper";
+import Span from "../Span/Span";
+import Text from "../Text/Text";
+import EventDetailsButton from "./EventDetailsButton";
+import {
+  getEventDetailsMenuOptions,
+  transformDetailsToListItem,
+} from "./utils";
 
 export default function EventDetails() {
   const preview = useNavigationState(
-    state =>
+    (state) =>
       (
-        state.routes.find(item => item.name === 'EventDetails')
-          ?.params as RootStackParamList['EventDetails']
-      ).preview
-  )
-  const navigation = useNavigation()
-  const [details, setDetails] = useState<IEvent.Details | null>(null)
-  const [loading, setLoading] = useState(false)
-  const { showActionSheetWithOptions } = useActionSheet()
-  const { user } = useAppSelector(selectUser)
+        state.routes.find((item) => item.name === "EventDetails")
+          ?.params as RootStackParamList["EventDetails"]
+      ).preview,
+  );
+  const navigation = useNavigation();
+  const [details, setDetails] = useState<IEvent.Details | null>(null);
+  const [loading, setLoading] = useState(false);
+  const { showActionSheetWithOptions } = useActionSheet();
+  const { user } = useAppSelector(selectUser);
 
-  const isAuthor = details?.authorId === user?.id
+  const isAuthor = details?.authorId === user?.id;
 
   async function getDetails(id: number) {
-    setLoading(true)
+    setLoading(true);
     try {
-      const response = await Event.getDetails(id)
-      const data = response.data?.data
+      const response = await Event.getDetails(id);
+      const data = response.data?.data;
       if (data) {
-        setDetails(data)
+        setDetails(data);
       }
     } catch (err: any) {
-      showToast(String(err.message))
-      console.log(err)
+      showToast(String(err.message));
+      console.log(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
   function reloadDetails() {
-    getDetails(preview?.id)
+    getDetails(preview?.id);
   }
 
   useFocusEffect(
     useCallback(() => {
-      getDetails(preview?.id)
-    }, [preview?.id])
-  )
+      getDetails(preview?.id);
+    }, [preview?.id]),
+  );
 
   function closeDetails() {
-    navigation.goBack()
+    navigation.goBack();
   }
 
   function navigateToProfile(authorId: number) {
-    navigation.navigate('Profile', {
+    navigation.navigate("Profile", {
       profileUserId: authorId,
-    })
+    });
   }
 
   const deleteEvent = useCallback(async () => {
-    if (!preview.id) return
+    if (!preview.id) return;
     try {
-      const response = await Event.delete(String(preview.id))
-      const message = response.data.data
-      navigation.navigate('Root')
-      if (message) showToast(message)
+      const response = await Event.delete(String(preview.id));
+      const message = response.data.data;
+      navigation.navigate("Root");
+      if (message) showToast(message);
     } catch (err: any) {
-      showToast(String(err.message))
-      console.log(err)
+      showToast(String(err.message));
+      console.log(err);
     }
-  }, [preview?.id])
+  }, [preview?.id]);
 
   const openMenu = useCallback(
     (user: IUser, isAuthor: boolean) => {
-      const { level } = user
-      const options = getEventDetailsMenuOptions({ level, isAuthor })
+      const { level } = user;
+      const options = getEventDetailsMenuOptions({ level, isAuthor });
       const destructiveButtonIndex =
-        options.indexOf('Deletar evento') === -1
+        options.indexOf("Deletar evento") === -1
           ? undefined
-          : options.indexOf('Deletar evento')
-      const cancelButtonIndex = options.indexOf('Cancelar')
+          : options.indexOf("Deletar evento");
+      const cancelButtonIndex = options.indexOf("Cancelar");
 
       showActionSheetWithOptions(
         {
@@ -114,24 +119,23 @@ export default function EventDetails() {
           },
         },
         (selectedIndex?: number) => {
-          if (typeof selectedIndex === 'undefined') return
+          if (typeof selectedIndex === "undefined") return;
 
-          const selectedOption = options[selectedIndex]
+          const selectedOption = options[selectedIndex];
           switch (selectedOption) {
-            case 'Deletar evento':
-              deleteEvent()
-              return
-            case 'Denunciar usuário':
-              navigation.navigate('ReportForm', {
+            case "Deletar evento":
+              deleteEvent();
+              return;
+            case "Denunciar usuário":
+              navigation.navigate("ReportForm", {
                 target: user.profile,
-              })
-              return
+              });
           }
-        }
-      )
+        },
+      );
     },
-    [deleteEvent]
-  )
+    [deleteEvent],
+  );
 
   return (
     <ModalWrapper onClose={closeDetails}>
@@ -158,7 +162,7 @@ export default function EventDetails() {
               <Span style={styles.AuthorButton}>
                 <FontAwesome5
                   size={16}
-                  name='crown'
+                  name="crown"
                   solid
                   color={Colors.secondaryColor}
                   style={styles.AuthorIcon}
@@ -180,7 +184,7 @@ export default function EventDetails() {
           <CategoryTag
             style={styles.CategoryTag}
             category={
-              typeof details?.category === 'undefined' ? 1 : details.category
+              typeof details?.category === "undefined" ? 1 : details.category
             }
           />
         </Span>
@@ -203,7 +207,7 @@ export default function EventDetails() {
             <Text style={styles.Subtitle}>Chat</Text>
             <Text>
               {details?._count.Message} mensage
-              {details?._count.Message !== 1 ? 'ns' : 'm'}
+              {details?._count.Message !== 1 ? "ns" : "m"}
             </Text>
           </Span>
           {details ? (
@@ -214,31 +218,31 @@ export default function EventDetails() {
         </Span>
       </Span>
     </ModalWrapper>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   Container: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+    position: "absolute",
+    width: "100%",
+    height: "100%",
     zIndex: 3,
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     padding: 0,
   },
   closeButton: {
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
     marginRight: 12,
     marginTop: 18,
   },
   wrapper: {
-    alignItems: 'flex-start',
-    position: 'relative',
+    alignItems: "flex-start",
+    position: "relative",
     flex: 1,
     backgroundColor: Colors.background,
     borderRadius: 18,
     padding: 14,
-    marginTop: Dimensions.get('screen').height * 0.2 - 16,
+    marginTop: Dimensions.get("screen").height * 0.2 - 16,
 
     ...shadow,
   },
@@ -246,43 +250,43 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   AvatarWrapper: {
-    position: 'relative',
-    alignSelf: 'center',
-    justifyContent: 'center',
-    textAlign: 'center',
+    position: "relative",
+    alignSelf: "center",
+    justifyContent: "center",
+    textAlign: "center",
     width: 200,
   },
   Avatar: {
-    position: 'absolute',
+    position: "absolute",
     top: -150,
   },
   AuthorButton: {
-    position: 'relative',
+    position: "relative",
   },
   AuthorIcon: {
     ...shadow,
   },
   TopRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
     marginBottom: 18,
-    width: '100%',
+    width: "100%",
   },
   TopRowEllipsis: {
     width: 48,
     height: 48,
   },
   TitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap-reverse',
-    width: '100%',
+    flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap-reverse",
+    width: "100%",
   },
   Title: {
     color: Colors.text,
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 7,
     marginRight: 0,
   },
@@ -294,19 +298,19 @@ const styles = StyleSheet.create({
     marginBottom: 18,
   },
   DatetimeRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     fontSize: 9,
     marginBottom: 10,
   },
   Subtitle: {
-    fontWeight: '600',
+    fontWeight: "600",
   },
   Description: {
     marginBottom: 18,
   },
   ChatContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
   },
-})
+});

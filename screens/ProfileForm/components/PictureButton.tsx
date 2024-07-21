@@ -1,18 +1,18 @@
-import { MaterialIcons } from '@expo/vector-icons'
-import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
-import Avatar from '../../../components/Avatar/Avatar'
-import Colors from '../../../constants/Colors'
-import useAskForImages from '../../../hooks/useAskForImages'
-import { IProfileViewData } from '../../../types/Profile'
-import { ProfileFormEvent } from '../ProfileForm'
-import * as ImagePicker from 'expo-image-picker'
-import { Control, useController } from 'react-hook-form'
+import { MaterialIcons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import type { Control } from "react-hook-form";
+import { useController } from "react-hook-form";
+import { StyleSheet, TouchableOpacity } from "react-native";
+
+import Avatar from "@/components/Avatar/Avatar";
+import Colors from "@/constants/Colors";
+import useAskForImages from "@/hooks/useAskForImages";
+import type { ProfileFormEvent } from "../ProfileForm";
 
 interface IProps {
-  name: keyof ProfileFormEvent
-  control: Control<ProfileFormEvent>
-  defaultValue?: string
+  name: keyof ProfileFormEvent;
+  control: Control<ProfileFormEvent>;
+  defaultValue?: string;
 }
 
 function PictureButton({ control, name, defaultValue }: IProps) {
@@ -20,24 +20,24 @@ function PictureButton({ control, name, defaultValue }: IProps) {
     name,
     control,
     defaultValue,
-  })
-  const { onChange, value } = field
-  const { handleCameraPermission } = useAskForImages()
+  });
+  const { onChange, value } = field;
+  const { handleCameraPermission } = useAskForImages();
 
   async function launchGallery() {
-    const grantedPermission = await handleCameraPermission()
-    if (!grantedPermission) return
+    const grantedPermission = await handleCameraPermission();
+    if (!grantedPermission) return;
 
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       selectionLimit: 1,
       allowsMultipleSelection: false,
-    })
+    });
 
     if (!result.canceled) {
-      const uriItem = result.assets[0].uri
-      onChange(uriItem)
+      const uriItem = result.assets[0].uri;
+      onChange(uriItem);
     }
   }
 
@@ -45,7 +45,7 @@ function PictureButton({ control, name, defaultValue }: IProps) {
     <TouchableOpacity style={styles.PictureButton} onPress={launchGallery}>
       <MaterialIcons
         style={styles.PictureIcon}
-        name='camera-alt'
+        name="camera-alt"
         size={30}
         color={Colors.text}
       />
@@ -54,10 +54,10 @@ function PictureButton({ control, name, defaultValue }: IProps) {
         source={value ? { uri: value as string } : undefined}
       />
     </TouchableOpacity>
-  )
+  );
 }
 
-export default PictureButton
+export default PictureButton;
 
 const styles = StyleSheet.create({
   Picture: {
@@ -65,11 +65,11 @@ const styles = StyleSheet.create({
     height: 150,
   },
   PictureButton: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   PictureIcon: {
-    position: 'absolute',
+    position: "absolute",
     zIndex: 10,
   },
-})
+});

@@ -1,27 +1,23 @@
-import React, { useRef, useState } from 'react'
-import {
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ViewProps,
-  FlatList,
-} from 'react-native'
-import Text from '../Text/Text'
-import View from '../View/View'
-import CameraSVG from '../../assets/images/camera.svg'
-import Colors from '../../constants/Colors'
-import * as ImagePicker from 'expo-image-picker'
-import { useController } from 'react-hook-form'
-import Span from '../Span/Span'
-import { FontAwesome5 } from '@expo/vector-icons'
-import { IEvent } from '../../Models/Event'
-import useAskForImages from '../../hooks/useAskForImages'
+import { FontAwesome5 } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { useRef, useState } from "react";
+import { useController } from "react-hook-form";
+import type { ViewProps } from "react-native";
+import { FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
+
+import CameraSVG from "../../assets/images/camera.svg";
+import Colors from "../../constants/Colors";
+import useAskForImages from "../../hooks/useAskForImages";
+import type { IEvent } from "../../Models/Event";
+import Span from "../Span/Span";
+import Text from "../Text/Text";
+import View from "../View/View";
 
 type ImageItemProps = {
-  item: IEvent.Image
-  remove(id: string): void
-  isLastItem: boolean
-}
+  item: IEvent.Image;
+  remove(id: string): void;
+  isLastItem: boolean;
+};
 
 function ImageItem({ item, remove, isLastItem }: ImageItemProps) {
   return (
@@ -37,7 +33,7 @@ function ImageItem({ item, remove, isLastItem }: ImageItemProps) {
       >
         <FontAwesome5
           size={30}
-          name='times-circle'
+          name="times-circle"
           solid
           color={Colors.secondaryColor}
           style={styles.closeButtonIcon}
@@ -45,17 +41,17 @@ function ImageItem({ item, remove, isLastItem }: ImageItemProps) {
       </TouchableOpacity>
       <Image style={[styles.ImageItem]} source={{ uri: item.url }} />
     </Span>
-  )
+  );
 }
 
 type UploadImageProps = ViewProps & {
-  listMax?: number
-  name: string
-  control: any
-  defaultValue?: IEvent.Image[]
-}
+  listMax?: number;
+  name: string;
+  control: any;
+  defaultValue?: IEvent.Image[];
+};
 
-let counter = 0
+let counter = 0;
 
 function UploadImage({
   style,
@@ -65,63 +61,63 @@ function UploadImage({
   defaultValue = [],
   ...rest
 }: UploadImageProps) {
-  const [list, setList] = useState<IEvent.Image[]>(defaultValue)
-  const listRef = useRef<FlatList>(null)
-  const { handleCameraPermission } = useAskForImages()
+  const [list, setList] = useState<IEvent.Image[]>(defaultValue);
+  const listRef = useRef<FlatList>(null);
+  const { handleCameraPermission } = useAskForImages();
 
   const { field } = useController({
     name,
     control,
-    defaultValue: defaultValue.map(image => image.url),
-  })
+    defaultValue: defaultValue.map((image) => image.url),
+  });
 
   const handleChoosePhoto = async () => {
-    const grantedPermission = await handleCameraPermission()
-    if (!grantedPermission) return
+    const grantedPermission = await handleCameraPermission();
+    if (!grantedPermission) return;
 
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       quality: 1,
       selectionLimit: listMax - list.length,
       allowsMultipleSelection: true,
-    })
+    });
 
     if (!result.canceled) {
-      const uriList = result.assets
+      const uriList = result.assets;
       const formattedList = uriList
-        .map(item => {
+        .map((item) => {
           const formattedItem = {
             id: String(item.uri) + counter,
             url: item.uri,
-          }
-          counter++
-          return formattedItem
+          };
+          counter++;
+          return formattedItem;
         })
-        .slice(0, listMax - list.length)
-      setList(prev => {
-        const stateList: IEvent.Image[] = [...formattedList, ...prev]
-        counter++
+        .slice(0, listMax - list.length);
+      setList((prev) => {
+        const stateList: IEvent.Image[] = [...formattedList, ...prev];
+        counter++;
 
-        const eventList = stateList.map(item => item.url)
-        onChange(eventList)
-        return stateList
-      })
+        const eventList = stateList.map((item) => item.url);
+        onChange(eventList);
+        return stateList;
+      });
     }
-  }
+  };
 
   function remove(id: string) {
-    setList(prev => {
-      const newList = prev.filter(item => item.id !== id)
+    setList((prev) => {
+      const newList = prev.filter((item) => item.id !== id);
 
-      const eventList = newList.map(item => item.url)
-      onChange(eventList)
-      listRef?.current?.scrollToIndex?.({ index: list.length - 1 })
+      const eventList = newList.map((item) => item.url);
+      onChange(eventList);
+      listRef?.current?.scrollToIndex?.({ index: list.length - 1 });
 
-      return newList
-    })
+      return newList;
+    });
   }
 
-  const { onChange } = field
+  const { onChange } = field;
 
   return (
     <FlatList
@@ -140,7 +136,7 @@ function UploadImage({
         </>
       }
       data={list}
-      horizontal={true}
+      horizontal
       renderItem={({ item, index }) => (
         <ImageItem
           item={item}
@@ -150,29 +146,29 @@ function UploadImage({
         />
       )}
     />
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   Container: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   ImageItemWrapper: {
-    position: 'relative',
+    position: "relative",
   },
   ImageItemWrapperMargin: {
     marginRight: 16,
   },
   ImageItem: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     borderRadius: 13,
     width: 150,
     height: 150,
-    position: 'relative',
+    position: "relative",
   },
   Input: {
-    borderStyle: 'dashed',
+    borderStyle: "dashed",
     borderWidth: 1,
     borderColor: Colors.text,
     backgroundColor: Colors.lightBackground,
@@ -190,7 +186,7 @@ const styles = StyleSheet.create({
     color: Colors.secondaryColor,
   },
   closeButton: {
-    position: 'absolute',
+    position: "absolute",
     right: 5,
     top: 5,
     zIndex: 2,
@@ -198,6 +194,6 @@ const styles = StyleSheet.create({
   closeButtonIcon: {
     elevation: 3,
   },
-})
+});
 
-export default UploadImage
+export default UploadImage;

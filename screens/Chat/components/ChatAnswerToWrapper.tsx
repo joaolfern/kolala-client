@@ -1,14 +1,15 @@
-import React, { ReactNode } from 'react'
-import { IMessage } from '../../../Models/Message'
-import Span from '../../../components/Span/Span'
-import { StyleSheet } from 'react-native'
-import ReplyPreview from '../../../components/ReplyPreview/ReplyPreview'
-import Colors from '../../../constants/Colors'
+import type { ReactNode } from "react";
+import { StyleSheet } from "react-native";
+
+import ReplyPreview from "@/components/ReplyPreview/ReplyPreview";
+import Span from "@/components/Span/Span";
+import Colors from "@/constants/Colors";
+import type { IMessage } from "@/Models/Message";
 
 interface IProps {
-  message: IMessage
-  children: ReactNode
-  isAuthor: boolean
+  message: IMessage;
+  children: ReactNode;
+  isAuthor: boolean;
 }
 
 function ChatAnswerToWrapper({ children, message, isAuthor }: IProps) {
@@ -25,12 +26,12 @@ function ChatAnswerToWrapper({ children, message, isAuthor }: IProps) {
         />
         {children}
       </Span>
-    )
+    );
 
-  return <>{children}</>
+  return <>{children}</>;
 }
 
-export default ChatAnswerToWrapper
+export default ChatAnswerToWrapper;
 
 const styles = StyleSheet.create({
   Container: {},
@@ -42,4 +43,4 @@ const styles = StyleSheet.create({
   ReplyPreviewNotAuthor: {
     backgroundColor: Colors.chatTextbox,
   },
-})
+});

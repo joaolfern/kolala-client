@@ -6,8 +6,9 @@
     "sourceMap": true,
     "declaration": false,
     "module": "esnext",
-    "typeRoots": [
-      "node_modules/@types"
-    ],
+    "typeRoots": ["node_modules/@types"],
+    "paths": {
+      "@/*": ["./*"]
+    }
   }
 }

@@ -1,34 +1,32 @@
-import { MaterialIcons } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
-import dayjs from 'dayjs'
-import React from 'react'
-import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native'
-import Avatar from '../../components/Avatar/Avatar'
-import CreateEventButton from '../../components/CreateEventButton/CreateEventButton'
-import Header from '../../components/Header/Header'
-import ModalWrapper from '../../components/ModalWrapper/ModalWrapper'
-import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
-import Span from '../../components/Span/Span'
-import Text from '../../components/Text/Text'
-import Colors from '../../constants/Colors'
-import { IEvent } from '../../Models/Event'
-import { MAP_ICONS } from '../EventForm/constants'
-import NoResultMessage from '../Events/components/NoResultMessage/NoResultMessage'
-import useMarkers from '../Home/hooks/useMarkers'
+import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import dayjs from "dayjs";
+import { FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
+
+import CreateEventButton from "../../components/CreateEventButton/CreateEventButton";
+import Header from "../../components/Header/Header";
+import SafeAreaView from "../../components/SafeAreaView/SafeAreaView";
+import Span from "../../components/Span/Span";
+import Text from "../../components/Text/Text";
+import Colors from "../../constants/Colors";
+import type { IEvent } from "../../Models/Event";
+import { MAP_ICONS } from "../EventForm/constants";
+import NoResultMessage from "../Events/components/NoResultMessage/NoResultMessage";
+import useMarkers from "../Home/hooks/useMarkers";
 
 function EventsOverview() {
-  const { goBack, navigate } = useNavigation()
-  const { markers } = useMarkers()
+  const { goBack, navigate } = useNavigation();
+  const { markers } = useMarkers();
 
   function navigateToEvent(preview: IEvent.IMarkers) {
-    goBack()
-    navigate('EventDetails', {
+    goBack();
+    navigate("EventDetails", {
       preview,
-    })
+    });
   }
 
   function navigateToReports() {
-    navigate('Report')
+    navigate("Report");
   }
 
   return (
@@ -47,7 +45,7 @@ function EventsOverview() {
             >
               <MaterialIcons
                 style={styles.DescriptionIcon}
-                name='campaign'
+                name="campaign"
                 color={Colors.orangeColor}
                 size={24}
               />
@@ -71,7 +69,7 @@ function EventsOverview() {
               <Span style={[styles.Row, styles.AddressRow]}>
                 <MaterialIcons
                   style={styles.DescriptionIcon}
-                  name='location-pin'
+                  name="location-pin"
                   size={24}
                   color={Colors.primaryColor}
                 />
@@ -82,7 +80,7 @@ function EventsOverview() {
               <Span style={styles.Row}>
                 <MaterialIcons
                   style={styles.DescriptionIcon}
-                  name='timer'
+                  name="timer"
                   size={24}
                   color={Colors.secondaryColor}
                 />
@@ -90,45 +88,45 @@ function EventsOverview() {
               </Span>
             </Span>
           </TouchableOpacity>
-        )
+        );
       }}
     />
-  )
+  );
 }
 
-export default EventsOverview
+export default EventsOverview;
 
 const styles = StyleSheet.create({
   Container: {
     backgroundColor: Colors.background,
-    height: '100%',
+    height: "100%",
     padding: 16,
   },
   ContainerTitle: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     fontSize: 24,
   },
   HeaderRow: {
-    flexDirection: 'column-reverse',
+    flexDirection: "column-reverse",
     marginBottom: 24,
   },
   MyReportsButton: {
     marginBottom: 18,
-    marginLeft: 'auto',
+    marginLeft: "auto",
   },
   MyReportsText: {
     color: Colors.orangeColor,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   Card: {
     backgroundColor: Colors.xLightBackground,
     borderRadius: 20,
     marginBottom: 16,
     padding: 14,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   CardTitle: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   CardAddress: {
     flex: 1,
@@ -142,8 +140,8 @@ const styles = StyleSheet.create({
     width: 40,
   },
   Row: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   AddressRow: {
     marginBottom: 4,
@@ -152,4 +150,4 @@ const styles = StyleSheet.create({
     marginRight: 4,
     width: 24,
   },
-})
+});

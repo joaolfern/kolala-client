@@ -1,10 +1,10 @@
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import React from 'react'
-import { StyleSheet } from 'react-native'
-import Colors from '../../constants/Colors'
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { StyleSheet } from "react-native";
+
+import Colors from "../../constants/Colors";
 
 interface IProps {
-  icon: any
+  icon: any;
 }
 
 function SocialMediaIcon({ icon }: IProps) {
@@ -15,14 +15,14 @@ function SocialMediaIcon({ icon }: IProps) {
       size={55}
       color={Colors.text}
     />
-  )
+  );
 }
 
-export default SocialMediaIcon
+export default SocialMediaIcon;
 
 const styles = StyleSheet.create({
   SocialMediaIcon: {
     marginRight: 16,
     width: 55,
   },
-})
+});

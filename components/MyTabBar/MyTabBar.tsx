@@ -1,8 +1,8 @@
-import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
-import React from 'react'
-import { View, StyleSheet } from 'react-native'
-import EventsButton from './EventsButton'
-import ProfileTabButton from './ProfileTabButton'
+import type { BottomTabBarProps } from "@react-navigation/bottom-tabs";
+import { StyleSheet, View } from "react-native";
+
+import EventsButton from "./EventsButton";
+import ProfileTabButton from "./ProfileTabButton";
 
 function MyTabBar({}: BottomTabBarProps) {
   return (
@@ -10,20 +10,20 @@ function MyTabBar({}: BottomTabBarProps) {
       <ProfileTabButton />
       <EventsButton />
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   TabBar: {
-    flexDirection: 'row',
+    flexDirection: "row",
     elevation: 0,
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
     left: 0,
     right: 0,
-    justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    justifyContent: "space-between",
+    alignItems: "flex-end",
   },
-})
+});
 
-export default MyTabBar
+export default MyTabBar;

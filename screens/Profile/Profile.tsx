@@ -1,50 +1,50 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Linking, StyleSheet, TouchableOpacity } from 'react-native'
-import Header from '../../components/Header/Header'
-import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
-import { useAppSelector } from '../../store/hooks'
-import { selectUser } from '../../store/userSlice'
-import Span from '../../components/Span/Span'
-import Text from '../../components/Text/Text'
-import { IProfileViewData } from '../../types/Profile'
-import { RootStackScreenProps } from '../../types'
-import LogoutButton from '../../components/LogoutButton/LogoutButton'
-import useLogout from '../../hooks/useLogout'
-import Avatar from '../../components/Avatar/Avatar'
-import Scroll from '../../components/Scroll/Scroll'
-import ProfileSettings from './components/ProfileSettingsButton'
-import User from '../../Models/User'
-import { _userLevel } from '../../types/User'
-import SocialMediaIcon from '../../components/SocialMediaIcon/SocialMediaIcon'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useRef, useState } from "react";
+import { Linking, StyleSheet, TouchableOpacity } from "react-native";
 
-function Profile({ route }: RootStackScreenProps<'Profile'>) {
-  const { profileUserId } = route?.params
-  const { user } = useAppSelector(selectUser)
-  const logout = useLogout()
+import Avatar from "../../components/Avatar/Avatar";
+import Header from "../../components/Header/Header";
+import LogoutButton from "../../components/LogoutButton/LogoutButton";
+import SafeAreaView from "../../components/SafeAreaView/SafeAreaView";
+import Scroll from "../../components/Scroll/Scroll";
+import SocialMediaIcon from "../../components/SocialMediaIcon/SocialMediaIcon";
+import Span from "../../components/Span/Span";
+import Text from "../../components/Text/Text";
+import useLogout from "../../hooks/useLogout";
+import User from "../../Models/User";
+import { useAppSelector } from "../../store/hooks";
+import { selectUser } from "../../store/userSlice";
+import type { RootStackScreenProps } from "../../types";
+import type { IProfileViewData } from "../../types/Profile";
+import ProfileSettings from "./components/ProfileSettingsButton";
 
-  const isOwnProfile = useRef(profileUserId === user?.id).current
-  const [profileUser, setProfileUser] = useState<IProfileViewData | null>(null)
+function Profile({ route }: RootStackScreenProps<"Profile">) {
+  const { profileUserId } = route?.params;
+  const { user } = useAppSelector(selectUser);
+  const logout = useLogout();
+
+  const isOwnProfile = useRef(profileUserId === user?.id).current;
+  const [profileUser, setProfileUser] = useState<IProfileViewData | null>(null);
 
   async function getProfileUser(id: number) {
     try {
-      const response = await User.getProfile(id)
-      const profile = response.data.data
+      const response = await User.getProfile(id);
+      const profile = response.data.data;
 
-      if (profile) setProfileUser(profile)
+      if (profile) setProfileUser(profile);
     } catch (err) {
-      console.error(JSON.stringify(err))
+      console.error(JSON.stringify(err));
     }
   }
 
   useFocusEffect(
     useCallback(() => {
-      getProfileUser(profileUserId)
-    }, [user?.profile])
-  )
+      getProfileUser(profileUserId);
+    }, [user?.profile]),
+  );
 
   async function openLink(url: string) {
-    await Linking.openURL(url)
+    await Linking.openURL(url);
   }
 
   return (
@@ -83,7 +83,7 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
           </Span>
           <Text style={styles.title}>{profileUser?.name}</Text>
           {!!(isOwnProfile && user?.email) && <Text>{user?.email}</Text>}
-          {profileUser?.User?.level === 'admin' && <Text>admin 🐨</Text>}
+          {profileUser?.User?.level === "admin" && <Text>admin 🐨</Text>}
           {profileUser?.User?.status === 0 && <Text>⛔ Suspensa</Text>}
         </Span>
         <Span style={styles.SocialMediaRow}>
@@ -92,11 +92,11 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
               style={styles.SocialMediaButton}
               onPress={() =>
                 openLink(
-                  `https://instagram.com/${profileUser?.instagramAccount}`
+                  `https://instagram.com/${profileUser?.instagramAccount}`,
                 )
               }
             >
-              <SocialMediaIcon icon='instagram' />
+              <SocialMediaIcon icon="instagram" />
             </TouchableOpacity>
           )}
           {profileUser?.facebookAccount && (
@@ -106,7 +106,7 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
                 openLink(`https://facebook.com/${profileUser?.facebookAccount}`)
               }
             >
-              <SocialMediaIcon icon='facebook' />
+              <SocialMediaIcon icon="facebook" />
             </TouchableOpacity>
           )}
           {profileUser?.twitterAccount && (
@@ -116,29 +116,29 @@ function Profile({ route }: RootStackScreenProps<'Profile'>) {
                 openLink(`https://twitter.com/${profileUser?.twitterAccount}`)
               }
             >
-              <SocialMediaIcon icon='twitter' />
+              <SocialMediaIcon icon="twitter" />
             </TouchableOpacity>
           )}
         </Span>
       </Scroll>
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   Header: {},
   SettingsButton: {
-    marginLeft: 'auto',
+    marginLeft: "auto",
   },
   topContainer: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   row: {
-    position: 'relative',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    alignItems: 'center',
-    width: '100%',
+    position: "relative",
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
     marginBottom: 16,
   },
   picture: {
@@ -146,29 +146,29 @@ const styles = StyleSheet.create({
     height: 150,
   },
   pictureWrapper: {
-    marginLeft: 'auto',
+    marginLeft: "auto",
   },
   title: {
     fontSize: 26,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   logoutWrapper: {
-    marginLeft: 'auto',
+    marginLeft: "auto",
     height: 53,
   },
   logout: {
-    position: 'absolute',
+    position: "absolute",
     right: 0,
     bottom: 0,
   },
   SocialMediaRow: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
     marginVertical: 16,
   },
   SocialMediaButton: {
     marginHorizontal: 8,
   },
-})
+});
 
-export default Profile
+export default Profile;

@@ -1,6 +1,6 @@
 export interface IAtendee {
-  id: number
-  userId: number
-  eventId: number
-  createdAt: string | Date
+  id: number;
+  userId: number;
+  eventId: number;
+  createdAt: string | Date;
 }

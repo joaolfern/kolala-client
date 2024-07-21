@@ -3,19 +3,19 @@
  * https://reactnavigation.org/docs/typescript/
  */
 
-import { BottomTabScreenProps } from '@react-navigation/bottom-tabs'
-import {
+import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
+import type {
   CompositeScreenProps,
   NavigatorScreenParams,
-} from '@react-navigation/native'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { IEvent } from './Models/Event'
-import { IProfile, IProfileViewData } from './types/Profile'
-import { IUser } from './types/User'
+} from "@react-navigation/native";
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
+
+import type { IEvent } from "./Models/Event";
+import type { IProfile, IProfileViewData } from "./types/Profile";
 
 export namespace ImagePicker {
   export interface ImagePickerMultipleResult {
-    uri: string
+    uri: string;
   }
 }
 
@@ -26,54 +26,54 @@ declare global {
 }
 
 export type RootStackParamList = {
-  Root: NavigatorScreenParams<RootTabParamList> | undefined
+  Root: NavigatorScreenParams<RootTabParamList> | undefined;
   EventDetails: {
     preview: {
-      id: number
-      title: string
-    }
-  }
-  NotFound: undefined
+      id: number;
+      title: string;
+    };
+  };
+  NotFound: undefined;
   EventForm?: {
-    event: IEvent.Details
-  }
+    event: IEvent.Details;
+  };
   Profile: {
-    profileUserId: number
-  }
+    profileUserId: number;
+  };
   ProfileForm: {
-    profile: IProfileViewData
-  }
-  Events: undefined
-  FiltersMenu: undefined
-  MapToast: undefined
+    profile: IProfileViewData;
+  };
+  Events: undefined;
+  FiltersMenu: undefined;
+  MapToast: undefined;
   Chat: {
-    event: IEvent.ListItem
-  }
-  Report: undefined
+    event: IEvent.ListItem;
+  };
+  Report: undefined;
   ReportForm: {
-    target: IProfile
-  }
-  EventsOverview: undefined
-}
+    target: IProfile;
+  };
+  EventsOverview: undefined;
+};
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
-  NativeStackScreenProps<RootStackParamList, Screen>
+  NativeStackScreenProps<RootStackParamList, Screen>;
 
 export type RootTabParamList = {
-  Maps: undefined
+  Maps: undefined;
   Profile: {
-    profileUserId: number
-  }
-  Events: undefined
-}
+    profileUserId: number;
+  };
+  Events: undefined;
+};
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   CompositeScreenProps<
     BottomTabScreenProps<RootTabParamList, Screen>,
     NativeStackScreenProps<RootStackParamList>
-  >
+  >;
 
 export type ISelect<Value, Label = string> = {
-  value: Value
-  label: Label
-}
+  value: Value;
+  label: Label;
+};

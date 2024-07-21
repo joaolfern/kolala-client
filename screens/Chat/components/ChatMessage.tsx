@@ -1,26 +1,27 @@
-import { useActionSheet } from '@expo/react-native-action-sheet'
-import dayjs from 'dayjs'
-import React, { useCallback } from 'react'
-import { memo } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
-import Avatar from '../../../components/Avatar/Avatar'
-import Span from '../../../components/Span/Span'
-import Text from '../../../components/Text/Text'
-import Colors from '../../../constants/Colors'
-import { IMessage } from '../../../Models/Message'
-import ws from '../../../services/socket'
-import { updateReplyTarget, useReply } from '../../../store/replySlice'
-import { useAppDispatch, useAppSelector } from '../../../store/hooks'
-import { selectUser } from '../../../store/userSlice'
-import { IUser, _userLevel } from '../../../types/User'
-import { getChatMessageContentOptions } from '../utils'
-import { useChat } from '../useChat'
-import ChatAnswerToWrapper from './ChatAnswerToWrapper'
-import { useNavigation } from '@react-navigation/native'
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import { useNavigation } from "@react-navigation/native";
+import dayjs from "dayjs";
+import { memo, useCallback } from "react";
+import { StyleSheet, TouchableOpacity } from "react-native";
+
+import Avatar from "@/components/Avatar/Avatar";
+import Span from "@/components/Span/Span";
+import Text from "@/components/Text/Text";
+import Colors from "@/constants/Colors";
+import type { IMessage } from "@/Models/Message";
+import ws from "@/services/socket";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { updateReplyTarget } from "@/store/replySlice";
+import { selectUser } from "@/store/userSlice";
+import type { IUser } from "@/types/User";
+import { getChatMessageContentOptions } from "../utils";
+import ChatAnswerToWrapper from "./ChatAnswerToWrapper";
+import { useChat } from "@/screens/Chat/hooks/useChat";
+
 interface IProps {
-  message: IMessage
-  isFollowingMessage: boolean
-  hasFollwingMessage: boolean
+  message: IMessage;
+  isFollowingMessage: boolean;
+  hasFollwingMessage: boolean;
 }
 
 function ChatMessage({
@@ -28,25 +29,25 @@ function ChatMessage({
   isFollowingMessage,
   hasFollwingMessage,
 }: IProps) {
-  const { user } = useAppSelector(selectUser)
-  const dispatch = useAppDispatch()
-  const navigation = useNavigation()
+  const { user } = useAppSelector(selectUser);
+  const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
-  const isFirstMessage = !isFollowingMessage
-  const isAuthor = message.authorId === user?.id
+  const isFirstMessage = !isFollowingMessage;
+  const isAuthor = message.authorId === user?.id;
 
-  const { showActionSheetWithOptions } = useActionSheet()
-  const { setValue, focusInput } = useChat()
+  const { showActionSheetWithOptions } = useActionSheet();
+  const { setValue, focusInput } = useChat();
 
   const openMenu = useCallback((isAuthor: boolean, user: IUser) => {
-    const { level } = user
-    const options = getChatMessageContentOptions({ isAuthor, level })
+    const { level } = user;
+    const options = getChatMessageContentOptions({ isAuthor, level });
     const destructiveButtonIndex =
-      options.indexOf('Deletar mensagem') === -1
+      options.indexOf("Deletar mensagem") === -1
         ? undefined
-        : options.indexOf('Deletar mensagem')
+        : options.indexOf("Deletar mensagem");
 
-    const cancelButtonIndex = options.indexOf('Cancelar')
+    const cancelButtonIndex = options.indexOf("Cancelar");
 
     showActionSheetWithOptions(
       {
@@ -59,33 +60,32 @@ function ChatMessage({
         },
       },
       (selectedIndex?: number) => {
-        if (typeof selectedIndex === 'undefined') return
+        if (typeof selectedIndex === "undefined") return;
 
-        const selectedOption = options[selectedIndex]
+        const selectedOption = options[selectedIndex];
         switch (selectedOption) {
-          case 'Deletar mensagem':
-            ws.deleteMessage({ id: message.id })
-            return
-          case 'Responder':
-            setValue('answerToId', message.id)
-            dispatch(updateReplyTarget(message))
-            focusInput()
+          case "Deletar mensagem":
+            ws.deleteMessage({ id: message.id });
+            return;
+          case "Responder":
+            setValue("answerToId", message.id);
+            dispatch(updateReplyTarget(message));
+            focusInput();
 
-            return
-          case 'Denunciar usuário':
-            navigation.navigate('ReportForm', {
+            return;
+          case "Denunciar usuário":
+            navigation.navigate("ReportForm", {
               target: user.profile,
-            })
-            return
+            });
         }
       }
-    )
-  }, [])
+    );
+  }, []);
 
   function navigateToProfile() {
-    navigation.navigate('Profile', {
+    navigation.navigate("Profile", {
       profileUserId: message.authorId as number,
-    })
+    });
   }
 
   return (
@@ -132,14 +132,14 @@ function ChatMessage({
         </ChatAnswerToWrapper>
       </Span>
     </Span>
-  )
+  );
 }
 
-export default memo(ChatMessage)
+export default memo(ChatMessage);
 
 interface IMessageContent {
-  message: IMessage
-  isAuthor: boolean
+  message: IMessage;
+  isAuthor: boolean;
 }
 
 function MessageContent({ message, isAuthor }: IMessageContent) {
@@ -152,16 +152,16 @@ function MessageContent({ message, isAuthor }: IMessageContent) {
       ]}
     >
       <Text style={styles.Datetime}>
-        {dayjs(message.createdAt).format('HH:mm')}
+        {dayjs(message.createdAt).format("HH:mm")}
       </Text>
       <Text style={styles.Text}>{message.content}</Text>
     </Span>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   Message: {
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
   },
   UserMessage: {},
   Avatar: {
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   AlignedRight: {
-    alignSelf: 'flex-end',
+    alignSelf: "flex-end",
   },
   Name: {
     marginBottom: 6,
@@ -180,12 +180,12 @@ const styles = StyleSheet.create({
   },
   ContentWrapper: {},
   UserContentWrapper: {
-    alignItems: 'flex-end',
+    alignItems: "flex-end",
   },
   MarginWrapper: {
     marginBottom: 16,
     maxWidth: 250,
-    minWidth: '45%',
+    minWidth: "45%",
   },
   Content: {
     backgroundColor: Colors.xLightBackground,
@@ -193,9 +193,9 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 7,
     padding: 14,
     paddingTop: 10,
-    overflow: 'hidden',
+    overflow: "hidden",
     paddingBottom: 24,
-    position: 'relative',
+    position: "relative",
   },
   ContentWithReplyRadius: {
     borderTopRightRadius: 0,
@@ -210,10 +210,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   Datetime: {
-    position: 'absolute',
+    position: "absolute",
     fontSize: 12,
     color: Colors.gray,
     right: 12,
     bottom: 4,
   },
-})
+});

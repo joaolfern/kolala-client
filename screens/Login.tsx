@@ -1,15 +1,16 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Image, StyleSheet } from "react-native";
+
+import logo from "../assets/images/logo.png";
+import { loginWithToken } from "../components/AuthButton/api";
+import FacebookAuthButton from "../components/AuthButton/FacebookAuthButton";
+import GoogleAuthButton from "../components/AuthButton/GoogleAuthButton";
+import Span from "../components/Span/Span";
 import Text from "../components/Text/Text";
 import View from "../components/View/View";
-import logo from "../assets/images/logo.png";
 import Colors from "../constants/Colors";
-import GoogleAuthButton from "../components/AuthButton/GoogleAuthButton";
-import FacebookAuthButton from "../components/AuthButton/FacebookAuthButton";
-import Span from "../components/Span/Span";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { selectToken, setToken } from "../store/tokenSlice";
-import { loginWithToken } from "../components/AuthButton/api";
 import { setUser } from "../store/userSlice";
 import { useSecureStore } from "../store/useSecureStore";
 

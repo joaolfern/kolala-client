@@ -1,17 +1,18 @@
-import React from 'react'
-import Button from '../Button/Button'
-import { MaterialIcons } from '@expo/vector-icons'
-import { StyleSheet, TouchableOpacityProps } from 'react-native'
+import { MaterialIcons } from "@expo/vector-icons";
+import type { TouchableOpacityProps } from "react-native";
+import { StyleSheet } from "react-native";
+
+import Button from "../Button/Button";
 
 function LogoutButton({ style, ...rest }: TouchableOpacityProps) {
   return (
     <Button style={[style, styles.button]} {...rest}>
-      <MaterialIcons name='logout' size={24} color='black' />
+      <MaterialIcons name="logout" size={24} color="black" />
     </Button>
-  )
+  );
 }
 
-export default LogoutButton
+export default LogoutButton;
 
 const styles = StyleSheet.create({
   button: {
@@ -19,4 +20,4 @@ const styles = StyleSheet.create({
     width: 53,
     height: 53,
   },
-})
+});

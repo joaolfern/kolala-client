@@ -1,18 +1,19 @@
-import React from 'react'
-import { SectionListData, StyleSheet } from 'react-native'
-import Span from '../../../../components/Span/Span'
-import Text from '../../../../components/Text/Text'
-import { IEvent } from '../../../../Models/Event'
-import NoResultMessage from '../NoResultMessage/NoResultMessage'
-import Toggle from 'react-native-toggle-element'
-import { _eventListTypes } from '../../Events'
-import { MaterialIcons } from '@expo/vector-icons'
-import Colors from '../../../../constants/Colors'
+import { MaterialIcons } from "@expo/vector-icons";
+import type { SectionListData } from "react-native";
+import { StyleSheet } from "react-native";
+import Toggle from "react-native-toggle-element";
+
+import Span from "@//components/Span/Span";
+import Text from "@//components/Text/Text";
+import Colors from "@//constants/Colors";
+import type { IEvent } from "@//Models/Event";
+import type { _eventListTypes } from "../../Events";
+import NoResultMessage from "../NoResultMessage/NoResultMessage";
 
 interface IProps {
-  section: SectionListData<IEvent.ListItem, IEvent.IEventSections>
-  showPastEvents: boolean
-  toggleShowPastEvents(): void
+  section: SectionListData<IEvent.ListItem, IEvent.IEventSections>;
+  showPastEvents: boolean;
+  toggleShowPastEvents(): void;
 }
 
 function EventListSectionTitle({
@@ -32,18 +33,18 @@ function EventListSectionTitle({
           thumbActiveComponent={
             <MaterialIcons
               size={38}
-              name='history'
+              name="history"
               color={Colors.secondaryColor}
             />
           }
           thumbButton={{
-            activeBackgroundColor: 'transparent',
-            inActiveBackgroundColor: 'transparent',
+            activeBackgroundColor: "transparent",
+            inActiveBackgroundColor: "transparent",
           }}
           thumbInActiveComponent={
             <MaterialIcons
               size={40}
-              name='explore'
+              name="explore"
               color={Colors.secondaryColor}
               solid
             />
@@ -61,10 +62,10 @@ function EventListSectionTitle({
       </Span>
       {!section.data.length && <NoResultMessage />}
     </Span>
-  )
+  );
 }
 
-export default EventListSectionTitle
+export default EventListSectionTitle;
 
 const styles = StyleSheet.create({
   Wrapper: {
@@ -72,18 +73,18 @@ const styles = StyleSheet.create({
   },
   Title: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     padding: 16,
   },
   Header: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    justifyContent: "space-between",
+    flexDirection: "row",
     marginRight: 7,
   },
   Toogle: {},
-})
+});
 
 const TRANSLATE_LIST_TYPE: { [key in _eventListTypes]: string } = {
-  organizing: 'Organizando',
-  participating: 'Participando',
-}
+  organizing: "Organizando",
+  participating: "Participando",
+};

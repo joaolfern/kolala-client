@@ -1,19 +1,19 @@
-import React, { useState } from 'react'
-import RNPickerSelect, {
+import { useController } from "react-hook-form";
+import { StyleSheet, View } from "react-native";
+import type {
   PickerSelectProps,
   PickerStyle,
-} from 'react-native-picker-select'
-import { StyleSheet, Text, View } from 'react-native'
-import Colors from '../../constants/Colors'
-import ArrowRight from '../../assets/images/arrow-right.svg'
-import Button from '../Button/Button'
-import { useController } from 'react-hook-form'
+} from "react-native-picker-select";
+import RNPickerSelect from "react-native-picker-select";
 
-type IProps = Omit<PickerSelectProps, 'onValueChange'> & {
-  name: string
-  control: any
-  defaultValue?: string
-}
+import ArrowRight from "../../assets/images/arrow-right.svg";
+import Colors from "../../constants/Colors";
+
+type IProps = Omit<PickerSelectProps, "onValueChange"> & {
+  name: string;
+  control: any;
+  defaultValue?: string;
+};
 
 export default function Select({
   name,
@@ -25,15 +25,15 @@ export default function Select({
     name,
     control,
     defaultValue,
-  })
+  });
 
-  const { onChange, value } = field
+  const { onChange, value } = field;
 
   return (
     <View style={styles.Container}>
       <RNPickerSelect
         value={value}
-        placeholder={{ label: 'Selecione uma opção', value: null }}
+        placeholder={{ label: "Selecione uma opção", value: null }}
         style={style}
         onValueChange={onChange}
         useNativeAndroidPickerStyle={false}
@@ -48,7 +48,7 @@ export default function Select({
         ]}
       />
     </View>
-  )
+  );
 }
 
 const style: PickerStyle = {
@@ -75,16 +75,16 @@ const style: PickerStyle = {
     paddingHorizontal: 20,
     paddingRight: 30,
   },
-}
+};
 
 const styles = StyleSheet.create({
   Container: {
-    position: 'relative',
+    position: "relative",
   },
   Arrow: {
-    position: 'absolute',
+    position: "absolute",
     right: 20,
-    top: '50%',
-    margin: 'auto',
+    top: "50%",
+    margin: "auto",
   },
-})
+});

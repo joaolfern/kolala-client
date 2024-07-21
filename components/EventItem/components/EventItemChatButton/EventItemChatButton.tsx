@@ -1,38 +1,37 @@
-import React from 'react'
-import Button from '../../../Button/Button'
-import Chat from '../../../../assets/mapIcons/chat.svg'
-import { StyleSheet } from 'react-native'
-import Colors from '../../../../constants/Colors'
-import { useNavigation } from '@react-navigation/native'
-import { IEvent } from '../../../../Models/Event'
-import Span from '../../../Span/Span'
+import { useNavigation } from "@react-navigation/native";
+import { StyleSheet } from "react-native";
+
+import Chat from "@//assets/mapIcons/chat.svg";
+import Colors from "@//constants/Colors";
+import type { IEvent } from "@//Models/Event";
+import Button from "@/components/Button/Button";
 
 interface IProps {
-  event: IEvent.ListItem
+  event: IEvent.ListItem;
 }
 
 function EventItemChatButton({ event }: IProps) {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
 
   function navigateToChat(event: IEvent.ListItem) {
-    navigation.navigate('Chat', {
+    navigation.navigate("Chat", {
       event,
-    })
+    });
   }
 
   return (
     <Button onPress={() => navigateToChat(event)} style={styles.Button}>
       <Chat />
     </Button>
-  )
+  );
 }
 
-export default EventItemChatButton
+export default EventItemChatButton;
 
-EventItemChatButton.Skeleton = Skeleton
+EventItemChatButton.Skeleton = Skeleton;
 
 function Skeleton() {
-  return <Button style={styles.Button} />
+  return <Button style={styles.Button} />;
 }
 
 const styles = StyleSheet.create({
@@ -43,4 +42,4 @@ const styles = StyleSheet.create({
   Skeleton: {
     backgroundColor: Colors.gray,
   },
-})
+});

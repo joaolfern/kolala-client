@@ -1,7 +1,7 @@
-import * as React from 'react'
+import * as React from "react";
 
-export const toastRef = React.createRef<any>()
+export const toastRef = React.createRef<any>();
 
 export const showToast = (text: string) => {
-  toastRef.current?.show(text)
-}
+  toastRef.current?.show(text);
+};

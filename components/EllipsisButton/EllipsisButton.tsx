@@ -1,22 +1,23 @@
-import { FontAwesome5 } from '@expo/vector-icons'
-import React from 'react'
-import { StyleSheet, TouchableOpacityProps } from 'react-native'
-import Colors from '../../constants/Colors'
-import Button from '../Button/Button'
+import { FontAwesome5 } from "@expo/vector-icons";
+import type { TouchableOpacityProps } from "react-native";
+import { StyleSheet } from "react-native";
+
+import Colors from "../../constants/Colors";
+import Button from "../Button/Button";
 
 interface IEllipsisButton extends TouchableOpacityProps {
-  onPress(): void
+  onPress(): void;
 }
 
 function EllipsisButton({ style, onPress }: IEllipsisButton) {
   return (
     <Button style={[styles.EllipsisButton, style]} onPress={onPress}>
-      <FontAwesome5 size={20} name='ellipsis-v' solid color={Colors.gray} />
+      <FontAwesome5 size={20} name="ellipsis-v" solid color={Colors.gray} />
     </Button>
-  )
+  );
 }
 
-export default EllipsisButton
+export default EllipsisButton;
 
 const styles = StyleSheet.create({
   EllipsisButton: {
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 99999999,
     backgroundColor: Colors.xLightBackground,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
-})
+});

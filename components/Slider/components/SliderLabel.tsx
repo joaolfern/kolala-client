@@ -1,9 +1,12 @@
-import React, { memo, ReactNode } from 'react'
-import { View, Text, StyleSheet, ViewProps } from 'react-native'
-import Colors from '../../../constants/Colors'
+import type { ReactNode } from "react";
+import { memo } from "react";
+import type { ViewProps } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+
+import Colors from "@/constants/Colors";
 
 interface IProps extends ViewProps {
-  text: ReactNode
+  text: ReactNode;
 }
 
 const Label = ({ text, ...restProps }: IProps) => {
@@ -11,12 +14,12 @@ const Label = ({ text, ...restProps }: IProps) => {
     <View style={styles.root} {...restProps}>
       <Text style={styles.text}>{text}</Text>
     </View>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   root: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: 8,
     backgroundColor: Colors.secondaryColor,
     borderRadius: 4,
@@ -24,8 +27,8 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 16,
-    color: '#010101',
+    color: "#010101",
   },
-})
+});
 
-export default memo(Label)
+export default memo(Label);

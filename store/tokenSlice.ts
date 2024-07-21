@@ -1,7 +1,12 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import * as SecureStore from "expo-secure-store";
 
-const initialState: string = "";
+export enum CustomTokenEnum {
+  guest = "guest",
+}
+
+const initialState: string = CustomTokenEnum.guest;
 
 export const tokenSlice = createSlice({
   name: "token",

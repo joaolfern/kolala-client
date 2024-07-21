@@ -1,12 +1,13 @@
-import React, { ReactNode } from 'react'
-import { StyleSheet } from 'react-native'
-import Colors from '../../constants/Colors'
-import Avatar, { IAvatar } from '../Avatar/Avatar'
-import Span from '../Span/Span'
+import type { ReactNode } from "react";
+import { StyleSheet } from "react-native";
+
+import type { IAvatar } from "../Avatar/Avatar";
+import Avatar from "../Avatar/Avatar";
+import Span from "../Span/Span";
 
 type IProps = IAvatar & {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 function AvatarWithIcon({ children, ...rest }: IProps) {
   return (
@@ -14,18 +15,18 @@ function AvatarWithIcon({ children, ...rest }: IProps) {
       <Avatar {...rest} />
       <Span style={styles.Icon}>{children}</Span>
     </Span>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   Wrapper: {
-    position: 'relative',
+    position: "relative",
   },
   Icon: {
-    position: 'absolute',
+    position: "absolute",
     right: 0,
     bottom: 0,
   },
-})
+});
 
-export default AvatarWithIcon
+export default AvatarWithIcon;

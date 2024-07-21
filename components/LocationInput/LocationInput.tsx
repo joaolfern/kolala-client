@@ -1,26 +1,27 @@
-import React, { useEffect, useRef } from 'react'
-import {
-  GooglePlacesAutocomplete,
+import { useEffect, useRef } from "react";
+import { useController } from "react-hook-form";
+import type {
   GooglePlacesAutocompleteProps,
   GooglePlacesAutocompleteRef,
-} from 'react-native-google-places-autocomplete'
-import Colors from '../../constants/Colors'
-import { useController } from 'react-hook-form'
-import Span from '../Span/Span'
-import Text from '../Text/Text'
-import { GOOGLE_API_TOKEN } from '../../env'
+} from "react-native-google-places-autocomplete";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+
+import Colors from "../../constants/Colors";
+import { GOOGLE_API_TOKEN } from "../../env";
+import Span from "../Span/Span";
+import Text from "../Text/Text";
 
 interface FormValueProps {
-  address: string | undefined
-  lat?: number | undefined
-  lng?: number | undefined
+  address: string | undefined;
+  lat?: number | undefined;
+  lng?: number | undefined;
 }
 
 interface IProps extends Partial<GooglePlacesAutocompleteProps> {
-  name: string
-  control: any
-  defaultValue: FormValueProps
-  clearError(): void
+  name: string;
+  control: any;
+  defaultValue: FormValueProps;
+  clearError(): void;
 }
 
 function LocationInput({
@@ -30,69 +31,69 @@ function LocationInput({
   clearError,
   ...rest
 }: IProps) {
-  const ref = useRef<GooglePlacesAutocompleteRef>(null)
-  const shouldSetDefault = useRef(true)
+  const ref = useRef<GooglePlacesAutocompleteRef>(null);
+  const shouldSetDefault = useRef(true);
   const { field } = useController({
     name,
     control,
     defaultValue,
-  })
+  });
 
-  const { onChange } = field
+  const { onChange } = field;
 
   useEffect(() => {
     if (shouldSetDefault.current && ref.current && defaultValue.address) {
-      ref.current.setAddressText(defaultValue.address)
-      shouldSetDefault.current = false
+      ref.current.setAddressText(defaultValue.address);
+      shouldSetDefault.current = false;
     }
-  }, [defaultValue])
+  }, [defaultValue]);
 
   return (
     <GooglePlacesAutocomplete
       {...rest}
       ref={ref}
       styles={style}
-      placeholder='ex: Avenida Chico Mendes 213, São Paulo'
+      placeholder="ex: Avenida Chico Mendes 213, São Paulo"
       textInputProps={{
         placeholderTextColor: Colors.gray,
       }}
       enablePoweredByContainer={false}
-      onFail={error => console.log(error)}
-      fetchDetails={true}
+      onFail={(error) => console.log(error)}
+      fetchDetails
       onPress={(_, details = null) => {
         const data: FormValueProps = {
           ...details?.geometry.location,
           address: details?.name,
-        }
-        onChange(data || {})
-        clearError()
+        };
+        onChange(data || {});
+        clearError();
       }}
       debounce={800}
-      keyboardShouldPersistTaps='always'
-      disableScroll={true}
+      keyboardShouldPersistTaps="always"
+      disableScroll
       query={{
         key: GOOGLE_API_TOKEN,
-        language: 'pt-BR',
-        rankby: 'distance',
-        location: '-23.4874549,-47.4991724',
+        language: "pt-BR",
+        rankby: "distance",
+        location: "-23.4874549,-47.4991724",
       }}
       renderRow={(rowData, idx) => {
-        const title = rowData.structured_formatting.main_text
-        const address = rowData.structured_formatting.secondary_text
+        const title = rowData.structured_formatting.main_text;
+        const address = rowData.structured_formatting.secondary_text;
         return (
           <Span style={resultStyle.containerResultRow(idx)}>
             <Text style={resultStyle.resultTitle}>{title}</Text>
             <Text>{address}</Text>
           </Span>
-        )
+        );
       }}
     />
-  )
+  );
 }
 
-const style: GooglePlacesAutocompleteProps['styles'] = {
+const style: GooglePlacesAutocompleteProps["styles"] = {
   container: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   textInput: {
     minHeight: 58,
@@ -100,31 +101,31 @@ const style: GooglePlacesAutocompleteProps['styles'] = {
     color: Colors.text,
     borderWidth: 1,
     borderRadius: 10,
-    borderColor: 'white',
-    backgroundColor: 'transparent',
+    borderColor: "white",
+    backgroundColor: "transparent",
     fontSize: 18,
     margin: 0,
     paddingHorizontal: 20,
   },
   textInputContainer: {
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   separator: {
-    display: 'none',
+    display: "none",
   },
   row: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
     paddingVertical: 0,
     paddingHorizontal: 0,
     margin: 0,
     color: Colors.text,
   },
-}
+};
 
 const resultStyle = {
   containerResultRow: (idx: number) => ({
     flex: 1,
-    'justify-content': 'center',
+    "justify-content": "center",
     color: Colors.text,
     borderWidth: 0,
     paddingVertical: 10,
@@ -133,8 +134,8 @@ const resultStyle = {
     backgroundColor: idx % 2 ? Colors.xLightBackground : Colors.lightBackground,
   }),
   resultTitle: {
-    fontWeight: '600' as '600',
+    fontWeight: "600" as "600",
   },
-}
+};
 
-export default LocationInput
+export default LocationInput;

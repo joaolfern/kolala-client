@@ -1,93 +1,90 @@
-import { MaterialIcons } from '@expo/vector-icons'
-import { useNavigation } from '@react-navigation/native'
-import dayjs from 'dayjs'
-import React, { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import {
-  StyleSheet,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-} from 'react-native'
-import MapToast from '../../components/MapToast/MapToast'
-import ModalWrapper from '../../components/ModalWrapper/ModalWrapper'
-import Span from '../../components/Span/Span'
-import Text from '../../components/Text/Text'
-import Colors from '../../constants/Colors'
-import { useAppDispatch } from '../../store/hooks'
+import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import dayjs from "dayjs";
+import { useEffect, useMemo, useState } from "react";
+import { useForm } from "react-hook-form";
+import { StyleSheet, TouchableWithoutFeedback } from "react-native";
+
+import MapToast from "../../components/MapToast/MapToast";
+import ModalWrapper from "../../components/ModalWrapper/ModalWrapper";
+import Span from "../../components/Span/Span";
+import Text from "../../components/Text/Text";
+import Colors from "../../constants/Colors";
+import { useAppDispatch } from "../../store/hooks";
 import {
   clearFilter,
   initialState,
   useMapFilter,
-} from '../../store/mapFilterSlice'
-import useMarkers from '../Home/hooks/useMarkers'
-import FilterDateInput from './components/FilterRange/FilterDateInput'
-import FilterSlideInput from './components/FilterSlideInput'
+} from "../../store/mapFilterSlice";
+import useMarkers from "../Home/hooks/useMarkers";
+import FilterDateInput from "./components/FilterRange/FilterDateInput";
+import FilterSlideInput from "./components/FilterSlideInput";
 
-export type _filterDatetype = 'week' | 'month'
+export type _filterDatetype = "week" | "month";
 
 export interface IFilters {
-  distance: number
-  datetype: _filterDatetype
-  minDateRange: string | null
-  maxDateRange: string | null
+  distance: number;
+  datetype: _filterDatetype;
+  minDateRange: string | null;
+  maxDateRange: string | null;
 }
 
 function formatObjToComparison(object: object) {
-  return JSON.stringify(object).split('').sort().join()
+  return JSON.stringify(object).split("").sort().join();
 }
 
 function showDate(date: string | null) {
-  if (!date) return null
-  return dayjs(date).format('DD/MM')
+  if (!date) return null;
+  return dayjs(date).format("DD/MM");
 }
 
 const datetypeDisplay = {
-  week: 'esta semana/fds',
-  month: 'este mês',
-}
+  week: "esta semana/fds",
+  month: "este mês",
+};
 
 function FiltersMenu() {
-  const dispatch = useAppDispatch()
-  const navigator = useNavigation()
-  const { shouldShowToast, filters, isGettingNewFilter } = useMapFilter()
-  const { markers } = useMarkers()
+  const dispatch = useAppDispatch();
+  const navigator = useNavigation();
+  const { shouldShowToast, filters, isGettingNewFilter } = useMapFilter();
+  const { markers } = useMarkers();
 
-  const [canClearFilters, setCanClearFilters] = useState(false)
+  const [canClearFilters, setCanClearFilters] = useState(false);
 
   const form = useForm<IFilters>({
     defaultValues: {
       ...filters,
     },
-  })
+  });
 
-  const { control, watch, reset } = form
+  const { control, watch, reset } = form;
 
   function onClose() {
-    navigator.navigate('Root')
+    navigator.navigate("Root");
   }
 
   function handleClear() {
-    dispatch(clearFilter())
-    reset(initialState.filters)
+    dispatch(clearFilter());
+    reset(initialState.filters);
   }
 
   useEffect(() => {
     const canClearFilters =
       formatObjToComparison(filters) !==
-      formatObjToComparison(initialState.filters)
+      formatObjToComparison(initialState.filters);
 
-    setCanClearFilters(canClearFilters)
-  }, [filters])
+    setCanClearFilters(canClearFilters);
+  }, [filters]);
 
   const rangeDisplay = useMemo(() => {
     const minRangeDisplay = filters.minDateRange
       ? `a partir de ${showDate(filters.minDateRange)} `
-      : ''
+      : "";
     const maxRangeDisplay = filters.maxDateRange
       ? `até ${showDate(filters.maxDateRange)}`
-      : ''
-    return minRangeDisplay + maxRangeDisplay
-  }, [filters.minDateRange, filters.maxDateRange])
+      : "";
+    return minRangeDisplay + maxRangeDisplay;
+  }, [filters.minDateRange, filters.maxDateRange]);
 
   return (
     <>
@@ -95,10 +92,10 @@ function FiltersMenu() {
         <MapToast>
           <MapToast.LoadingHeader
             loading={isGettingNewFilter}
-            title={isGettingNewFilter ? '' : `${markers.length} Resultados`}
+            title={isGettingNewFilter ? "" : `${markers.length} Resultados`}
           >
             <Text>
-              A {filters.distance} km e{' '}
+              A {filters.distance} km e{" "}
               {filters.maxDateRange || filters.minDateRange
                 ? rangeDisplay
                 : datetypeDisplay[filters.datetype]}
@@ -113,7 +110,7 @@ function FiltersMenu() {
               <MaterialIcons
                 color={Colors.primaryColor}
                 size={34}
-                name='filter-alt'
+                name="filter-alt"
               />
               <Text style={styles.Title}>Filtros</Text>
             </Span>
@@ -130,31 +127,31 @@ function FiltersMenu() {
         </Span>
       </ModalWrapper>
     </>
-  )
+  );
 }
 
-export default FiltersMenu
+export default FiltersMenu;
 
 const styles = StyleSheet.create({
   FiltersMenu: {
     marginTop: 16,
     backgroundColor: Colors.background,
-    width: '100%',
+    width: "100%",
     zIndex: 1,
     borderRadius: 16,
     padding: 16,
   },
   Header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   HeaderText: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   Title: {
     marginLeft: 10,
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Colors.primaryColor,
     marginBottom: 24,
   },
@@ -162,10 +159,10 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   ClearFilterText: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   SuccessHeaderText: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: Colors.primaryColor,
   },
-})
+});

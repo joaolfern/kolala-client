@@ -1,18 +1,17 @@
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
-import React, { useCallback, useState } from 'react'
-import { SectionList, StyleSheet } from 'react-native'
-import Button from '../../components/Button/Button'
-import Header from '../../components/Header/Header'
-import EventItem from '../../components/EventItem/EventItem'
-import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
-import Span from '../../components/Span/Span'
-import Text from '../../components/Text/Text'
-import Colors from '../../constants/Colors'
-import Spinner from '../../components/Spinner/Spinner'
-import Event, { IEvent } from '../../Models/Event'
-import EventListSectionTitle from './components/EventListSectionTitle/EventListSectionTitle'
-import NoResultMessage from './components/NoResultMessage/NoResultMessage'
-import CreateEventButton from '../../components/CreateEventButton/CreateEventButton'
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useState } from "react";
+import { SectionList, StyleSheet } from "react-native";
+
+import CreateEventButton from "../../components/CreateEventButton/CreateEventButton";
+import EventItem from "../../components/EventItem/EventItem";
+import Header from "../../components/Header/Header";
+import SafeAreaView from "../../components/SafeAreaView/SafeAreaView";
+import Span from "../../components/Span/Span";
+import Spinner from "../../components/Spinner/Spinner";
+import type { IEvent } from "../../Models/Event";
+import Event from "../../Models/Event";
+import EventListSectionTitle from "./components/EventListSectionTitle/EventListSectionTitle";
+import NoResultMessage from "./components/NoResultMessage/NoResultMessage";
 
 function EventListHeader() {
   return (
@@ -22,21 +21,21 @@ function EventListHeader() {
       </Header>
       <CreateEventButton />
     </Span>
-  )
+  );
 }
 
-export type _eventListTypes = 'organizing' | 'participating'
+export type _eventListTypes = "organizing" | "participating";
 
 type IEventList = {
   [key in _eventListTypes]: {
-    data: IEvent.IEventSections | null
-    arePast: boolean
-    loading: boolean
-  } | null
-}
+    data: IEvent.IEventSections | null;
+    arePast: boolean;
+    loading: boolean;
+  } | null;
+};
 
 function EventList() {
-  const [initialLoading, setInitialLoading] = useState(false)
+  const [initialLoading, setInitialLoading] = useState(false);
   const [events, setEvents] = useState<IEventList>({
     organizing: {
       arePast: false,
@@ -48,72 +47,72 @@ function EventList() {
       data: null,
       loading: false,
     },
-  })
+  });
 
   async function getEvents(type: _eventListTypes, arePast: boolean = true) {
     setEvents(
-      prev =>
+      (prev) =>
         ({
           ...prev,
           [type]: {
             ...prev[type],
             loading: true,
           },
-        } as IEventList)
-    )
+        }) as IEventList,
+    );
     try {
       const config = {
         params: {
           arePast,
         },
-      }
-      const response = await Event.listEvents(type, config)
-      const data = response.data?.data
+      };
+      const response = await Event.listEvents(type, config);
+      const data = response.data?.data;
       if (data) {
-        setEvents(prev => {
+        setEvents((prev) => {
           return {
             ...prev,
             [type]: {
               ...prev[type],
               data,
               arePast,
-            } as IEventList['organizing'],
-          }
-        })
+            } as IEventList["organizing"],
+          };
+        });
       }
     } catch (err) {
-      console.log(err)
+      console.log(err);
     } finally {
       setEvents(
-        prev =>
+        (prev) =>
           ({
             ...prev,
             [type]: {
               ...prev[type],
               loading: false,
             },
-          } as IEventList)
-      )
+          }) as IEventList,
+      );
     }
   }
 
   async function getInitalEvents() {
-    setInitialLoading(true)
-    await getEvents('organizing', events.organizing?.arePast)
-    await getEvents('participating', events.participating?.arePast)
-    setInitialLoading(false)
+    setInitialLoading(true);
+    await getEvents("organizing", events.organizing?.arePast);
+    await getEvents("participating", events.participating?.arePast);
+    setInitialLoading(false);
   }
 
   useFocusEffect(
     useCallback(() => {
-      getInitalEvents()
-    }, [])
-  )
+      getInitalEvents();
+    }, []),
+  );
 
   const list = [
     ...(events?.organizing?.data ? [events?.organizing?.data] : []),
     ...(events?.participating?.data ? [events?.participating?.data] : []),
-  ]
+  ];
 
   const loadingElement = (
     <Span style={styles.Container}>
@@ -122,7 +121,7 @@ function EventList() {
         <Spinner />
       </Span>
     </Span>
-  )
+  );
 
   return (
     <SafeAreaView>
@@ -142,33 +141,33 @@ function EventList() {
             )
           }
           renderSectionHeader={({ section }) => {
-            const eventType = section.title as _eventListTypes
+            const eventType = section.title as _eventListTypes;
 
             return (
               <EventListSectionTitle
                 section={section}
                 showPastEvents={!!events[eventType]?.arePast}
                 toggleShowPastEvents={() => {
-                  return setEvents(prev => {
-                    const updatedArePast = !prev[eventType]?.arePast
+                  return setEvents((prev) => {
+                    const updatedArePast = !prev[eventType]?.arePast;
 
-                    getEvents(eventType, updatedArePast)
+                    getEvents(eventType, updatedArePast);
                     return {
                       ...prev,
                       [eventType]: {
                         ...prev[eventType],
                         arePast: updatedArePast,
                       },
-                    }
-                  })
+                    };
+                  });
                 }}
               />
-            )
+            );
           }}
         />
       )}
     </SafeAreaView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -179,14 +178,14 @@ const styles = StyleSheet.create({
   },
   Title: {
     fontSize: 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     padding: 16,
   },
   loadingContainer: {
     padding: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
-})
+});
 
-export default EventList
+export default EventList;

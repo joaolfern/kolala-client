@@ -1,18 +1,21 @@
-import { useActionSheet } from '@expo/react-native-action-sheet'
-import { useNavigation } from '@react-navigation/native'
-import React, { ReactNode, useCallback } from 'react'
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native'
-import Colors from '../../../constants/Colors'
-import Report, { IReport } from '../../../Models/Report'
-import { useAppSelector } from '../../../store/hooks'
-import { selectUser } from '../../../store/userSlice'
-import { showToast } from '../../../utils/toast'
-import { REPORT_STATUS_RESOURCE } from '../constants'
+import { useActionSheet } from "@expo/react-native-action-sheet";
+import { useNavigation } from "@react-navigation/native";
+import type { ReactNode } from "react";
+import { useCallback } from "react";
+import type { TouchableOpacityProps } from "react-native";
+import { TouchableOpacity } from "react-native";
+
+import Colors from "@/constants/Colors";
+import type { IReport } from "@/Models/Report";
+import Report from "@/Models/Report";
+import { useAppSelector } from "@/store/hooks";
+import { selectUser } from "@/store/userSlice";
+import { showToast } from "@/utils/toast";
 
 interface IProps extends TouchableOpacityProps {
-  children: ReactNode
-  report: IReport.Model
-  reloadList(): void
+  children: ReactNode;
+  report: IReport.Model;
+  reloadList(): void;
 }
 
 function ReportCardAdminWrapper({
@@ -22,16 +25,16 @@ function ReportCardAdminWrapper({
   reloadList,
   ...rest
 }: IProps) {
-  const { showActionSheetWithOptions } = useActionSheet()
-  const { user } = useAppSelector(selectUser)
-  const { navigate } = useNavigation()
+  const { showActionSheetWithOptions } = useActionSheet();
+  const { user } = useAppSelector(selectUser);
+  const { navigate } = useNavigation();
 
   async function updateReportStatus({
     report,
     status,
   }: {
-    report: IReport.Model
-    status: number
+    report: IReport.Model;
+    status: number;
   }) {
     try {
       await Report.updateReport({
@@ -39,23 +42,23 @@ function ReportCardAdminWrapper({
           status,
         },
         reportId: report.id,
-      })
+      });
 
-      reloadList()
+      reloadList();
     } catch (err: any) {
-      if (err?.message) showToast(err.message)
+      if (err?.message) showToast(err.message);
     }
   }
 
-  const isAdmin = user?.level === 'admin'
+  const isAdmin = user?.level === "admin";
   const showUpdateReportStatusOptions = useCallback(() => {
     const options = [
-      'Pendente',
-      'Suspender conta',
-      'Descartar denúncia',
-      'Visitar perfil',
-      'Cancelar',
-    ]
+      "Pendente",
+      "Suspender conta",
+      "Descartar denúncia",
+      "Visitar perfil",
+      "Cancelar",
+    ];
     showActionSheetWithOptions(
       {
         options,
@@ -65,23 +68,23 @@ function ReportCardAdminWrapper({
         },
       },
       (selectedIndex?: number) => {
-        if (typeof selectedIndex === 'undefined') return
-        const isLast = options.length - 1 === selectedIndex
-        if (isLast) return
-        const option = options[selectedIndex]
+        if (typeof selectedIndex === "undefined") return;
+        const isLast = options.length - 1 === selectedIndex;
+        if (isLast) return;
+        const option = options[selectedIndex];
 
         switch (option) {
-          case 'Visitar perfil': {
-            navigate('Profile', {
+          case "Visitar perfil": {
+            navigate("Profile", {
               profileUserId: report.targetId,
-            })
+            });
           }
         }
 
-        updateReportStatus({ report, status: selectedIndex })
+        updateReportStatus({ report, status: selectedIndex });
       }
-    )
-  }, [])
+    );
+  }, []);
 
   return (
     <>
@@ -97,7 +100,7 @@ function ReportCardAdminWrapper({
         children
       )}
     </>
-  )
+  );
 }
 
-export default ReportCardAdminWrapper
+export default ReportCardAdminWrapper;

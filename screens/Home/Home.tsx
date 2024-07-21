@@ -1,64 +1,66 @@
-import React, { useCallback, useState, useEffect, useRef } from 'react'
-import { StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
-import MapView, { Marker, Region } from 'react-native-maps'
-import mapStyle from '../../constants/mapStyle'
-import View from '../../components/View/View'
-import useUserLocation from './UserMarker/useUserLocation'
 import {
   useFocusEffect,
   useIsFocused,
   useNavigation,
-} from '@react-navigation/native'
-import { MAP_ICONS } from '../EventForm/constants'
-import { IEvent } from '../../Models/Event'
-import MapFilter from '../../components/MapFilter/MapFilter'
-import { useMapFilter } from '../../store/mapFilterSlice'
-import useMarkers from './hooks/useMarkers'
-import HomeButton from '../../components/MyTabBar/HomeButton'
+} from "@react-navigation/native";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Dimensions, StyleSheet } from "react-native";
+import type { Region } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
+
+import MapFilter from "../../components/MapFilter/MapFilter";
+import HomeButton from "../../components/MyTabBar/HomeButton";
+import View from "../../components/View/View";
+import mapStyle from "../../constants/mapStyle";
+import type { IEvent } from "../../Models/Event";
+import { useMapFilter } from "../../store/mapFilterSlice";
+import { MAP_ICONS } from "../EventForm/constants";
+import useMarkers from "./hooks/useMarkers";
+import useUserLocation from "./UserMarker/useUserLocation";
 
 export default function Home() {
-  const mapRef = useRef<null | MapView>(null)
+  const mapRef = useRef<null | MapView>(null);
 
-  const navigation = useNavigation()
-  const { location } = useUserLocation()
-  const { markers, requestMarkers } = useMarkers()
-  const [markersInterator, setMarkersInterator] = useState(0)
-  const isFocused = useIsFocused()
-  const [mapRegion, setMapRegion] = useState<Region | null>(null)
+  const navigation = useNavigation();
+  const { location } = useUserLocation();
+  const { markers, requestMarkers } = useMarkers();
+  const [markersInterator, setMarkersInterator] = useState(0);
+  const isFocused = useIsFocused();
+  const [mapRegion, setMapRegion] = useState<Region | null>(null);
 
-  const { filters } = useMapFilter()
+  const { filters } = useMapFilter();
 
-  const [showOverlay, setShowoverlay] = useState(false)
+  const [showOverlay, setShowoverlay] = useState(false);
 
   const displayDetails = ({ id, title }: IEvent.IMarkers) => {
-    if (mapRegion) setMapRegion(null)
-    navigation.navigate('EventDetails', {
+    if (mapRegion) setMapRegion(null);
+    navigation.navigate("EventDetails", {
       preview: { id, title },
-    })
-  }
+    });
+  };
 
   useFocusEffect(
     useCallback(() => {
-      setShowoverlay(false)
+      setShowoverlay(false);
       return () => {
-        setShowoverlay(true)
-      }
-    }, [navigation])
-  )
+        setShowoverlay(true);
+      };
+    }, [navigation]),
+  );
 
   useEffect(() => {
-    if (location) requestMarkers(location, filters)
-  }, [isFocused, location, JSON.stringify(filters)])
+    if (location) requestMarkers(location, filters);
+  }, [isFocused, location, JSON.stringify(filters)]);
 
   useEffect(() => {
-    if (location) setMapRegion(location)
-  }, [location])
+    if (location) setMapRegion(location);
+  }, [location]);
 
   function focusNextMarker() {
-    const { lat, lng } = markers?.[markersInterator]
-    if (!lat || !lng) return
-    setMarkersInterator(prev => prev + 1)
-    mapRef.current?.pointForCoordinate({ latitude: lat, longitude: lng })
+    const { lat, lng } = markers?.[markersInterator];
+    if (!lat || !lng) return;
+    setMarkersInterator((prev) => prev + 1);
+    mapRef.current?.pointForCoordinate({ latitude: lat, longitude: lng });
   }
 
   return (
@@ -71,7 +73,7 @@ export default function Home() {
         customMapStyle={mapStyle}
         // @ts-ignore
         region={mapRegion}
-        showsUserLocation={true}
+        showsUserLocation
       >
         {markers.map((marker, idx) => {
           return (
@@ -85,27 +87,27 @@ export default function Home() {
                 longitude: marker.lng,
               }}
             />
-          )
+          );
         })}
       </MapView>
       <MapFilter />
       <HomeButton onPress={focusNextMarker} />
       {showOverlay && <View style={styles.overlay} />}
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "relative",
   },
   map: {
-    height: Dimensions.get('window').height + 100,
-    position: 'absolute',
+    height: Dimensions.get("window").height + 100,
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
@@ -117,10 +119,10 @@ const styles = StyleSheet.create({
     height: 50,
   },
   overlay: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
+    position: "absolute",
+    width: "100%",
+    height: "100%",
     zIndex: 3,
-    backgroundColor: '#00000081',
+    backgroundColor: "#00000081",
   },
-})
+});

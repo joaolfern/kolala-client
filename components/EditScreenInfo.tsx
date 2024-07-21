@@ -1,9 +1,7 @@
-import * as WebBrowser from 'expo-web-browser';
-import React from 'react';
-import { StyleSheet } from 'react-native';
-import Text from './Text/Text'
-import View from './View/View'
+import { StyleSheet } from "react-native";
 
+import Text from "./Text/Text";
+import View from "./View/View";
 
 export default function EditScreenInfo({ path }: { path: string }) {
   return (
@@ -15,7 +13,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
 
 const styles = StyleSheet.create({
   getStartedContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginHorizontal: 50,
   },
   homeScreenFilename: {
@@ -28,17 +26,17 @@ const styles = StyleSheet.create({
   getStartedText: {
     fontSize: 17,
     lineHeight: 24,
-    textAlign: 'center',
+    textAlign: "center",
   },
   helpContainer: {
     marginTop: 15,
     marginHorizontal: 20,
-    alignItems: 'center',
+    alignItems: "center",
   },
   helpLink: {
     paddingVertical: 15,
   },
   helpLinkText: {
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

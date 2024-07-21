@@ -1,23 +1,24 @@
-import React, { memo } from 'react'
-import { View, StyleSheet } from 'react-native'
-import Colors from '../../../constants/Colors'
-import { shadow } from '../../../screens/EventForm/utils'
-import Span from '../../Span/Span'
+import { memo } from "react";
+import { StyleSheet, View } from "react-native";
 
-const THUMB_RADIUS = 12
+import Colors from "@/constants/Colors";
+import { shadow } from "@/screens/EventForm/utils";
+import Span from "../../Span/Span";
+
+const THUMB_RADIUS = 12;
 
 const Thumb = () => {
   return (
     <Span style={styles.TouchareaWrapper}>
       <View style={styles.root} />
     </Span>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   TouchareaWrapper: {
     height: 80,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   root: {
     width: THUMB_RADIUS * 2,
@@ -28,6 +29,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.secondaryColor,
     ...shadow,
   },
-})
+});
 
-export default memo(Thumb)
+export default memo(Thumb);

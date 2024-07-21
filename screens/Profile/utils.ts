@@ -1,9 +1,9 @@
-import { IUser, _userLevel } from '../../types/User'
+import type { IUser, UserLevel } from "../../types/User";
 
 interface IGetProfileSettingsOptions {
-  level: _userLevel
-  isOwnProfile: boolean
-  target: IUser
+  level: UserLevel;
+  isOwnProfile: boolean;
+  target: IUser;
 }
 
 export function getProfileSettingsOptions({
@@ -11,17 +11,17 @@ export function getProfileSettingsOptions({
   level,
   target,
 }: IGetProfileSettingsOptions) {
-  const basePermission = 'Cancelar'
-  const editPermission = 'Editar perfil'
-  const reportPermission = 'Denunciar usuário'
-  const banPermission = 'Suspender conta'
-  const unbanPermission = 'Restaurar conta'
-  const promotePermission = 'Tornar administrador'
-  const demotePermission = 'Remover administrador'
+  const basePermission = "Cancelar";
+  const editPermission = "Editar perfil";
+  const reportPermission = "Denunciar usuário";
+  const banPermission = "Suspender conta";
+  const unbanPermission = "Restaurar conta";
+  const promotePermission = "Tornar administrador";
+  const demotePermission = "Remover administrador";
 
-  const hasAdminPermission = level === 'admin'
+  const hasAdminPermission = level === "admin";
 
-  const isBanned = target.status === 0
+  const isBanned = target.status === 0;
 
   return [
     ...(isOwnProfile
@@ -30,10 +30,10 @@ export function getProfileSettingsOptions({
           ...(hasAdminPermission
             ? [
                 isBanned ? unbanPermission : banPermission,
-                target.level === 'user' ? promotePermission : demotePermission,
+                target.level === "user" ? promotePermission : demotePermission,
               ]
             : [reportPermission]),
         ]),
     basePermission,
-  ]
+  ];
 }

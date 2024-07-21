@@ -1,15 +1,15 @@
-import React from 'react'
-import { StyleSheet } from 'react-native'
-import Avatar from '../../../components/Avatar/Avatar'
-import EllipsisButton from '../../../components/EllipsisButton/EllipsisButton'
-import Header from '../../../components/Header/Header'
-import Span from '../../../components/Span/Span'
-import Text from '../../../components/Text/Text'
-import Colors from '../../../constants/Colors'
-import { useChat } from '../useChat'
+import { StyleSheet } from "react-native";
+
+import Avatar from "@/components/Avatar/Avatar";
+import EllipsisButton from "@/components/EllipsisButton/EllipsisButton";
+import Header from "@/components/Header/Header";
+import Span from "@/components/Span/Span";
+import Text from "@/components/Text/Text";
+import Colors from "@/constants/Colors";
+import { useChat } from "@/screens/Chat/hooks/useChat";
 
 function ChatHeader() {
-  const { event } = useChat()
+  const { event } = useChat();
 
   return (
     <Header style={styles.Header}>
@@ -27,10 +27,10 @@ function ChatHeader() {
         <EllipsisButton onPress={() => {}} />
       </Span>
     </Header>
-  )
+  );
 }
 
-export default ChatHeader
+export default ChatHeader;
 
 const styles = StyleSheet.create({
   Header: {
@@ -39,9 +39,9 @@ const styles = StyleSheet.create({
     borderColor: Colors.lightBackground,
   },
   HeaderContent: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: "space-between",
+    flexDirection: "row",
+    alignItems: "center",
     flex: 1,
   },
   TitleGroup: {
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
   SubTitle: {
     fontSize: 16,
   },
-})
+});

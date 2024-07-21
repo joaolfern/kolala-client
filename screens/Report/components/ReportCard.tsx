@@ -1,21 +1,22 @@
-import dayjs from 'dayjs'
-import React from 'react'
-import { StyleSheet, ViewProps } from 'react-native'
-import Avatar from '../../../components/Avatar/Avatar'
-import Span from '../../../components/Span/Span'
-import Text from '../../../components/Text/Text'
-import Colors from '../../../constants/Colors'
-import { IReport } from '../../../Models/Report'
+import dayjs from "dayjs";
+import type { ViewProps } from "react-native";
+import { StyleSheet } from "react-native";
+
+import Avatar from "@/components/Avatar/Avatar";
+import Span from "@/components/Span/Span";
+import Text from "@/components/Text/Text";
+import Colors from "@/constants/Colors";
+import type { IReport } from "@/Models/Report";
 import {
   REPORT_CATEGORY_RESOURCE,
   REPORT_STATUS_COLOR_RESOURCE,
   REPORT_STATUS_RESOURCE,
-} from '../constants'
-import ReportCardAdminWrapper from './ReportCardAdminWrapper'
+} from "../constants";
+import ReportCardAdminWrapper from "./ReportCardAdminWrapper";
 
 interface IProps extends ViewProps {
-  report: IReport.Model
-  reloadList(): void
+  report: IReport.Model;
+  reloadList(): void;
 }
 
 function ReportCard({ report, style, reloadList, ...rest }: IProps) {
@@ -40,7 +41,7 @@ function ReportCard({ report, style, reloadList, ...rest }: IProps) {
             >
               {
                 REPORT_STATUS_RESOURCE.find(
-                  item => item.value === report.status
+                  (item) => item.value === report.status
                 )?.label
               }
             </Text>
@@ -49,20 +50,20 @@ function ReportCard({ report, style, reloadList, ...rest }: IProps) {
         <Text style={[styles.TitleText, styles.MarginTop]}>
           {
             REPORT_CATEGORY_RESOURCE.find(
-              item => item.value === report.category
+              (item) => item.value === report.category
             )?.label
           }
         </Text>
         <Text>{report.description}</Text>
         <Text style={styles.Timestamp}>
-          {dayjs(report.createdAt).format('HH:mm DD [de] MMM[.]')}
+          {dayjs(report.createdAt).format("HH:mm DD [de] MMM[.]")}
         </Text>
       </Span>
     </ReportCardAdminWrapper>
-  )
+  );
 }
 
-export default ReportCard
+export default ReportCard;
 
 const styles = StyleSheet.create({
   Card: {
@@ -72,21 +73,21 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   Header: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   Title: {
     marginLeft: 16,
   },
   TitleText: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   Timestamp: {
     fontSize: 14,
     marginTop: 4,
-    marginLeft: 'auto',
+    marginLeft: "auto",
     color: Colors.gray,
   },
   MarginTop: {
     marginTop: 14,
   },
-})
+});

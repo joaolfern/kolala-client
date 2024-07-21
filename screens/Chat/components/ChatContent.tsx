@@ -1,26 +1,26 @@
-import React, { forwardRef, Ref } from 'react'
-import { FlatList, ScrollView, ScrollViewProps, StyleSheet } from 'react-native'
-import Span from '../../../components/Span/Span'
-import { useChat } from '../useChat'
-import ChatMessage from './ChatMessage'
+import type { ScrollViewProps } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 
-type IProps = ScrollViewProps & {}
+import { useChat } from "@/screens/Chat/hooks/useChat";
 
-function ChatContent({ ...rest }: IProps, ref: Ref<FlatList> | null) {
-  const { messages } = useChat()
+import ChatMessage from "./ChatMessage";
+
+type IProps = ScrollViewProps;
+
+function ChatContent({ ...rest }: IProps) {
+  const { messages } = useChat();
 
   return (
     <FlatList
       {...rest}
-      ref={ref}
-      inverted={true}
+      inverted
       style={styles.Content}
       data={messages}
       renderItem={({ item, index }) => {
         const isFollowingMessage =
-          messages[index + 1]?.authorId === item.authorId
+          messages[index + 1]?.authorId === item.authorId;
         const hasFollwingMessage =
-          messages[index - 1]?.authorId === item.authorId
+          messages[index - 1]?.authorId === item.authorId;
 
         return (
           <ChatMessage
@@ -29,21 +29,21 @@ function ChatContent({ ...rest }: IProps, ref: Ref<FlatList> | null) {
             isFollowingMessage={isFollowingMessage}
             hasFollwingMessage={hasFollwingMessage}
           />
-        )
+        );
       }}
     />
-  )
+  );
 }
 
-export default forwardRef(ChatContent)
+export default ChatContent;
 
 const styles = StyleSheet.create({
   Content: {
     paddingHorizontal: 16,
     flex: 1,
-    height: '100%',
+    height: "100%",
   },
   BottomSpacing: {
     height: 18,
   },
-})
+});

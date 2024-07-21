@@ -1,13 +1,14 @@
-import React, { ReactNode } from 'react'
-import SafeAreaView from '../../components/SafeAreaView/SafeAreaView'
-import Scroll from '../../components/Scroll/Scroll'
-import Header from '../../components/Header/Header'
-import { StyleSheet } from 'react-native'
-import Colors from '../../constants/Colors'
+import type { ReactNode } from "react";
+import { StyleSheet } from "react-native";
+
+import Colors from "../../constants/Colors";
+import Header from "../Header/Header";
+import SafeAreaView from "../SafeAreaView/SafeAreaView";
+import Scroll from "../Scroll/Scroll";
 
 interface ICommonWrapper {
-  children: ReactNode
-  title: ReactNode
+  children: ReactNode;
+  title: ReactNode;
 }
 
 function CommonWrapper({ children, title }: ICommonWrapper) {
@@ -20,15 +21,15 @@ function CommonWrapper({ children, title }: ICommonWrapper) {
         {children}
       </SafeAreaView>
     </Scroll>
-  )
+  );
 }
 
-export default CommonWrapper
+export default CommonWrapper;
 
 const styles = StyleSheet.create({
   Container: {
-    height: '100%',
+    height: "100%",
     flex: 1,
     backgroundColor: Colors.background,
   },
-})
+});

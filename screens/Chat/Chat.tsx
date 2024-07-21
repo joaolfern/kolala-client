@@ -1,159 +1,22 @@
-import { useFocusEffect, useNavigationState } from "@react-navigation/native";
-import React, {
-  createContext,
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  Ref,
-} from "react";
-import { Control, useForm, UseFormSetValue } from "react-hook-form";
-import {
-  FlatList,
-  StyleSheet,
-  TextInput as DefaultTextInput,
-} from "react-native";
+import { StyleSheet } from "react-native";
+
+import { ChatProvider } from "@/screens/Chat/providers/ChatProvider";
+
 import SafeAreaView from "../../components/SafeAreaView/SafeAreaView";
 import Colors from "../../constants/Colors";
-import { IEvent } from "../../Models/Event";
-import Message, { IMessage } from "../../Models/Message";
-import ws, { ISendMessageArgs } from "../../services/socket";
-import { useAppSelector } from "../../store/hooks";
-import { selectToken } from "../../store/tokenSlice";
-import { selectUser } from "../../store/userSlice";
-import { RootStackParamList } from "../../types";
 import ChatContent from "./components/ChatContent";
 import ChatFooter from "./components/ChatFooter";
 import ChatHeader from "./components/ChatHeader";
 
-type IContext = {
-  event: null | IEvent.ListItem;
-  messages: IMessage[];
-  sendMessage(args: ISendMessageArgs): void;
-  control: Control<ISendMessageArgs, any> | null;
-  handleSubmit: Function;
-  setValue: UseFormSetValue<ISendMessageArgs>;
-  inputRef: Ref<DefaultTextInput> | null;
-  focusInput(): void;
-};
-
-const initialState: IContext = {
-  event: null,
-  messages: [],
-  sendMessage: () => {},
-  control: null,
-  handleSubmit: () => {},
-  setValue: () => {},
-  inputRef: null,
-  focusInput: () => {},
-};
-
-export const ChatContext = createContext(initialState);
-
 function Chat() {
-  const token = useAppSelector(selectToken);
-  const { user } = useAppSelector(selectUser);
-  const { event } = useNavigationState(
-    (state) =>
-      state.routes.find((item) => item.name === "Chat")
-        ?.params as RootStackParamList["Chat"]
-  );
-  const { control, reset, handleSubmit, setValue } =
-    useForm<ISendMessageArgs>();
-  const [messages, setMessages] = useState<IMessage[]>([]);
-
-  const inputRef = useRef<DefaultTextInput | null>(null);
-  const scrollRef = useRef<FlatList | null>(null);
-  const params = useRef({
-    page: 1,
-  });
-
-  function focusBottom() {
-    scrollRef.current?.scrollToOffset?.({ offset: 0 });
-  }
-
-  function focusInput() {
-    inputRef.current?.focus();
-  }
-
-  useEffect(() => {
-    async function getMessages(newParams: object) {
-      const requestParams = {
-        ...params.current,
-        ...newParams,
-      };
-
-      params.current = requestParams;
-
-      const config = { params: requestParams };
-
-      try {
-        const response = await Message.list(event?.id as number, config);
-        const { data } = response.data;
-
-        const isFirstPage = requestParams.page === 1;
-
-        if (data && Array.isArray(data)) {
-          setMessages((prev) => (isFirstPage ? data : [...data, ...prev]));
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    }
-
-    getMessages(params.current);
-  }, []);
-
-  async function sendMessage(args: ISendMessageArgs) {
-    try {
-      ws.sendMessage(args);
-
-      reset({ answerToId: undefined, content: "" });
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  useFocusEffect(
-    useCallback(() => {
-      if (event.id ?? true) {
-        ws.initialize({ token, eventId: event.id });
-
-        ws.onNewMessage((newMessage: IMessage) => {
-          setMessages((prev) => [newMessage, ...prev]);
-          if (newMessage.authorId === user?.id) focusBottom();
-        });
-
-        ws.onDeleteMessageFromDisplay((id) => {
-          setMessages((prev) => prev.filter((message) => message.id !== id));
-        });
-      }
-
-      return () => {
-        ws.disconnect();
-      };
-    }, [event.id, token])
-  );
-
-  const context = {
-    event,
-    messages,
-    sendMessage,
-    control,
-    handleSubmit,
-    setValue,
-    inputRef,
-    focusInput,
-  };
-
   return (
-    <SafeAreaView style={styles.Container}>
-      <ChatContext.Provider value={context}>
+    <ChatProvider>
+      <SafeAreaView style={styles.Container}>
         <ChatHeader />
-        <ChatContent ref={scrollRef} />
+        <ChatContent />
         <ChatFooter />
-      </ChatContext.Provider>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ChatProvider>
   );
 }
 
