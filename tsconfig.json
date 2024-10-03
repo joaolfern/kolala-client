@@ -7,8 +7,9 @@
     "declaration": false,
     "module": "esnext",
     "typeRoots": ["node_modules/@types"],
+    "useUnknownInCatchVariables": false,
     "paths": {
-      "@/*": ["./*"]
-    }
-  }
+      "@/*": ["./src/*"]
+    },
+  },
 }
