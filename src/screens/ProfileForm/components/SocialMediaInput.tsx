@@ -7,11 +7,12 @@ import Span from '@/components/Span/Span'
 import TextInput from '@/components/TextInput/TextInput'
 import type { IProfile } from '@/types/Profile'
 import type { ProfileFormEvent } from '../ProfileForm'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 interface IProps {
   control: Control<ProfileFormEvent>
   name: keyof ProfileFormEvent
-  icon: any
+  icon: keyof typeof MaterialCommunityIcons.glyphMap
   placeholder: string
   errors: FieldErrorsImpl<DeepRequired<Partial<IProfile>>>
 }

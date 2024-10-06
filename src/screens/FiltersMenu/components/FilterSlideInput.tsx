@@ -9,7 +9,7 @@ import type { IFilters } from '../FiltersMenu'
 
 interface IProps {
   watch: UseFormWatch<IFilters>
-  control: Control<IFilters, any>
+  control: Control<IFilters>
 }
 
 function FilterSlideInput({ watch, control }: IProps) {

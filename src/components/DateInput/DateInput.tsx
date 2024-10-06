@@ -1,10 +1,15 @@
 import dayjs from 'dayjs'
 import { useState } from 'react'
-import { useController } from 'react-hook-form'
+import {
+  Control,
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+} from 'react-hook-form'
 import { StyleSheet } from 'react-native'
 import type { ReactNativeModalDateTimePickerProps } from 'react-native-modal-datetime-picker'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
-
 import Colors from '@/constants/Colors'
 import Button from '../Button/Button'
 import Span from '../Span/Span'
@@ -15,28 +20,29 @@ const DISPLAY_MODES = {
   long: 'DD [de] MMM. [às] HH:mm [horas]',
 }
 
-export type IProps = Partial<ReactNativeModalDateTimePickerProps> & {
-  name: string
-  control: any
-  defaultValue?: string
-  placeholder?: string
-  displayMode: keyof typeof DISPLAY_MODES
-  onChangeEventful?: (value: string) => void
-  format?: string
-}
+export type IProps<T extends FieldValues> =
+  Partial<ReactNativeModalDateTimePickerProps> & {
+    name: Path<T>
+    control: Control<T>
+    defaultValue?: PathValue<T, Path<T>>
+    placeholder?: string
+    displayMode: keyof typeof DISPLAY_MODES
+    onChangeEventful?: (value: string) => void
+    format?: string
+  }
 
-function DateInput({
+function DateInput<T extends FieldValues>({
   style,
   name,
   control,
-  defaultValue = '',
+  defaultValue,
   placeholder = 'Selecionar data',
   mode = 'datetime',
   displayMode,
   onChangeEventful,
   format = 'YYYY-MM-DD HH:mm:ss',
   ...rest
-}: IProps) {
+}: IProps<T>) {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
 
   const { field } = useController({

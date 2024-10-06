@@ -35,7 +35,7 @@ class User {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        transformRequest: (data, headers) => {
+        transformRequest: () => {
           return body
         },
       })
@@ -48,7 +48,7 @@ class User {
     )
   }
 
-  async updateStatsus({ body, targetId }: IUserUpdateStatus) {
+  async updateStatus({ body, targetId }: IUserUpdateStatus) {
     return Fetch(() => api.patch(`${this.path}/status/${targetId}`, body))
   }
 }

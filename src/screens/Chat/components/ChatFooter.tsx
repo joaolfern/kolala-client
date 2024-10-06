@@ -30,7 +30,7 @@ function ChatFooter() {
       {replyTarget && <ChatReplyPreview />}
       <Span style={styles.Form}>
         <TextInput
-          ref={inputRef}
+          inputRef={inputRef}
           style={styles.TextInput}
           control={control}
           name='content'

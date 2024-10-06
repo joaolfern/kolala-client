@@ -12,7 +12,7 @@ import Span from '@/components/Span/Span'
 import Text from '@/components/Text/Text'
 import Textarea from '@/components/Textarea/Textarea'
 import Colors from '@/constants/Colors'
-import type { IReport } from '@/Models/Report'
+import type { ICreateReportConfig } from '@/Models/Report'
 import Report from '@/Models/Report'
 import type { RootStackParamList } from '@/types'
 import { showToast } from '@/utils/toast'
@@ -20,8 +20,7 @@ import { REPORT_CATEGORY_RESOURCE } from '../Report/constants'
 
 function ReportForm() {
   const { navigate, goBack } = useNavigation()
-  const { control, handleSubmit } =
-    useForm<IReport.CreateReportConfig['body']>()
+  const { control, handleSubmit } = useForm<ICreateReportConfig['body']>()
   const { target } =
     useNavigationState(
       (state) =>
@@ -31,10 +30,10 @@ function ReportForm() {
 
   const [loadingSubmit, setLoadingSubmit] = useState(false)
 
-  async function onSubmit(values: IReport.CreateReportConfig['body']) {
+  async function onSubmit(values: ICreateReportConfig['body']) {
     setLoadingSubmit(true)
 
-    const body: IReport.CreateReportConfig['body'] = {
+    const body: ICreateReportConfig['body'] = {
       ...values,
       targetId: target.id,
     }
@@ -43,7 +42,7 @@ function ReportForm() {
       await Report.createReport({ body })
       goBack()
       navigate('Report')
-    } catch (err: any) {
+    } catch (err) {
       showToast(err.message)
     } finally {
       setLoadingSubmit(false)

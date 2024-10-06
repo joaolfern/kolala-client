@@ -2,8 +2,9 @@ import { StyleSheet } from 'react-native'
 
 import type { IProps } from '../TextInput/TextInput'
 import TextInput from '../TextInput/TextInput'
+import { FieldValues } from 'react-hook-form'
 
-function Textarea({ ...rest }: IProps) {
+function Textarea<T extends FieldValues>({ ...rest }: IProps<T>) {
   return (
     <TextInput multiline numberOfLines={5} style={styles.Textarea} {...rest} />
   )

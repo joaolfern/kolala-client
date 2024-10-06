@@ -6,7 +6,7 @@ import type { TouchableOpacityProps } from 'react-native'
 import { TouchableOpacity } from 'react-native'
 
 import Colors from '@/constants/Colors'
-import type { IReport } from '@/Models/Report'
+import type { IReportModel } from '@/Models/Report'
 import Report from '@/Models/Report'
 import { useAppSelector } from '@/store/hooks'
 import { selectUser } from '@/store/userSlice'
@@ -14,7 +14,7 @@ import { showToast } from '@/utils/toast'
 
 interface IProps extends TouchableOpacityProps {
   children: ReactNode
-  report: IReport.Model
+  report: IReportModel
   reloadList(): void
 }
 
@@ -33,7 +33,7 @@ function ReportCardAdminWrapper({
     report,
     status,
   }: {
-    report: IReport.Model
+    report: IReportModel
     status: number
   }) {
     try {
@@ -45,7 +45,7 @@ function ReportCardAdminWrapper({
       })
 
       reloadList()
-    } catch (err: any) {
+    } catch (err) {
       if (err?.message) showToast(err.message)
     }
   }

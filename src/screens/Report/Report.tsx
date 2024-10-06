@@ -5,20 +5,20 @@ import { FlatList, StyleSheet } from 'react-native'
 import Header from '@/components/Header/Header'
 import SafeAreaView from '@/components/SafeAreaView/SafeAreaView'
 import Colors from '@/constants/Colors'
-import type { IReport } from '@/Models/Report'
+import type { IReportModel } from '@/Models/Report'
 import Report from '@/Models/Report'
 import { showToast } from '@/utils/toast'
 import ReportCard from './components/ReportCard'
 
 function ReportList() {
-  const [reports, setReports] = useState<IReport.Model[]>([])
+  const [reports, setReports] = useState<IReportModel[]>([])
 
   const getReports = useCallback(async () => {
     try {
       const response = await Report.list()
       const { data } = response.data || {}
       if (Array.isArray(data)) setReports(data)
-    } catch (err: any) {
+    } catch (err) {
       console.log(err)
       if (err.message) showToast(err.message)
     }

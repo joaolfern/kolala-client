@@ -1,12 +1,20 @@
-import { Image, ImageProps, StyleSheet } from 'react-native'
+import {
+  Image,
+  ImageProps,
+  ImageSourcePropType,
+  StyleSheet,
+} from 'react-native'
 
-// @ts-ignore
 import spinner from '@/assets/images/spinner-white.gif'
 
-interface IProps extends ImageProps {}
-
-function Spinner({ style, ...rest }: IProps) {
-  return <Image style={[styles.Image, style]} source={spinner} {...rest} />
+function Spinner({ style, ...rest }: ImageProps) {
+  return (
+    <Image
+      style={[styles.Image, style]}
+      source={spinner as ImageSourcePropType}
+      {...rest}
+    />
+  )
 }
 
 export default Spinner

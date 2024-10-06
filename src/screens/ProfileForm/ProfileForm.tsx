@@ -36,17 +36,18 @@ function makeFormData(data: ProfileFormEvent, formData: FormData) {
           const uriArray = value.split('.')
           const fileType = uriArray[uriArray.length - 1]
 
-          const file: any = {
+          const file = {
             uri: value,
             name: `${data.name?.replace(/ /g, '-')}.${fileType}`,
             type: `image/${fileType}`,
           }
-          formData.append(key, file)
+
+          formData.append(key, file as unknown as Blob)
           return
         }
         return
       default:
-        formData.append(key, value as any)
+        formData.append(key, value as unknown as Blob)
     }
   })
 }
@@ -80,6 +81,7 @@ function ProfileForm() {
     try {
       await User.updateProfile(config)
     } catch (err) {
+      console.error(err)
     } finally {
       setTimeout(() => {
         goBack()

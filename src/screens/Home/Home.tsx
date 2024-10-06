@@ -12,11 +12,11 @@ import MapFilter from '@/components/MapFilter/MapFilter'
 import HomeButton from '@/components/MyTabBar/HomeButton'
 import View from '@/components/View/View'
 import mapStyle from '@/constants/mapStyle'
-import type { IEvent } from '@/Models/Event'
 import { useMapFilter } from '@/store/mapFilterSlice'
 import { MAP_ICONS } from '../EventForm/constants'
 import useMarkers from './hooks/useMarkers'
 import useUserLocation from './UserMarker/useUserLocation'
+import { IMarkers } from '@/Models/Event'
 
 export default function Home() {
   const mapRef = useRef<null | MapView>(null)
@@ -26,14 +26,14 @@ export default function Home() {
   const { markers, requestMarkers } = useMarkers()
   const [markersInterator, setMarkersInterator] = useState(0)
   const isFocused = useIsFocused()
-  const [mapRegion, setMapRegion] = useState<Region | null>(null)
+  const [mapRegion, setMapRegion] = useState<Region | undefined>()
 
   const { filters } = useMapFilter()
 
   const [showOverlay, setShowoverlay] = useState(false)
 
-  const displayDetails = ({ id, title }: IEvent.IMarkers) => {
-    if (mapRegion) setMapRegion(null)
+  const displayDetails = ({ id, title }: IMarkers) => {
+    if (mapRegion) setMapRegion(undefined)
     navigation.navigate('EventDetails', {
       preview: { id, title },
     })
@@ -57,8 +57,10 @@ export default function Home() {
   }, [location])
 
   function focusNextMarker() {
-    const { lat, lng } = markers?.[markersInterator]
+    const { lat, lng } = markers?.[markersInterator] || {}
+
     if (!lat || !lng) return
+
     setMarkersInterator((prev) => prev + 1)
     mapRef.current?.pointForCoordinate({ latitude: lat, longitude: lng })
   }
@@ -71,7 +73,6 @@ export default function Home() {
         style={styles.map}
         showsMyLocationButton={false}
         customMapStyle={mapStyle}
-        // @ts-ignore
         region={mapRegion}
         showsUserLocation
       >

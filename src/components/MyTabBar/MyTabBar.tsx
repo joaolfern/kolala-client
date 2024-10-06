@@ -1,10 +1,9 @@
-import type { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { StyleSheet, View } from 'react-native'
 
 import EventsButton from './EventsButton'
 import ProfileTabButton from './ProfileTabButton'
 
-function MyTabBar({}: BottomTabBarProps) {
+function MyTabBar() {
   return (
     <View style={styles.TabBar}>
       <ProfileTabButton />

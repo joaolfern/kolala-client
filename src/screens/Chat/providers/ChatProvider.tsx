@@ -1,13 +1,14 @@
 import { useFocusEffect, useNavigationState } from '@react-navigation/native'
 import type { ReactNode, Ref } from 'react'
 import { createContext, useCallback, useEffect, useRef, useState } from 'react'
-import type { Control, UseFormSetValue } from 'react-hook-form'
+import type {
+  Control,
+  UseFormHandleSubmit,
+  UseFormSetValue,
+} from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import type { FlatList, TextInput as DefaultTextInput } from 'react-native'
-import { StyleSheet } from 'react-native'
-
-import Colors from '@/constants/Colors'
-import type { IEvent } from '@/Models/Event'
+import type { IEventListItem } from '@/Models/Event'
 import type { IMessage } from '@/Models/Message'
 import Message from '@/Models/Message'
 import type { ISendMessageArgs } from '@/services/socket'
@@ -18,11 +19,11 @@ import { selectUser } from '@/store/userSlice'
 import type { RootStackParamList } from '@/types/'
 
 type IContext = {
-  event: null | IEvent.ListItem
+  event: null | IEventListItem
   messages: IMessage[]
   sendMessage(args: ISendMessageArgs): void
-  control: Control<ISendMessageArgs, any> | null
-  handleSubmit: Function
+  control: Control<ISendMessageArgs> | undefined
+  handleSubmit: UseFormHandleSubmit<ISendMessageArgs, undefined>
   setValue: UseFormSetValue<ISendMessageArgs>
   inputRef: Ref<DefaultTextInput> | null
   focusInput(): void
@@ -33,8 +34,11 @@ const initialState: IContext = {
   event: null,
   messages: [],
   sendMessage: () => {},
-  control: null,
-  handleSubmit: () => {},
+  control: undefined,
+  handleSubmit: (async () => {}) as unknown as UseFormHandleSubmit<
+    ISendMessageArgs,
+    undefined
+  >,
   setValue: () => {},
   inputRef: null,
   focusInput: () => {},
@@ -149,11 +153,3 @@ export function ChatProvider({ children }: ChatProviderProps) {
 
   return <ChatContext.Provider value={context}>{children}</ChatContext.Provider>
 }
-
-const styles = StyleSheet.create({
-  Container: {
-    paddingVertical: 16,
-    backgroundColor: Colors.background,
-    height: '100%',
-  },
-})

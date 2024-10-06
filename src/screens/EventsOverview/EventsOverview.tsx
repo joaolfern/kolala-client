@@ -8,16 +8,16 @@ import SafeAreaView from '@/components/SafeAreaView/SafeAreaView'
 import Span from '@/components/Span/Span'
 import Text from '@/components/Text/Text'
 import Colors from '@/constants/Colors'
-import type { IEvent } from '@/Models/Event'
 import { MAP_ICONS } from '../EventForm/constants'
 import NoResultMessage from '../Events/components/NoResultMessage/NoResultMessage'
 import useMarkers from '../Home/hooks/useMarkers'
+import { IMarkers } from '@/Models/Event'
 
 function EventsOverview() {
   const { goBack, navigate } = useNavigation()
   const { markers } = useMarkers()
 
-  function navigateToEvent(preview: IEvent.IMarkers) {
+  function navigateToEvent(preview: IMarkers) {
     goBack()
     navigate('EventDetails', {
       preview,

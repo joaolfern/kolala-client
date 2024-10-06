@@ -3,7 +3,7 @@ import { useRef } from 'react'
 function useDebounceEffect() {
   const lastestRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  function takeLastestEvent(fn: Function, time: number) {
+  function takeLastestEvent(fn: () => void, time: number) {
     if (lastestRef.current) {
       clearTimeout(lastestRef.current)
     }

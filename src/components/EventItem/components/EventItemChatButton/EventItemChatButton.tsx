@@ -3,17 +3,17 @@ import { StyleSheet } from 'react-native'
 
 import Chat from '@//assets/mapIcons/chat.svg'
 import Colors from '@/constants/Colors'
-import type { IEvent } from '@/Models/Event'
+import type { IEventListItem } from '@/Models/Event'
 import Button from '@/components/Button/Button'
 
 interface IProps {
-  event: IEvent.ListItem
+  event: IEventListItem
 }
 
 function EventItemChatButton({ event }: IProps) {
   const navigation = useNavigation()
 
-  function navigateToChat(event: IEvent.ListItem) {
+  function navigateToChat(event: IEventListItem) {
     navigation.navigate('Chat', {
       event,
     })

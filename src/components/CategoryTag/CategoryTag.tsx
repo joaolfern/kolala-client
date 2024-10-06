@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import type { ViewProps } from 'react-native'
 import { StyleSheet } from 'react-native'
 
-import Colors from '../../constants/Colors'
-import { CATEGORY_RESOURCE } from '../../screens/EventForm/constants'
+import Colors from '@/constants/Colors'
+import { CATEGORY_RESOURCE } from '@/screens/EventForm/constants'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 

@@ -1,4 +1,10 @@
-import { useController } from 'react-hook-form'
+import {
+  Control,
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+} from 'react-hook-form'
 import { StyleSheet, View } from 'react-native'
 import type { PickerSelectProps, PickerStyle } from 'react-native-picker-select'
 import RNPickerSelect from 'react-native-picker-select'
@@ -6,18 +12,21 @@ import RNPickerSelect from 'react-native-picker-select'
 import ArrowRight from '@/assets/images/arrow-right.svg'
 import Colors from '@/constants/Colors'
 
-type IProps = Omit<PickerSelectProps, 'onValueChange'> & {
-  name: string
-  control: any
-  defaultValue?: string
+type IProps<T extends FieldValues> = Omit<
+  PickerSelectProps,
+  'onValueChange'
+> & {
+  name: Path<T>
+  control: Control<T>
+  defaultValue?: PathValue<T, Path<T>>
 }
 
-export default function Select({
+export default function Select<T extends FieldValues>({
   name,
   control,
   defaultValue,
   ...rest
-}: IProps) {
+}: IProps<T>) {
   const { field } = useController({
     name,
     control,

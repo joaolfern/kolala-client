@@ -1,4 +1,4 @@
-import type { IEvent } from '@/Models/Event'
+import { IEventDetails, IEventListItem } from '@/Models/Event'
 import type { IUser } from '@/types/User'
 
 interface IGetEventDetailsMenuOptions {
@@ -33,8 +33,8 @@ export function getEventDetailsMenuOptions({
 }
 
 export function transformDetailsToListItem(
-  details: IEvent.Details
-): IEvent.ListItem {
+  details: IEventDetails
+): IEventListItem {
   return {
     ...details,
     image: details.EventImage[0]?.url,

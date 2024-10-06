@@ -8,13 +8,11 @@ import { Fetch } from '../services/Fetch'
 import type { IAtendee } from '../types/Atendee'
 import type { IProfile } from '../types/Profile'
 
-namespace EventRequestConfig {
-  export interface IGetMarkers extends AxiosRequestConfig {
-    params: {
-      lat: number
-      lng: number
-    } & IFilters
-  }
+interface IGetMarkersConfig extends AxiosRequestConfig {
+  params: {
+    lat: number
+    lng: number
+  } & IFilters
 }
 export interface IListRequestParams {
   arePast: boolean
@@ -27,31 +25,31 @@ class Event {
   private path = 'auth/events'
 
   async getDetails(id: number) {
-    return Fetch<IEvent.Details>(() => api.get(`${this.path}/${id}`))
+    return Fetch<IEventDetails>(() => api.get(`${this.path}/${id}`))
   }
 
   async getList() {
-    return Fetch<IEvent.IEventSections[]>(() => api.get(this.path))
+    return Fetch<IEventSections[]>(() => api.get(this.path))
   }
 
   async getParticipants(id: number) {
-    return Fetch<IEvent.IEventSections[]>(() =>
+    return Fetch<IEventSections[]>(() =>
       api.get(`${this.path}/${id}/participants`)
     )
   }
 
-  async getMarkers(config: EventRequestConfig.IGetMarkers) {
-    return Fetch<IEvent.IMarkers[]>(() => api.get(`${this.path}/map`, config))
+  async getMarkers(config: IGetMarkersConfig) {
+    return Fetch<IMarkers[]>(() => api.get(`${this.path}/map`, config))
   }
 
   async listEvents(type: _eventListTypes, config: IListRequestConfig) {
-    return Fetch<IEvent.IEventSections>(() =>
+    return Fetch<IEventSections>(() =>
       api.get(`${this.path}/list/${type}`, config)
     )
   }
 
   async create(data: FormData) {
-    return Fetch<{}>(() =>
+    return Fetch(() =>
       api.post(this.path, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -61,7 +59,7 @@ class Event {
   }
 
   async update(id: string, data: FormData) {
-    return Fetch<{}>(() =>
+    return Fetch(() =>
       api.patch(`${this.path}/${id}`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -81,67 +79,65 @@ class Event {
 
 export default new Event()
 
-export namespace IEvent {
-  export interface Model {
-    id: number
-    createdAt: Date
-    title: string
-    description: string
-    category: number
-    status: number
-    EventImage: Image[]
-    authorId: number
-    datetime: Date
+export interface IEventModel {
+  id: number
+  createdAt: Date
+  title: string
+  description: string
+  category: number
+  status: number
+  EventImage: IEventImage[]
+  authorId: number
+  datetime: Date
+  lat: number
+  lng: number
+  address: string
+  author: IProfile
+  Atendee: IAtendee[]
+  icon: keyof typeof MAP_ICONS
+}
+
+export interface IEventSections {
+  title: string
+  data: IEventListItem[]
+}
+
+export interface IEventDetails extends IEventModel {
+  _count: {
+    Message: number
+  }
+}
+
+export interface IEventListItem extends Omit<IEventModel, 'EventImage'> {
+  image: string
+}
+
+export interface IEventFormSubmitEvent {
+  address?: string
+  title: string
+  image: string[]
+  category: number
+  datetime: Date
+  description: string
+  icon: number
+  location: {
     lat: number
     lng: number
     address: string
-    author: IProfile
-    Atendee: IAtendee[]
-    icon: keyof typeof MAP_ICONS
   }
+}
 
-  export interface IEventSections {
-    title: string
-    data: ListItem[]
-  }
+export interface IEventImage {
+  id: number | string
+  url: string
+}
 
-  export interface Details extends Model {
-    _count: {
-      Message: number
-    }
-  }
-
-  export interface ListItem extends Omit<Model, 'EventImage'> {
-    image: string
-  }
-
-  export interface FormSubmitEvent {
-    address?: string
-    title: string
-    image: string[]
-    category: number
-    datetime: Date
-    description: string
-    icon: number
-    location: {
-      lat: number
-      lng: number
-      address: string
-    }
-  }
-
-  export interface Image {
-    id: number | string
-    url: string
-  }
-
-  export interface IMarkers {
-    id: number
-    lat: number
-    lng: number
-    icon: keyof typeof MAP_ICONS
-    title: string
-    address: string
-    datetime: string
-  }
+export interface IMarkers {
+  id: number
+  lat: number
+  lng: number
+  icon: keyof typeof MAP_ICONS
+  title: string
+  address: string
+  datetime: string
 }

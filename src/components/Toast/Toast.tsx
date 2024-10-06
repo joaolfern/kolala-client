@@ -1,3 +1,4 @@
+import { ToastRef } from '@/utils/toast'
 import React, { useEffect, useImperativeHandle, useRef, useState } from 'react'
 import {
   Animated,
@@ -9,14 +10,12 @@ import {
   View,
 } from 'react-native'
 
-interface Props {}
-
-export const DURATION = {
+const DURATION = {
   LENGTH_SHORT: 2000,
   FOREVER: 0,
 }
 
-const Toast: React.FC<Props> = React.forwardRef((_props, ref) => {
+const Toast = React.forwardRef<ToastRef | undefined, unknown>((_, ref) => {
   const { height } = useWindowDimensions()
 
   const [isShow, setShow] = useState<boolean>(false)
@@ -28,17 +27,18 @@ const Toast: React.FC<Props> = React.forwardRef((_props, ref) => {
 
   useEffect(() => {
     return () => {
-      animation && animation.stop()
-      timer && clearTimeout(timer)
+      if (animation) animation.stop()
+      if (timer) clearTimeout(timer)
     }
   }, [animation, timer])
 
   useImperativeHandle(ref, () => ({
     show: (text: string) => {
-      console.log('eii', Platform.OS)
-      Platform.OS === 'android'
-        ? ToastAndroid.show(text, ToastAndroid.SHORT)
-        : show(text)
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(text, ToastAndroid.SHORT)
+      } else {
+        show(text)
+      }
     },
   }))
 
@@ -63,7 +63,7 @@ const Toast: React.FC<Props> = React.forwardRef((_props, ref) => {
     if (!isShowing && !isShow) {
       return
     }
-    timer && clearTimeout(timer)
+    if (timer) clearTimeout(timer)
     timer = setTimeout(() => {
       animation = Animated.timing(opacityValue, {
         toValue: 0.0,

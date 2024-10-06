@@ -1,5 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { useController } from 'react-hook-form'
+import {
+  Control,
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+} from 'react-hook-form'
 import type {
   GooglePlacesAutocompleteProps,
   GooglePlacesAutocompleteRef,
@@ -17,20 +23,21 @@ interface FormValueProps {
   lng?: number | undefined
 }
 
-interface IProps extends Partial<GooglePlacesAutocompleteProps> {
-  name: string
-  control: any
-  defaultValue: FormValueProps
+interface IProps<T extends FieldValues>
+  extends Partial<GooglePlacesAutocompleteProps> {
+  name: Path<T>
+  control: Control<T>
+  defaultValue: PathValue<T, Path<T>>
   clearError(): void
 }
 
-function LocationInput({
+function LocationInput<T extends FieldValues>({
   control,
   name,
   defaultValue,
   clearError,
   ...rest
-}: IProps) {
+}: IProps<T>) {
   const ref = useRef<GooglePlacesAutocompleteRef>(null)
   const shouldSetDefault = useRef(true)
   const { field } = useController({

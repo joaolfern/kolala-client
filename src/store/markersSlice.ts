@@ -1,11 +1,11 @@
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { createSlice } from '@reduxjs/toolkit'
 
-import type { IEvent } from '../Models/Event'
+import type { IMarkers } from '../Models/Event'
 import type { RootState } from './rootReducer'
 
 type IInitialState = {
-  markers: IEvent.IMarkers[]
+  markers: IMarkers[]
 }
 
 const initialState: IInitialState = {
@@ -16,7 +16,7 @@ const markersSlice = createSlice({
   name: 'markers',
   initialState,
   reducers: {
-    updateMarkers: (state, action: PayloadAction<IEvent.IMarkers[]>) => {
+    updateMarkers: (state, action: PayloadAction<IMarkers[]>) => {
       return (state = {
         markers: action.payload,
       })

@@ -1,32 +1,28 @@
-import { useState } from 'react'
-import type { SwitchProps } from 'react-native'
-import { StyleSheet, Switch as DefaultSwitch, View } from 'react-native'
+import BaseToggle from 'react-native-toggle-element'
+import { ReactNativeToggleElementProps } from 'react-native-toggle-element/lib/types'
+import Colors from '@/constants/Colors'
 
-type IProps = SwitchProps & {}
+type IProps = Partial<ReactNativeToggleElementProps> & {}
 
-function Toggle({}: IProps) {
-  const [isEnabled, setIsEnabled] = useState(false)
-  const toggleSwitch = () => setIsEnabled((previousState) => !previousState)
-
+function Toggle({ ...props }: IProps) {
   return (
-    <View style={styles.container}>
-      <DefaultSwitch
-        trackColor={{ false: '#767577', true: '#81b0ff' }}
-        thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-        ios_backgroundColor='#3e3e3e'
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      />
-    </View>
+    <BaseToggle
+      {...props}
+      thumbButton={{
+        activeBackgroundColor: 'transparent',
+        inActiveBackgroundColor: 'transparent',
+      }}
+      trackBar={{
+        activeBackgroundColor: Colors.lightBackground,
+        inActiveBackgroundColor: Colors.lightBackground,
+        borderActiveColor: Colors.background,
+        borderInActiveColor: Colors.background,
+        borderWidth: 5,
+        width: 100,
+        height: 45,
+      }}
+    />
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-})
 
 export default Toggle

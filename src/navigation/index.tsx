@@ -1,7 +1,6 @@
 import { FontAwesome5 } from '@expo/vector-icons'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { DarkTheme, NavigationContainer } from '@react-navigation/native'
-import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import type * as React from 'react'
 import EventDetails from '@/components/EventDetails/EventDetails'
@@ -17,11 +16,7 @@ import Profile from '@/screens/Profile/Profile'
 import ProfileForm from '@/screens/ProfileForm/ProfileForm'
 import Report from '@/screens/Report/Report'
 import ReportForm from '@/screens/ReportForm/ReportForm'
-import type {
-  RootStackParamList,
-  RootTabParamList,
-  RootTabScreenProps,
-} from '@/types'
+import type { RootStackParamList, RootTabParamList } from '@/types'
 import LinkingConfiguration from './LinkingConfiguration'
 import Chat from '@/screens/Chat/Chat'
 
@@ -113,9 +108,7 @@ function RootNavigator() {
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>()
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Root'>
-
-function BottomTabNavigator({ navigation: stackNavigation }: Props) {
+function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName='Maps'
@@ -129,21 +122,21 @@ function BottomTabNavigator({ navigation: stackNavigation }: Props) {
           position: 'absolute',
         },
       }}
-      tabBar={(props) => {
-        return <MyTabBar {...props} />
+      tabBar={() => {
+        return <MyTabBar />
       }}
     >
       <BottomTab.Screen
         name='Maps'
         component={Home}
-        options={({ navigation }: RootTabScreenProps<'Maps'>) => ({
+        options={() => ({
           tabBarIcon: ({ color }) => <TabBarIcon name='map' color={color} />,
         })}
       />
       <BottomTab.Screen
         name='Events'
         component={Events}
-        options={({ navigation }: RootTabScreenProps<'Events'>) => ({
+        options={() => ({
           tabBarIcon: ({ color }) => <TabBarIcon name='Events' color={color} />,
         })}
       />

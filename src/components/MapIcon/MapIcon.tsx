@@ -1,20 +1,25 @@
-import { useController } from 'react-hook-form'
+import {
+  Control,
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+} from 'react-hook-form'
 import type { ImageURISource } from 'react-native'
 import { Image, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import Colors from '@/constants/Colors'
+import { MAP_ICONS_RESOURCE } from '@/screens/EventForm/constants'
 
-import Colors from '../../constants/Colors'
-import { MAP_ICONS_RESOURCE } from '../../screens/EventForm/constants'
-
-type IProps = {
-  name: string
-  control: any
+type IProps<T extends FieldValues> = {
+  name: Path<T>
+  control: Control<T>
 }
 
-function MapIcon({ name, control }: IProps) {
+function MapIcon<T extends FieldValues>({ name, control }: IProps<T>) {
   const { field } = useController({
     name,
     control,
-    defaultValue: MAP_ICONS_RESOURCE[0].label,
+    defaultValue: MAP_ICONS_RESOURCE[0].label as PathValue<T, Path<T>>,
   })
 
   const { onChange, value: selectedIcon } = field

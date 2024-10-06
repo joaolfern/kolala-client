@@ -15,7 +15,7 @@ const MOCKED_LOCATION = {
 }
 
 function useUserLocation() {
-  const { location, user } = useAppSelector(selectUser)
+  const { location } = useAppSelector(selectUser)
   const dispatch = useAppDispatch()
 
   async function updateUserLocation() {
@@ -49,17 +49,22 @@ function useUserLocation() {
 
   async function getUserLocation() {
     const { status } = await Location.requestForegroundPermissionsAsync()
+    console.log('🐨 env', ENVIRONMENT)
 
     if (status !== 'granted') {
       console.log(`Location access denied`)
     }
-    console.log('🐨 env', ENVIRONMENT)
-    const userLocation =
-      ENVIRONMENT === `local` ? MOCKED_LOCATION : await getApiLocation()
 
-    if (userLocation) {
-      return userLocation
+    if (ENVIRONMENT === `local`) {
+      return MOCKED_LOCATION
     }
+
+    const cachedLocation = await tryCachedLocation()
+    if (cachedLocation) {
+      return cachedLocation
+    }
+
+    return await getApiLocation()
   }
 
   async function getGlobalLocaiton() {

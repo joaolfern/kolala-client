@@ -5,9 +5,7 @@ import FilterSVG from '@/assets/images/filter.svg'
 import Colors from '@/constants/Colors'
 import Button from '../Button/Button'
 
-interface IProps {}
-
-function MapFilter({}: IProps) {
+function MapFilter() {
   const navigation = useNavigation()
 
   function openFilters() {

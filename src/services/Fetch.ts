@@ -1,7 +1,7 @@
 import type { AxiosResponse } from 'axios'
 import axios from 'axios'
 
-interface IResponseBase<T = any> extends AxiosResponse {
+interface IResponseBase<T = unknown> extends AxiosResponse {
   data: {
     status: string
     code: number
@@ -35,7 +35,7 @@ export async function Fetch<T>(
   try {
     const response: AxiosResponse = await request()
     return response
-  } catch (err: any) {
+  } catch (err) {
     console.log('eoo', err)
     if (axios.isCancel(err)) throw err
     if (err.name === 'ERR_INTERNET_DISCONNECTED')

@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native'
 import { useCallback } from 'react'
 import type { TouchableOpacityProps } from 'react-native'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-
 import Colors from '@/constants/Colors'
 import useUserOperations from '@/hooks/useUserOperations'
 import User from '@/Models/User'
@@ -64,10 +63,8 @@ function ProfileSettingsButton({
     ({
       user,
       profileUser,
-      updateProfile,
       isOwnProfile,
     }: {
-      updateProfile: Function
       user: IUser
       profileUser: IProfileViewData
       isOwnProfile: boolean
@@ -104,19 +101,19 @@ function ProfileSettingsButton({
               return
             }
             case 'Restaurar conta': {
-              if (typeof targetId !== 'undefined')
-                await updateStatus(
-                  { body: { status: 1 }, targetId },
-                  updateProfile
-                )
+              if (typeof targetId !== 'undefined') {
+                await updateStatus({ body: { status: 1 }, targetId })
+                updateProfile()
+              }
+
               return
             }
             case 'Suspender conta': {
-              if (typeof targetId !== 'undefined')
-                await updateStatus(
-                  { body: { status: 0 }, targetId },
-                  updateProfile
-                )
+              if (typeof targetId !== 'undefined') {
+                await updateStatus({ body: { status: 0 }, targetId })
+                updateProfile()
+              }
+
               return
             }
             case 'Remover administrador': {
@@ -145,9 +142,7 @@ function ProfileSettingsButton({
       style={[styles.Button, style]}
       {...rest}
       onPress={() =>
-        user &&
-        profileUser &&
-        openMenu({ user, profileUser, isOwnProfile, updateProfile })
+        user && profileUser && openMenu({ user, profileUser, isOwnProfile })
       }
     >
       <MaterialIcons size={28} name='settings' color={Colors.text} />

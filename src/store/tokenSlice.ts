@@ -12,13 +12,13 @@ export const tokenSlice = createSlice({
   name: 'token',
   initialState,
   reducers: {
-    setToken: (state, action: PayloadAction<string>) => {
+    setToken: (_, action: PayloadAction<string>) => {
       SecureStore.setItemAsync('token', action.payload)
-      return (state = action.payload)
+      return action.payload
     },
-    clearToken: (state) => {
+    clearToken: () => {
       SecureStore.deleteItemAsync('token')
-      return (state = initialState)
+      return initialState
     },
   },
 })

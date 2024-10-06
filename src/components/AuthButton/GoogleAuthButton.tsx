@@ -9,7 +9,7 @@ import { EXPO_CLIENT_ID } from '../../../env'
 import { useAppDispatch } from '@/store/hooks'
 import { setToken } from '@/store/tokenSlice'
 import { setUser } from '@/store/userSlice'
-import { showToast } from '../../utils/toast'
+import { showToast } from '@/utils/toast'
 import Button from '../Button/Button'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
@@ -43,13 +43,13 @@ function GoogleAuthButton() {
         return
       }
       throw new Error('Access token not found')
-    } catch (error: any) {
-      console.log('error', error)
-      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+    } catch (err) {
+      console.log('error', err)
+      if (err.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
-      } else if (error.code === statusCodes.IN_PROGRESS) {
+      } else if (err.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
-      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+      } else if (err.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // play services not available or outdated
       } else {
         // some other error happened
@@ -65,7 +65,7 @@ function GoogleAuthButton() {
       if (user) dispatch(setUser(user))
 
       if (token) dispatch(setToken(token))
-    } catch (err: any) {
+    } catch (err) {
       const message = err?.response?.data
       if (message) {
         showToast(message)

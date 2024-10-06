@@ -1,6 +1,6 @@
 import { useNavigation, useNavigationState } from '@react-navigation/native'
 import React, { Suspense, useEffect, useRef, useState } from 'react'
-import type { FieldError } from 'react-hook-form'
+import type { Control, FieldError, FieldValues } from 'react-hook-form'
 import { useForm } from 'react-hook-form'
 import { StyleSheet } from 'react-native'
 
@@ -19,7 +19,11 @@ import TextInput from '@/components/TextInput/TextInput'
 import UploadImage from '@/components/UploadImage/UploadImage'
 import Colors from '@/constants/Colors'
 import { REACT_APP_SERVER } from '../../../env'
-import type { IEvent } from '@/Models/Event'
+import type {
+  IEventDetails,
+  IEventFormSubmitEvent,
+  IEventImage,
+} from '@/Models/Event'
 import Event from '@/Models/Event'
 import { useMapFilter } from '@/store/mapFilterSlice'
 import { showToast } from '@/utils/toast'
@@ -34,21 +38,15 @@ const LocationInput = React.lazy(
 
 function formatDetailsToForm({
   EventImage,
-  Atendee,
-  author,
   lat,
   lng,
-  authorId,
-  createdAt,
-  id,
-  status,
   address,
   title,
   description,
   category,
   datetime,
   icon,
-}: IEvent.Details): IEvent.FormSubmitEvent {
+}: IEventDetails): IEventFormSubmitEvent {
   return {
     title,
     description,
@@ -69,7 +67,7 @@ function EventForm() {
     (state) =>
       (
         state.routes.find((item) => item.name === 'EventForm')?.params as {
-          event: IEvent.Details | undefined
+          event: IEventDetails | undefined
         }
       )?.event
   )
@@ -89,7 +87,7 @@ function EventForm() {
     setError,
     clearErrors,
     formState: { errors },
-  } = useForm<IEvent.FormSubmitEvent>({
+  } = useForm<IEventFormSubmitEvent>({
     defaultValues: details ? formatDetailsToForm(details) : undefined,
   })
 
@@ -97,12 +95,12 @@ function EventForm() {
     if (details?.icon || details?.icon === 0) setValue('icon', details?.icon)
   }, [details?.icon])
 
-  function makeFormData(data: IEvent.FormSubmitEvent, formData: FormData) {
+  function makeFormData(data: IEventFormSubmitEvent, formData: FormData) {
     Object.entries(data).forEach(([key, value]) => {
       if (value === undefined) return
       switch (key) {
         case 'image':
-          value?.map?.((uri: string | IEvent.Image[], idx: number) => {
+          value?.map?.((uri: string | IEventImage[], idx: number) => {
             if (typeof uri === 'string') {
               const isHosted = uri.includes(REACT_APP_SERVER)
               if (isHosted) return
@@ -110,12 +108,12 @@ function EventForm() {
               const uriArray = uri.split('.')
               const fileType = uriArray[uriArray.length - 1]
 
-              const file: any = {
+              const file = {
                 uri,
                 name: `${data.title.replace(/ /g, '-')}(${idx}).${fileType}`,
                 type: `image/${fileType}`,
               }
-              formData.append(`${key}[]`, file)
+              formData.append(`${key}[]`, file as unknown as Blob)
             }
           })
 
@@ -132,7 +130,7 @@ function EventForm() {
     })
   }
 
-  async function onSubmit(data: IEvent.FormSubmitEvent) {
+  async function onSubmit(data: IEventFormSubmitEvent) {
     const formData = new FormData()
     makeFormData(data, formData)
 
@@ -141,7 +139,7 @@ function EventForm() {
       if (details) await updateForm(data, formData)
       else await createForm(formData)
       if (location) requestMarkers(location, filters)
-    } catch (err: any) {
+    } catch (err) {
       if (err) {
         if (err._message) showToast('Ocorreu um problema')
 
@@ -149,7 +147,7 @@ function EventForm() {
         if (formMessages) {
           Object.entries(formMessages).map(
             ([key, message]: [string, unknown]) => {
-              setError(key as keyof IEvent.FormSubmitEvent, {
+              setError(key as keyof IEventFormSubmitEvent, {
                 message: message as string,
               })
             }
@@ -168,22 +166,18 @@ function EventForm() {
     navigation.navigate('Events')
   }
 
-  async function updateForm(data: IEvent.FormSubmitEvent, formData: FormData) {
-    try {
-      originalImagesRef.current
-        .filter((originalItem) => !data.image.includes(originalItem.url))
-        .map((item) => {
-          formData.append('removedImages[]', String(item.id))
-        })
+  async function updateForm(data: IEventFormSubmitEvent, formData: FormData) {
+    originalImagesRef.current
+      .filter((originalItem) => !data.image.includes(originalItem.url))
+      .map((item) => {
+        formData.append('removedImages[]', String(item.id))
+      })
 
-      if (!details?.id) throw new Error('EventId not found')
+    if (!details?.id) throw new Error('EventId not found')
 
-      await Event.update(String(details.id), formData)
+    await Event.update(String(details.id), formData)
 
-      navigation.goBack()
-    } catch (err) {
-      throw err
-    }
+    navigation.goBack()
   }
 
   return (
@@ -219,10 +213,10 @@ function EventForm() {
         </FormItem>
 
         <FormItem label='Local' error={errors.address as FieldError}>
-          <Suspense fallback={<TextInput control={control} name='' />}>
+          <Suspense fallback={<TextInput control={control} name='location' />}>
             <LocationInput
               name='location'
-              control={control}
+              control={control as unknown as Control<FieldValues>}
               styles={styles.marginBottom}
               clearError={() => setError('address', { message: undefined })}
               defaultValue={{
@@ -249,8 +243,11 @@ function EventForm() {
 
         <Span>
           <Label>Ícone no mapa</Label>
-          <Suspense fallback={<TextInput control={control} name='' />}>
-            <MapIcon control={control} name='icon' />
+          <Suspense fallback={<TextInput control={control} name='icon' />}>
+            <MapIcon
+              control={control as unknown as Control<FieldValues>}
+              name='icon'
+            />
           </Suspense>
         </Span>
 

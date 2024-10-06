@@ -3,32 +3,32 @@ import type { Control } from 'react-hook-form'
 import { useController } from 'react-hook-form'
 import { StyleSheet } from 'react-native'
 
-import Colors from '../../constants/Colors'
-import type { IFilters } from '../../screens/FiltersMenu/FiltersMenu'
+import Colors from '@/constants/Colors'
+import type { IFilters } from '@/screens/FiltersMenu/FiltersMenu'
 import Button from '../Button/Button'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 
-interface IOptionItem {
+interface IOptionItem<T> {
   label: ReactNode
-  value: any
+  value: T
 }
 
-interface IProps {
-  options: IOptionItem[]
+interface IProps<T> {
+  options: IOptionItem<T>[]
   control: Control<IFilters>
   name: keyof IFilters
   disabled?: boolean
-  onChangeEventful?: (option: IOptionItem['value']) => void
+  onChangeEventful?: (option: IOptionItem<T>['value']) => void
 }
 
-function ButtonLookingRadio({
+function ButtonLookingRadio<T>({
   options,
   name,
   control,
   disabled,
   onChangeEventful,
-}: IProps) {
+}: IProps<T>) {
   const { field } = useController({
     name,
     control,
@@ -36,7 +36,7 @@ function ButtonLookingRadio({
 
   const { onChange, value: selectedOption } = field
 
-  const getOptionStyles = (option: IOptionItem, idx: number) => {
+  const getOptionStyles = (option: IOptionItem<T>, idx: number) => {
     const isFirst = idx === 0
     const isLast = idx === options.length - 1
 
@@ -51,7 +51,7 @@ function ButtonLookingRadio({
     ]
   }
 
-  function handleChange(option: IOptionItem['value']) {
+  function handleChange(option: IOptionItem<T>['value']) {
     onChange(option)
     onChangeEventful?.(option)
   }
@@ -64,7 +64,7 @@ function ButtonLookingRadio({
           return (
             <Button
               disabled={disabled}
-              key={option.value + idx}
+              key={String(option.value)}
               onPress={() => !disabled && handleChange(option.value)}
               style={[
                 optionStyles,

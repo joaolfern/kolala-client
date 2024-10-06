@@ -1,9 +1,9 @@
-import type { IReport } from '../Models/Report'
+import type { ICreateReportConfig, IUpdateReportConfig } from '../Models/Report'
 import Report from '../Models/Report'
 import { showToast } from '../utils/toast'
 
 function useReport() {
-  async function createReport(config: IReport.CreateReportConfig) {
+  async function createReport(config: ICreateReportConfig) {
     try {
       await Report.createReport(config)
     } catch (err) {
@@ -11,7 +11,7 @@ function useReport() {
     }
   }
 
-  async function updateReport(config: IReport.UpdateReportConfig) {
+  async function updateReport(config: IUpdateReportConfig) {
     try {
       await Report.updateReport(config)
     } catch (err) {

@@ -24,31 +24,32 @@ const userSlice = createSlice({
         ...state,
         user: action.payload,
       }),
-    setUserProfile: (state, action: PayloadAction<IUser['profile']>) =>
-      (state = {
+    setUserProfile: (state, action: PayloadAction<IUser['profile']>) => {
+      return {
         ...state,
         user: {
-          ...(state.user as IUser),
+          ...state.user!,
           profile: action.payload,
         },
-      }),
-    clearUser: (state) => {
+      }
+    },
+    clearUser: () => {
       SecureStore.deleteItemAsync('location')
-      return (state = initialState)
+      return initialState
     },
     setLocation: (state, action: PayloadAction<Region>) => {
       SecureStore.setItemAsync('location', JSON.stringify(action.payload))
-      return (state = {
+      return {
         ...state,
         location: action.payload,
-      })
+      }
     },
     clearLocation: (state) => {
       SecureStore.deleteItemAsync('location')
-      return (state = {
+      return {
         ...state,
         location: null,
-      })
+      }
     },
   },
 })

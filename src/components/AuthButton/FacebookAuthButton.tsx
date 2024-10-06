@@ -24,8 +24,10 @@ function FacebookAuthButton() {
   React.useEffect(() => {
     async function sendAccessToken(accessToken: string) {
       try {
-        const response = await sendAccessTokenRequest({ accessToken })
-      } catch (err) {}
+        await sendAccessTokenRequest({ accessToken })
+      } catch (err) {
+        console.error(err)
+      }
     }
 
     if (response?.type === 'success') {

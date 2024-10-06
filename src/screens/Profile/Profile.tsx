@@ -19,7 +19,7 @@ import type { IProfileViewData } from '@/types/Profile'
 import ProfileSettings from './components/ProfileSettingsButton'
 
 function Profile({ route }: RootStackScreenProps<'Profile'>) {
-  const { profileUserId } = route?.params
+  const { profileUserId } = route?.params || {}
   const { user } = useAppSelector(selectUser)
   const logout = useLogout()
 

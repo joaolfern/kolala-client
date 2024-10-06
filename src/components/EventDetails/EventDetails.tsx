@@ -9,7 +9,7 @@ import { useCallback, useState } from 'react'
 import { Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 
 import Colors from '@/constants/Colors'
-import type { IEvent } from '@/Models/Event'
+import type { IEventDetails } from '@/Models/Event'
 import Event from '@/Models/Event'
 import { shadow } from '@/screens/EventForm/utils'
 import { useAppSelector } from '@/store/hooks'
@@ -38,7 +38,7 @@ export default function EventDetails() {
       ).preview
   )
   const navigation = useNavigation()
-  const [details, setDetails] = useState<IEvent.Details | null>(null)
+  const [details, setDetails] = useState<IEventDetails | null>(null)
   const [loading, setLoading] = useState(false)
   const { showActionSheetWithOptions } = useActionSheet()
   const { user } = useAppSelector(selectUser)
@@ -53,7 +53,7 @@ export default function EventDetails() {
       if (data) {
         setDetails(data)
       }
-    } catch (err: any) {
+    } catch (err) {
       showToast(String(err.message))
       console.log(err)
     } finally {
@@ -88,7 +88,7 @@ export default function EventDetails() {
       const message = response.data.data
       navigation.navigate('Root')
       if (message) showToast(message)
-    } catch (err: any) {
+    } catch (err) {
       showToast(String(err.message))
       console.log(err)
     }

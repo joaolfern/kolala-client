@@ -43,8 +43,8 @@ export const filterSlice = createSlice({
         isGettingNewFilter: action.payload,
       })
     },
-    clearFilter: (state) => {
-      return (state = initialState)
+    clearFilter: () => {
+      return initialState
     },
     updateShouldShowToast: (state, action: PayloadAction<boolean>) => {
       return (state = {

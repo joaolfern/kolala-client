@@ -1,16 +1,12 @@
 import type { TouchableOpacityProps } from 'react-native'
 import { StyleSheet, TouchableOpacity } from 'react-native'
-
 import Compass from '@/assets/images/compass.svg'
 
 type IProps = TouchableOpacityProps & {}
 
 function HomeButton({ ...rest }: IProps) {
   return (
-    <TouchableOpacity
-      style={styles.Button}
-      onPressIn={() => console.log('eooo')}
-    >
+    <TouchableOpacity style={styles.Button} {...rest}>
       <Compass />
     </TouchableOpacity>
   )

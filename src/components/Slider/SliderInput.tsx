@@ -1,9 +1,8 @@
 import type { ReactNode } from 'react'
 import { useCallback, useMemo } from 'react'
-import { useController } from 'react-hook-form'
+import { Control, FieldValues, Path, useController } from 'react-hook-form'
 import { StyleSheet, Text, View } from 'react-native'
 import Slider from 'rn-range-slider'
-
 import Colors from '@/constants/Colors'
 import Label from '../Label/Label'
 import Span from '../Span/Span'
@@ -13,18 +12,18 @@ import RailSelected from './components/RailSelected'
 import SliderLabel from './components/SliderLabel'
 import Thumb from './components/Thumb'
 
-interface IProps {
+interface IProps<T extends FieldValues> {
   min: number
   max: number
   step: number
   disableRange?: boolean
   floatingLabel?: boolean
   sulfix: string
-  name: string
-  control: any
+  name: Path<T>
+  control: Control<T>
 }
 
-const SliderInput = ({
+const SliderInput = <T extends FieldValues>({
   min,
   max,
   step,
@@ -33,7 +32,7 @@ const SliderInput = ({
   sulfix,
   name,
   control,
-}: IProps) => {
+}: IProps<T>) => {
   const renderThumb = useCallback(() => <Thumb />, [])
   const renderRail = useCallback(() => <Rail />, [])
   const renderRailSelected = useCallback(() => <RailSelected />, [])

@@ -1,18 +1,18 @@
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet, TouchableOpacity } from 'react-native'
 
-import Colors from '../../constants/Colors'
-import type { IEvent } from '../../Models/Event'
-import { hasPast } from '../../screens/EventForm/utils'
+import Colors from '@/constants/Colors'
+import { hasPast } from '@/screens/EventForm/utils'
 import Avatar from '../Avatar/Avatar'
 import CategoryTag from '../CategoryTag/CategoryTag'
 import DatetimeLabel from '../DatetimeLabel/DatetimeLabel'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 import EventItemChatButton from './components/EventItemChatButton/EventItemChatButton'
+import { IEventListItem } from '@/Models/Event'
 
 interface IProps {
-  event: IEvent.ListItem
+  event: IEventListItem
 }
 
 function EventItem({ event }: IProps) {

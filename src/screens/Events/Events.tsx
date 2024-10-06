@@ -8,7 +8,7 @@ import Header from '@/components/Header/Header'
 import SafeAreaView from '@/components/SafeAreaView/SafeAreaView'
 import Span from '@/components/Span/Span'
 import Spinner from '@/components/Spinner/Spinner'
-import type { IEvent } from '@/Models/Event'
+import type { IEventSections } from '@/Models/Event'
 import Event from '@/Models/Event'
 import EventListSectionTitle from './components/EventListSectionTitle/EventListSectionTitle'
 import NoResultMessage from './components/NoResultMessage/NoResultMessage'
@@ -28,7 +28,7 @@ export type _eventListTypes = 'organizing' | 'participating'
 
 type IEventList = {
   [key in _eventListTypes]: {
-    data: IEvent.IEventSections | null
+    data: IEventSections | null
     arePast: boolean
     loading: boolean
   } | null
@@ -133,7 +133,7 @@ function EventList() {
           ListHeaderComponent={EventListHeader}
           sections={list}
           ListEmptyComponent={NoResultMessage}
-          renderItem={({ item, index, section }) =>
+          renderItem={({ item, index }) =>
             index === 0 && events[item.title as _eventListTypes]?.loading ? (
               loadingElement
             ) : (

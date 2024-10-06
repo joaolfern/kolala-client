@@ -1,6 +1,7 @@
 import { io } from 'socket.io-client'
 
 import { REACT_APP_SERVER } from '../../env'
+import { IMessage } from '@/Models/Message'
 
 class WSService {
   instance: ReturnType<typeof io> | null = null
@@ -16,8 +17,6 @@ class WSService {
         token,
       },
     })
-
-    this.instance.on('connection', (socket) => {})
 
     this.joinChat(eventId)
   }
@@ -38,7 +37,7 @@ class WSService {
     this.instance?.on?.('deleteMessageFromDisplay', cb)
   }
 
-  onNewMessage(cb: (args: any) => void) {
+  onNewMessage(cb: (newMessage: IMessage) => void) {
     this.instance?.on?.('newMessage', cb)
   }
 

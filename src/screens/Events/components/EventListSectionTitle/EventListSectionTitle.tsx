@@ -1,17 +1,16 @@
 import { MaterialIcons } from '@expo/vector-icons'
 import type { SectionListData } from 'react-native'
 import { StyleSheet } from 'react-native'
-import Toggle from 'react-native-toggle-element'
-
 import Span from '@/components/Span/Span'
 import Text from '@/components/Text/Text'
 import Colors from '@/constants/Colors'
-import type { IEvent } from '@/Models/Event'
+import type { IEventListItem, IEventSections } from '@/Models/Event'
 import type { _eventListTypes } from '../../Events'
 import NoResultMessage from '../NoResultMessage/NoResultMessage'
+import Toggle from '@/components/Toggle/Toggle'
 
 interface IProps {
-  section: SectionListData<IEvent.ListItem, IEvent.IEventSections>
+  section: SectionListData<IEventListItem, IEventSections>
   showPastEvents: boolean
   toggleShowPastEvents(): void
 }
@@ -37,10 +36,6 @@ function EventListSectionTitle({
               color={Colors.secondaryColor}
             />
           }
-          thumbButton={{
-            activeBackgroundColor: 'transparent',
-            inActiveBackgroundColor: 'transparent',
-          }}
           thumbInActiveComponent={
             <MaterialIcons
               size={40}
@@ -49,15 +44,6 @@ function EventListSectionTitle({
               solid
             />
           }
-          trackBar={{
-            activeBackgroundColor: Colors.lightBackground,
-            inActiveBackgroundColor: Colors.lightBackground,
-            borderActiveColor: Colors.background,
-            borderInActiveColor: Colors.background,
-            borderWidth: 5,
-            width: 100,
-            height: 45,
-          }}
         />
       </Span>
       {!section.data.length && <NoResultMessage />}

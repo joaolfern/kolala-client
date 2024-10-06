@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native'
 import Colors from '@/constants/Colors'
 
 interface IProps {
-  icon: any
+  icon: keyof typeof MaterialCommunityIcons.glyphMap
 }
 
 function SocialMediaIcon({ icon }: IProps) {

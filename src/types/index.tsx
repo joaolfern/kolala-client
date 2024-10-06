@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 /**
  * Learn more about using TypeScript with React Navigation:
  * https://reactnavigation.org/docs/typescript/
@@ -10,7 +11,7 @@ import type {
 } from '@react-navigation/native'
 import type { NativeStackScreenProps } from '@react-navigation/native-stack'
 
-import type { IEvent } from '../Models/Event'
+import type { IEventDetails, IEventListItem } from '../Models/Event'
 import type { IProfile, IProfileViewData } from './Profile'
 
 export namespace ImagePicker {
@@ -21,6 +22,7 @@ export namespace ImagePicker {
 
 declare global {
   namespace ReactNavigation {
+    // eslint-disable-next-line @typescript-eslint/no-empty-object-type
     interface RootParamList extends RootStackParamList {}
   }
 }
@@ -35,7 +37,7 @@ export type RootStackParamList = {
   }
   NotFound: undefined
   EventForm?: {
-    event: IEvent.Details
+    event: IEventDetails
   }
   Profile: {
     profileUserId: number
@@ -47,7 +49,7 @@ export type RootStackParamList = {
   FiltersMenu: undefined
   MapToast: undefined
   Chat: {
-    event: IEvent.ListItem
+    event: IEventListItem
   }
   Report: undefined
   ReportForm: {

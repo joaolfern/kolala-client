@@ -4,10 +4,10 @@ import { useMemo, useState } from 'react'
 import type { StyleProp, ViewStyle } from 'react-native'
 import { StyleSheet } from 'react-native'
 
-import Colors from '../../constants/Colors'
-import type { IEvent } from '../../Models/Event'
+import Colors from '@/constants/Colors'
+import type { IEventDetails } from '../../Models/Event'
 import Event from '../../Models/Event'
-import { hasPast } from '../../screens/EventForm/utils'
+import { hasPast } from '@/screens/EventForm/utils'
 import { useAppSelector } from '@/store/hooks'
 import { selectUser } from '@/store/userSlice'
 import Button from '../Button/Button'
@@ -31,7 +31,7 @@ function ButtonComponent({ children, onPress, style }: IButtonComponentProps) {
 }
 
 interface IEventDetailsButtonProps {
-  event: IEvent.Details | null
+  event: IEventDetails | null
   loading: boolean
   reloadDetails(): void
 }
@@ -52,7 +52,7 @@ function EventDetailsButton({
   const navigation = useNavigation()
   const [loadingButton, setLoadingButton] = useState(false)
 
-  function navigateToEdit(event: IEvent.Details) {
+  function navigateToEdit(event: IEventDetails) {
     navigation.navigate('EventForm', {
       event,
     })

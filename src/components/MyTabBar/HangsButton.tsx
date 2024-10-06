@@ -1,6 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
 import { StyleSheet } from 'react-native'
-
 import PersonSVG from '@/assets/images/person.svg'
 import Colors from '@/constants/Colors'
 import Button from '../Button/Button'
@@ -8,7 +7,6 @@ import Span from '../Span/Span'
 import { usePreventGuest } from '@/hooks/usePreventGuest'
 
 function HangsButton() {
-  const hasNotifications = true
   const navigation = useNavigation()
   const { preventGuest } = usePreventGuest()
 

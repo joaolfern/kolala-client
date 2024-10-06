@@ -6,7 +6,7 @@ import Avatar from '@/components/Avatar/Avatar'
 import Span from '@/components/Span/Span'
 import Text from '@/components/Text/Text'
 import Colors from '@/constants/Colors'
-import type { IReport } from '@/Models/Report'
+import type { IReportModel } from '@/Models/Report'
 import {
   REPORT_CATEGORY_RESOURCE,
   REPORT_STATUS_COLOR_RESOURCE,
@@ -15,7 +15,7 @@ import {
 import ReportCardAdminWrapper from './ReportCardAdminWrapper'
 
 interface IProps extends ViewProps {
-  report: IReport.Model
+  report: IReportModel
   reloadList(): void
 }
 

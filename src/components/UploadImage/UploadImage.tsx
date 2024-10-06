@@ -1,20 +1,26 @@
 import { FontAwesome5 } from '@expo/vector-icons'
 import * as ImagePicker from 'expo-image-picker'
 import { useRef, useState } from 'react'
-import { useController } from 'react-hook-form'
+import {
+  Control,
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+} from 'react-hook-form'
 import type { ViewProps } from 'react-native'
 import { FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native'
 
 import CameraSVG from '@/assets/images/camera.svg'
 import Colors from '@/constants/Colors'
 import useAskForImages from '@/hooks/useAskForImages'
-import type { IEvent } from '@/Models/Event'
+import type { IEventImage } from '@/Models/Event'
 import Span from '../Span/Span'
 import Text from '../Text/Text'
 import View from '../View/View'
 
 type ImageItemProps = {
-  item: IEvent.Image
+  item: IEventImage
   remove(id: string): void
   isLastItem: boolean
 }
@@ -44,31 +50,33 @@ function ImageItem({ item, remove, isLastItem }: ImageItemProps) {
   )
 }
 
-type UploadImageProps = ViewProps & {
+type UploadImageProps<T extends FieldValues> = ViewProps & {
   listMax?: number
-  name: string
-  control: any
-  defaultValue?: IEvent.Image[]
+  name: Path<T>
+  control: Control<T>
+  defaultValue?: IEventImage[]
 }
 
 let counter = 0
 
-function UploadImage({
-  style,
+function UploadImage<T extends FieldValues>({
   listMax = 6,
   name,
   control,
   defaultValue = [],
   ...rest
-}: UploadImageProps) {
-  const [list, setList] = useState<IEvent.Image[]>(defaultValue)
+}: UploadImageProps<T>) {
+  const [list, setList] = useState<IEventImage[]>(defaultValue)
   const listRef = useRef<FlatList>(null)
   const { handleCameraPermission } = useAskForImages()
 
   const { field } = useController({
     name,
     control,
-    defaultValue: defaultValue.map((image) => image.url),
+    defaultValue: defaultValue.map((image) => image.url) as PathValue<
+      T,
+      Path<T>
+    >,
   })
 
   const handleChoosePhoto = async () => {
@@ -95,7 +103,7 @@ function UploadImage({
         })
         .slice(0, listMax - list.length)
       setList((prev) => {
-        const stateList: IEvent.Image[] = [...formattedList, ...prev]
+        const stateList: IEventImage[] = [...formattedList, ...prev]
         counter++
 
         const eventList = stateList.map((item) => item.url)

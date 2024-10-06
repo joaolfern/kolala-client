@@ -4,7 +4,7 @@ import { StyleSheet, View } from 'react-native'
 
 import Colors from '@/constants/Colors'
 
-interface IProps extends ViewProps {}
+type IProps = ViewProps
 
 const Notch = ({ ...rest }: IProps) => {
   return <View style={styles.root} {...rest} />

@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Image, StyleSheet } from 'react-native'
 
-import type { IEvent } from '../../Models/Event'
-import { shadow } from '../../screens/EventForm/utils'
+import type { IEventModel } from '../../Models/Event'
+import { shadow } from '@/screens/EventForm/utils'
 import Avatar from '../Avatar/Avatar'
 import Span from '../Span/Span'
 
 interface Props {
-  image: IEvent.Model['EventImage'] | undefined
+  image: IEventModel['EventImage'] | undefined
 }
 
 let timer: ReturnType<typeof setTimeout>

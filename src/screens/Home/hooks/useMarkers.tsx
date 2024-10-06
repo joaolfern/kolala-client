@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import type { Region } from 'react-native-maps'
 
-import type { IEvent } from '@/Models/Event'
+import type { IMarkers } from '@/Models/Event'
 import Event from '@/Models/Event'
 import { useAppDispatch, useAppSelector } from '@/store/hooks'
 import {
@@ -18,7 +18,7 @@ function useMarkers() {
   const currentFiltersString = useRef(JSON.stringify(initialState.filters))
   const dispatch = useAppDispatch()
 
-  function setMarkers(data: IEvent.IMarkers[]) {
+  function setMarkers(data: IMarkers[]) {
     dispatch(updateMarkers(data))
   }
 
@@ -44,7 +44,7 @@ function useMarkers() {
       const { data } = response.data
 
       if (Array.isArray(data)) setMarkers(data)
-    } catch (err: any) {
+    } catch (err) {
       console.error(err)
       showToast(err.message)
     }

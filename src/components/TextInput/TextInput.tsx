@@ -1,21 +1,31 @@
 import type { Ref } from 'react'
-import { forwardRef } from 'react'
-import { useController } from 'react-hook-form'
+import {
+  Control,
+  FieldValues,
+  Path,
+  PathValue,
+  useController,
+} from 'react-hook-form'
 import type { TextInputProps } from 'react-native'
 import { StyleSheet, TextInput as DefaultTextInput } from 'react-native'
 
 import Colors from '@/constants/Colors'
 
-export type IProps = TextInputProps & {
-  name: string
-  control: any
-  defaultValue?: string
+export type IProps<T extends FieldValues> = TextInputProps & {
+  name: Path<T>
+  control: Control<T> | undefined
+  defaultValue?: PathValue<T, Path<T>>
+  inputRef?: Ref<DefaultTextInput> | null
 }
 
-function TextInput(
-  { style, name, control, defaultValue = '', ...rest }: IProps,
-  ref: Ref<DefaultTextInput> | null
-) {
+function TextInput<T extends FieldValues>({
+  style,
+  name,
+  control,
+  defaultValue,
+  inputRef,
+  ...rest
+}: IProps<T>) {
   const { field } = useController({
     name,
     control,
@@ -25,7 +35,7 @@ function TextInput(
   const { value, onChange } = field
   return (
     <DefaultTextInput
-      ref={ref}
+      ref={inputRef}
       value={value}
       onChangeText={onChange}
       placeholderTextColor={Colors.gray}
@@ -48,4 +58,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default forwardRef(TextInput)
+export default TextInput
